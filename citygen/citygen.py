@@ -23,7 +23,14 @@
 """
 from qgis.PyQt.QtCore import QSettings, QTranslator, QCoreApplication
 from qgis.PyQt.QtGui import QIcon
-from qgis.PyQt.QtWidgets import QAction
+from qgis.PyQt.QtWidgets import QAction, QFileDialog, QErrorMessage
+from qgis.core import QgsProject, Qgis, QgsMessageLog
+from qgis.gui import QgsMessageBar
+
+
+from .generate_model.appCtx import appContext
+from .generate_model.bibliotecas import DotDict, execute, file_menagement, getter, path_manager, path_manager, \
+    progress_bar, plugin_management
 
 # Initialize Qt resources from file resources.py
 from .resources import *
@@ -82,18 +89,17 @@ class citygen:
         # noinspection PyTypeChecker,PyArgumentList,PyCallByClass
         return QCoreApplication.translate('citygen', message)
 
-
     def add_action(
-        self,
-        icon_path,
-        text,
-        callback,
-        enabled_flag=True,
-        add_to_menu=True,
-        add_to_toolbar=True,
-        status_tip=None,
-        whats_this=None,
-        parent=None):
+            self,
+            icon_path,
+            text,
+            callback,
+            enabled_flag=True,
+            add_to_menu=True,
+            add_to_toolbar=True,
+            status_tip=None,
+            whats_this=None,
+            parent=None):
         """Add a toolbar icon to the toolbar.
 
         :param icon_path: Path to the icon for this action. Can be a resource
@@ -170,7 +176,6 @@ class citygen:
         # will be set False in run()
         self.first_start = True
 
-
     def unload(self):
         """Removes the plugin menu item and icon from QGIS GUI."""
         for action in self.actions:
@@ -178,7 +183,6 @@ class citygen:
                 self.tr(u'&citygen'),
                 action)
             self.iface.removeToolBarIcon(action)
-
 
     def run(self):
         """Run method that performs all the real work"""
@@ -189,12 +193,34 @@ class citygen:
             self.first_start = False
             self.dlg = citygenDialog()
 
+        # Loading Vars
+        layer_list = QgsProject.instance().layerTreeRoot().children()
+        crawler_list = plugin_management.get_list()
+        appContext.plugins.getter_ortho_list = list(filter(lambda x: "ortho" in x["layer"], list(crawler_list)))
+        appContext.plugins.getter_dsm_list = list(filter(lambda x: "dsm" in x["layer"], list(crawler_list)))
+        appContext.plugins.getter_dtm_list = list(filter(lambda x: "dtm" in x["layer"], list(crawler_list)))
+
+        ### DSM ###
+        self.dlg.cbxDSMSource.clear()
+        self.dlg.cbxDSMSource.addItems([plugin["name"] for plugin in appContext.plugins.getter_dsm_list])
+
+        self.dlg.cbxDSMLayer.clear()
+        self.dlg.cbxDSMLayer.addItems([layer.name() for layer in layer_list])
+        ### END ###
+
         # show the dialog
         self.dlg.show()
         # Run the dialog event loop
         result = self.dlg.exec_()
         # See if OK was pressed
         if result:
-            # Do something useful here - delete the line containing pass and
-            # substitute with your code.
-            pass
+            self.set_stpe("dtm", appContext.plugins.getter_dsm_list[self.dlg.cbxDSMLayer.currentIndex()])
+
+            # selectedLayer = layer_list[selectedLayerIndex].layer()
+
+            self.iface.messageBar().pushMessage("Success", "Open", level=Qgis.Success, duration=3)
+
+    def set_stpe(self, current_step, selected_source):
+        appContext.steps.crawler[current_step] = selected_source
+        appContext.steps.normalizer[current_step] = selected_source["normalizer"]
+        appContext.steps.normalizer[current_step]["parameters"] = selected_source["normalizer"].get("parameters", {})
