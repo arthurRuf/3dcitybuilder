@@ -30,7 +30,7 @@ from qgis.gui import QgsMessageBar
 from .generate_model.main import start
 from .generate_model.appCtx import appContext
 from .generate_model.bibliotecas import DotDict, execute, file_menagement, getter, path_manager, path_manager, \
-    progress_bar, plugin_management
+    progress_bar, plugin_management, logger
 
 # Initialize Qt resources from file resources.py
 from .resources import *
@@ -196,6 +196,9 @@ class citygen:
 
         # Loading Vars
         appContext.qgis.iface = self.iface
+        appContext.qgis.segf = self
+
+
         layer_list = QgsProject.instance().layerTreeRoot().children()
         crawler_list = plugin_management.get_list()
         appContext.plugins.getter_ortho_list = list(filter(lambda x: "ortho" in x["layer"], list(crawler_list)))
@@ -210,16 +213,31 @@ class citygen:
         self.dlg.cbxDSMLayer.addItems([layer.name() for layer in layer_list])
         ### END ###
 
+        self.dlg.btnRun.clicked.connect(self.on_run)
+        self.dlg.btnCancel.clicked.connect(self.on_cancel)
+        self.dlg.btnTest.clicked.connect(self.on_test)
+        self.dlg.btnClear.clicked.connect(self.on_clear)
+
         # show the dialog
         self.dlg.show()
         # Run the dialog event loop
         result = self.dlg.exec_()
         # See if OK was pressed
         if result:
-            appContext.steps.crawler.dsm = appContext.plugins.getter_dsm_list[self.dlg.cbxDSMLayer.currentIndex()]
-            QgsMessageLog.logMessage("Selected DSM: " + appContext.steps.crawler.dsm.name)
+            pass
 
-            start()
-            # selectedLayer = layer_list[selectedLayerIndex].layer()
+    def on_run(self):
+        logger.general_log("clicked on_run")
+        appContext.steps.crawler.dsm = appContext.plugins.getter_dsm_list[self.dlg.cbxDSMLayer.currentIndex()]
+        QgsMessageLog.logMessage("Selected DSM: " + appContext.steps.crawler.dsm.name)
 
-            self.iface.messageBar().pushMessage("Success", "Concluded without errors!", level=Qgis.Success, duration=3)
+        start()
+        # selectedLayer = layer_list[selectedLayerIndex].layer()
+
+        self.iface.messageBar().pushMessage("Success", "Concluded without errors!", level=Qgis.Success, duration=3)
+    def on_cancel(self):
+        logger.general_log("clicked on_cancel")
+    def on_test(self):
+        logger.general_log("clicked on_test")
+    def on_clear(self):
+        logger.general_log("clicked on_clear")

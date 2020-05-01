@@ -8,6 +8,6 @@ def message_bar_log(title, message="", level=Qgis.Success):
     appContext.qgis.iface.messageBar().pushMessage(title, message, level=level, duration=3)
 
 def plugin_log(message=""):
-    QgsMessageLog.logMessage(message)
+    appContext.qgis.segf.dlg.txtLog.append(message)
     # appContext.qgis.iface.messageBar().pushMessage(title, message, level=level, duration=3)
 
