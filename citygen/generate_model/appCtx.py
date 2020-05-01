@@ -50,6 +50,10 @@ class appContext:
         }
     })
 
+    qgis = DotDict.DotDict({
+        "iface": None
+    })
+
     def updateContext(self, newContext):
         self.plugins = newContext.plugins
         self.user_parameters = newContext.user_parameters

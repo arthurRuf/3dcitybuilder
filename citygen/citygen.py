@@ -27,7 +27,7 @@ from qgis.PyQt.QtWidgets import QAction, QFileDialog, QErrorMessage
 from qgis.core import QgsProject, Qgis, QgsMessageLog
 from qgis.gui import QgsMessageBar
 
-
+from .generate_model.main import start
 from .generate_model.appCtx import appContext
 from .generate_model.bibliotecas import DotDict, execute, file_menagement, getter, path_manager, path_manager, \
     progress_bar, plugin_management
@@ -73,6 +73,7 @@ class citygen:
         # Check if plugin was started the first time in current QGIS session
         # Must be set in initGui() to survive plugin reloads
         self.first_start = None
+
 
     # noinspection PyMethodMayBeStatic
     def tr(self, message):
@@ -194,6 +195,7 @@ class citygen:
             self.dlg = citygenDialog()
 
         # Loading Vars
+        appContext.qgis.iface = self.iface
         layer_list = QgsProject.instance().layerTreeRoot().children()
         crawler_list = plugin_management.get_list()
         appContext.plugins.getter_ortho_list = list(filter(lambda x: "ortho" in x["layer"], list(crawler_list)))
@@ -214,13 +216,10 @@ class citygen:
         result = self.dlg.exec_()
         # See if OK was pressed
         if result:
-            self.set_stpe("dtm", appContext.plugins.getter_dsm_list[self.dlg.cbxDSMLayer.currentIndex()])
+            appContext.steps.crawler.dsm = appContext.plugins.getter_dsm_list[self.dlg.cbxDSMLayer.currentIndex()]
+            QgsMessageLog.logMessage("Selected DSM: " + appContext.steps.crawler.dsm.name)
 
+            start()
             # selectedLayer = layer_list[selectedLayerIndex].layer()
 
-            self.iface.messageBar().pushMessage("Success", "Open", level=Qgis.Success, duration=3)
-
-    def set_stpe(self, current_step, selected_source):
-        appContext.steps.crawler[current_step] = selected_source
-        appContext.steps.normalizer[current_step] = selected_source["normalizer"]
-        appContext.steps.normalizer[current_step]["parameters"] = selected_source["normalizer"].get("parameters", {})
+            self.iface.messageBar().pushMessage("Success", "Concluded without errors!", level=Qgis.Success, duration=3)

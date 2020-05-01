@@ -1,6 +1,6 @@
-import logging
-from .appCtx import appContext
-from .bibliotecas import progress_bar, plugin_management
+from ..appCtx import appContext
+from ..bibliotecas import progress_bar, plugin_management, logger
+
 
 
 def execute_crawlers():
@@ -8,10 +8,10 @@ def execute_crawlers():
     # plugin_management.execute_plugin(appContext.steps.crawler.ortho.id)
     # logging.info("Done!")
 
-    logging.info("Retrieving Surface Digital Model...")
+    logger.plugin_log("Retrieving Surface Digital Model...")
     plugin_management.execute_plugin(appContext.steps.crawler.dsm.id)
-    logging.info("Done!")
+    logger.plugin_log("Done!")
 
-    logging.info("Retrieving Terrain Digital Model...")
-    plugin_management.execute_plugin(appContext.steps.crawler.dtm.id)
-    logging.info("Done")
+    # logging.info("Retrieving Terrain Digital Model...")
+    # plugin_management.execute_plugin(appContext.steps.crawler.dtm.id)
+    # logging.info("Done")

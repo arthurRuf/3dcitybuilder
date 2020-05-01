@@ -1,23 +1,22 @@
-import os, importlib, logging, json, pathlib
+import os, importlib, json, pathlib
 
-from . import plugin_management
-from . import DotDict
+from . import DotDict, logger
 from .. import appCtx
-from qgis.core import QgsMessageLog
+
 
 def get_list():
-    plugin_list = plugin_management.load_plugin_list()
+    plugin_list = load_plugin_list()
     return list(filter(lambda x: "crawler" in x["type"], plugin_list))
 
 
 def load_plugin_list():
-    logging.info("Loading Plugins... ")
+    logger.plugin_log("Loading Plugins... ")
 
     file_re = os.path.dirname(os.path.realpath(__file__))
     path = pathlib.Path(file_re)
-    plugins_path = str(path.parent)+"/plugins"
+    plugins_path = str(path.parent) + "/plugins"
 
-    QgsMessageLog.logMessage("Loading crawlers from: " + plugins_path)
+    logger.plugin_log("Loading crawlers from: " + plugins_path)
 
     directory_list = os.listdir(plugins_path)
 
@@ -32,7 +31,7 @@ def load_plugin_list():
                         or len(plugin_configuration_file["features"]) != 1 \
                         or "properties" not in plugin_configuration_file["features"][0] \
                         or "geometry" not in plugin_configuration_file["features"][0]:
-                    logging.warning(
+                    logger.plugin_log(
                         f"Invalid config.json file for plugin {directory_name}.")
                     raise Exception()
 
@@ -41,11 +40,11 @@ def load_plugin_list():
                 plugin_geometry = plugin_feature["geometry"]
 
                 if "type" not in plugin_properties:
-                    logging.warning(
+                    logger.plugin_log(
                         f"Invalid config.json file for plugin {directory_name}.\n Property 'type' is mandatory on features[0].properties.")
                     raise Exception()
                 if "layer" not in plugin_properties:
-                    logging.warning(
+                    logger.plugin_log(
                         f"Invalid config.json file for plugin {directory_name}.\n Property 'layer' is mandatory on features[0].properties.")
                     raise Exception()
 
@@ -64,13 +63,13 @@ def load_plugin_list():
                     "geometry": plugin_geometry
                 })
         except FileExistsError:
-            logging.warning(f"Fail to load {directory_name} plugin! The plugin does not have a config.yml file")
+            logger.plugin_log(f"Fail to load {directory_name} plugin! The plugin does not have a config.yml file")
         except Exception:
-            logging.warning(f"Fail to load {directory_name} plugin!")
+            logger.plugin_log(f"Fail to load {directory_name} plugin!")
 
-    plugin_list = sorted(plugin_list, key=lambda k: k['position'])
+            plugin_list = sorted(plugin_list, key=lambda k: k['position'])
 
-    logging.info("Done!")
+            logger.plugin_log("Done!")
     return plugin_list
 
 
@@ -96,7 +95,7 @@ def run_plugin_method(plugin_id, method_name):
         method(appResources, appCtx)
 
     except AttributeError:
-        logging.warning(f"Unable to configure {plugin_id}")
+        logger.plugin_log(f"Unable to configure {plugin_id}")
 
 
 def configure_plugin(plugin_id):
