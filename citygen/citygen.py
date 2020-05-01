@@ -74,7 +74,6 @@ class citygen:
         # Must be set in initGui() to survive plugin reloads
         self.first_start = None
 
-
     # noinspection PyMethodMayBeStatic
     def tr(self, message):
         """Get the translation for a string using Qt translation API.
@@ -198,7 +197,6 @@ class citygen:
         appContext.qgis.iface = self.iface
         appContext.qgis.segf = self
 
-
         layer_list = QgsProject.instance().layerTreeRoot().children()
         crawler_list = plugin_management.get_list()
         appContext.plugins.getter_ortho_list = list(filter(lambda x: "ortho" in x["layer"], list(crawler_list)))
@@ -206,6 +204,8 @@ class citygen:
         appContext.plugins.getter_dtm_list = list(filter(lambda x: "dtm" in x["layer"], list(crawler_list)))
 
         ### DSM ###
+        self.dlg.cbxDSMSource.currentIndexChanged.connect(self.cbxDSMSource_on_change)
+        self.dlg.cbxDSMLayer.currentIndexChanged.connect(self.cbxDSMLayer_on_change)
         self.dlg.cbxDSMSource.clear()
         self.dlg.cbxDSMSource.addItems([plugin["name"] for plugin in appContext.plugins.getter_dsm_list])
 
@@ -228,16 +228,28 @@ class citygen:
 
     def on_run(self):
         logger.general_log("clicked on_run")
-        appContext.steps.crawler.dsm = appContext.plugins.getter_dsm_list[self.dlg.cbxDSMLayer.currentIndex()]
-        QgsMessageLog.logMessage("Selected DSM: " + appContext.steps.crawler.dsm.name)
-
         start()
-        # selectedLayer = layer_list[selectedLayerIndex].layer()
-
+        self.dlg.btnCancel.setText("Close")
+        self.dlg.btnRun.setText("Run again")
         self.iface.messageBar().pushMessage("Success", "Concluded without errors!", level=Qgis.Success, duration=3)
+
     def on_cancel(self):
-        logger.general_log("clicked on_cancel")
+        self.dlg.close()
+
     def on_test(self):
         logger.general_log("clicked on_test")
+
+    def cbxDSMSource_on_change(self, selected_index):
+        appContext.steps.crawler.dsm = appContext.plugins.getter_dsm_list[selected_index]
+        if selected_index == 0:
+            self.dlg.frmDSMLayer.setVisible(True)
+        else:
+            self.dlg.frmDSMLayer.setHidden(True)
+
+    def cbxDSMLayer_on_change(self, selected_index):
+        appContext.steps.crawler.dsm.parameters.input_layer = QgsProject.instance().layerTreeRoot().children()[
+            selected_index].layer()
+
     def on_clear(self):
         logger.general_log("clicked on_clear")
+        self.dlg.txtLog.setText("")

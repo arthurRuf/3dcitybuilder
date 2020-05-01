@@ -4,6 +4,7 @@ from .bibliotecas import logger
 # from .generate_model.bibliotecas import plugin_management, progress_bar
 
 from .crawler import crawler_management
+from .gis import gis
 
 
 # def cleanup_temp():
@@ -24,7 +25,7 @@ from .crawler import crawler_management
 
 def start():
     logger.plugin_log("Getting files...")
-    crawler_management.execute_crawlers()
+    # crawler_management.execute_crawlers()
 
-    # gis.generate_3d_model()
+    gis.generate_3d_model()
     logger.plugin_log("Process complete without errors!")
