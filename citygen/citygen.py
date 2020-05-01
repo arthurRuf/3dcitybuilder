@@ -203,7 +203,17 @@ class citygen:
         appContext.plugins.getter_dsm_list = list(filter(lambda x: "dsm" in x["layer"], list(crawler_list)))
         appContext.plugins.getter_dtm_list = list(filter(lambda x: "dtm" in x["layer"], list(crawler_list)))
 
-        ### DSM ###
+        ### BEGIN Ortho ###
+        self.dlg.cbxOrthoSource.currentIndexChanged.connect(self.cbxOrthoSource_on_change)
+        self.dlg.cbxOrthoLayer.currentIndexChanged.connect(self.cbxOrthoLayer_on_change)
+        self.dlg.cbxOrthoSource.clear()
+        self.dlg.cbxOrthoSource.addItems([plugin["name"] for plugin in appContext.plugins.getter_ortho_list])
+
+        self.dlg.cbxOrthoLayer.clear()
+        self.dlg.cbxOrthoLayer.addItems([layer.name() for layer in layer_list])
+        ### END Ortho ###
+
+        ### BEGIN DSM ###
         self.dlg.cbxDSMSource.currentIndexChanged.connect(self.cbxDSMSource_on_change)
         self.dlg.cbxDSMLayer.currentIndexChanged.connect(self.cbxDSMLayer_on_change)
         self.dlg.cbxDSMSource.clear()
@@ -211,7 +221,17 @@ class citygen:
 
         self.dlg.cbxDSMLayer.clear()
         self.dlg.cbxDSMLayer.addItems([layer.name() for layer in layer_list])
-        ### END ###
+        ### END DSM ###
+
+        ### BEGIN DTM ###
+        self.dlg.cbxDTMSource.currentIndexChanged.connect(self.cbxDTMSource_on_change)
+        self.dlg.cbxDTMLayer.currentIndexChanged.connect(self.cbxDTMLayer_on_change)
+        self.dlg.cbxDTMSource.clear()
+        self.dlg.cbxDTMSource.addItems([plugin["name"] for plugin in appContext.plugins.getter_dtm_list])
+
+        self.dlg.cbxDTMLayer.clear()
+        self.dlg.cbxDTMLayer.addItems([layer.name() for layer in layer_list])
+        ### END DTM ###
 
         self.dlg.btnRun.clicked.connect(self.on_run)
         self.dlg.btnCancel.clicked.connect(self.on_cancel)
@@ -239,6 +259,25 @@ class citygen:
     def on_test(self):
         logger.general_log("clicked on_test")
 
+    def on_clear(self):
+        logger.general_log("clicked on_clear")
+        self.dlg.txtLog.setText("")
+
+    ## BEGIN Ortho ##
+    def cbxOrthoSource_on_change(self, selected_index):
+        appContext.steps.crawler.ortho = appContext.plugins.getter_ortho_list[selected_index]
+        if selected_index == 0:
+            self.dlg.frmOrthoLayer.setVisible(True)
+        else:
+            self.dlg.frmOrthoLayer.setHidden(True)
+
+    def cbxOrthoLayer_on_change(self, selected_index):
+        appContext.steps.crawler.ortho.parameters.input_layer = QgsProject.instance().layerTreeRoot().children()[
+            selected_index].layer()
+
+    ## END Ortho ##
+
+    ## BEGIN DSM ##
     def cbxDSMSource_on_change(self, selected_index):
         appContext.steps.crawler.dsm = appContext.plugins.getter_dsm_list[selected_index]
         if selected_index == 0:
@@ -250,6 +289,17 @@ class citygen:
         appContext.steps.crawler.dsm.parameters.input_layer = QgsProject.instance().layerTreeRoot().children()[
             selected_index].layer()
 
-    def on_clear(self):
-        logger.general_log("clicked on_clear")
-        self.dlg.txtLog.setText("")
+    ## END DSM ##
+
+    ## BEGIN DTM ##
+    def cbxDTMSource_on_change(self, selected_index):
+        appContext.steps.crawler.dtm = appContext.plugins.getter_dtm_list[selected_index]
+        if selected_index == 0:
+            self.dlg.frmDTMLayer.setVisible(True)
+        else:
+            self.dlg.frmDTMLayer.setHidden(True)
+
+    def cbxDTMLayer_on_change(self, selected_index):
+        appContext.steps.crawler.dtm.parameters.input_layer = QgsProject.instance().layerTreeRoot().children()[
+            selected_index].layer()
+    ## END DTM ##
