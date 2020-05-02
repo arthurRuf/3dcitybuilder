@@ -41,12 +41,9 @@ def execute(appResources, appContext):
     normalized_file = f"{normalized_folder}/dsm.tif"
     appResources.bibliotecas.file_management.create_dirs(normalized_folder)
     appResources.bibliotecas.logger.update_progress(step_description="Moving files...")
-    appResources.bibliotecas.file_management.copy_file(f"{appContext.execution.raw_temp_folder}/dsm/34_4_dom.tif",
+    appResources.bibliotecas.file_management.move_file(f"{appContext.execution.raw_temp_folder}/dsm/34_4_dom.tif",
                                                   normalized_file)
 
     appContext.steps.gis.dsm.input_file = normalized_file
-
-    dsm_layer = addLayer(normalized_file, "dsm")
-    QgsProject.instance().addMapLayer(dsm_layer)
 
     logging.info("Done!")
