@@ -8,6 +8,7 @@
         "invocation": "python3",
         "position": 10,
         "type": "getter",
+        "format": "file",
         "layer": "dtm",
         "datum": "ETRS89",
         "cropIncluded": false,

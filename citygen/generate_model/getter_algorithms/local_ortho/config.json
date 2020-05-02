@@ -4,9 +4,10 @@
     {
       "type": "feature",
       "properties": {
-        "name": "Select a layer",
         "invocation": "python3",
         "type": "getter",
+        "name": "Select a layer",
+        "format": "layer",
         "position": 0,
         "layer": "ortho",
         "datum": "ETRS89",

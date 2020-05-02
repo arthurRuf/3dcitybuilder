@@ -1,14 +1,9 @@
-import time, shutil, logging, os, sys, requests
-from ...bibliotecas import progress_bar, inputa, internet,plugin_management
 
 
 def configure(appResources, appContext):
-    pass
+    appContext.steps.getters.ortho.parameters.input_layer = appContext.user_parameters.ortho_input
 
 
 def execute(appResources, appContext):
-
-   # WMTS!!!
-   # https://maps.wien.gv.at/wmts/1.0.0/WMTSCapabilities-arcmap.xml
-
-    logging.info("Done!")
+    configure(appResources, appContext)
+    appContext.steps.gis.ortho.input_layer = appContext.steps.getters.ortho.parameters.input_layer

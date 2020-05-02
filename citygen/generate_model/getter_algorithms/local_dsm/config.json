@@ -7,6 +7,7 @@
         "name": "Select a layer",
         "invocation": "python3",
         "type": "getter",
+        "format": "layer",
         "position": 0,
         "layer": "dsm",
         "datum": "ETRS89",

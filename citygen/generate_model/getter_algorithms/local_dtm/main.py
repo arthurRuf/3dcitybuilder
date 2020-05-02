@@ -1,10 +1,8 @@
-import time, shutil, logging, os, sys, requests
-from ...bibliotecas import progress_bar, inputa, internet,plugin_management
-
 
 def configure(appResources, appContext):
-    pass
+    appContext.steps.getters.dtm.parameters.input_layer = appContext.user_parameters.dtm_input
 
 
 def execute(appResources, appContext):
-    logging.info("Done!")
+    configure(appResources, appContext)
+    appContext.steps.gis.dtm.input_layer = appContext.steps.getters.dtm.parameters.input_layer

@@ -7,7 +7,7 @@ def execute_getters():
     # Ortho
     logger.increase_overall_current("Data Retrieve")
     logger.update_progress(step_current=1, step_description="Satellite Image (Ortho)", step_maximum=100)
-    # plugin_management.execute_plugin(appContext.steps.getters.ortho.id)
+    plugin_management.execute_plugin(appContext.steps.getters.ortho.id)
     logger.plugin_log("Done!")
 
     # DSM
@@ -19,5 +19,5 @@ def execute_getters():
     # DTM
     logger.increase_overall_current()
     logger.update_progress(step_current=1, step_description="Digital Terrain Model (DTM)", step_maximum=100)
-    # plugin_management.execute_plugin(appContext.steps.getters.dtm.id)
+    plugin_management.execute_plugin(appContext.steps.getters.dtm.id)
     logger.plugin_log("Done!")

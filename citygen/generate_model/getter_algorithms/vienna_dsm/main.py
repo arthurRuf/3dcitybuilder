@@ -37,8 +37,8 @@ def execute(appResources, appContext):
     appResources.bibliotecas.logger.update_progress(step_description="Uncompromising...")
     appResources.bibliotecas.file_management.unzip_file(raw_file, f"{appContext.execution.raw_temp_folder}/dsm/")
 
-    normalized_folder = f"{appContext.execution.normalizer_temp_folder}/dsm"
-    normalized_file = f"{normalized_folder}/dsm.tif"
+    normalized_folder = f"{appContext.execution.normalized_temp_folder}/dsm"
+    normalized_file = appContext.user_parameters.dsm_output
     appResources.bibliotecas.file_management.create_dirs(normalized_folder)
     appResources.bibliotecas.logger.update_progress(step_description="Moving files...")
     appResources.bibliotecas.file_management.move_file(f"{appContext.execution.raw_temp_folder}/dsm/34_4_dom.tif",

@@ -13,18 +13,26 @@ def addLayer(filePath, baseName, provider="gdal"):
 
 
 def load_layers():
-    dsm_layer = addLayer(appContext.steps.gis.dsm.input_file, "dsm")
-    QgsProject.instance().addMapLayer(dsm_layer)
+    if appContext.steps.gis.ortho.input_file != "":
+        ortho_layer = addLayer(appContext.steps.gis.ortho.input_file, "ortho")
+        QgsProject.instance().addMapLayer(ortho_layer)
+    else:
+        ortho_layer = appContext.steps.gis.ortho.input_layer
 
-    # dsm_layer = addLayer("/Users/arthurrufhosangdacosta/qgis_data/rasters/Image1.tif", "mds")
-    # dtm_layer = addLayer("/Users/arthurrufhosangdacosta/qgis_data/rasters/Image2.tif", "mdt")
+    if appContext.steps.gis.dsm.input_file != "":
+        dsm_layer = addLayer(appContext.steps.gis.dsm.input_file, "dsm")
+        QgsProject.instance().addMapLayer(dsm_layer)
+    else:
+        dsm_layer = appContext.steps.gis.dsm.input_layer
+
+    if appContext.steps.gis.dtm.input_file != "":
+        dtm_layer = addLayer(appContext.steps.gis.dtm.input_file, "dtm")
+        QgsProject.instance().addMapLayer(dtm_layer)
+    else:
+        dtm_layer = appContext.steps.gis.dtm.input_layer
+
     # footprint_layer = addLayer("/Users/arthurrufhosangdacosta/qgis_data/rasters/Image1.tif", "footprint")
-    # ortho_layer = addLayer("/Users/arthurrufhosangdacosta/qgis_data/rasters/Image2.tif", "ortho")
-
-    # QgsProject.instance().addMapLayer(dsm_layer)
-    # QgsProject.instance().addMapLayer(dtm_layer)
     # QgsProject.instance().addMapLayer(footprint_layer)
-    # QgsProject.instance().addMapLayer(ortho_layer)
 
 
 def identify_footprint():

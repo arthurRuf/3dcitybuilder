@@ -7,6 +7,7 @@
         "name": "Vienna City",
         "invocation": "python3",
         "type": "getter",
+        "format": "file",
         "layer": "dsm",
         "datum": "ETRS89",
         "cropIncluded": false,

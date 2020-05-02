@@ -56,6 +56,7 @@ def load_plugin_list():
                     "position": 0 if directory_name in ["local_ortho", "local_dsm", "local_dtm"] else index + 1,
                     "name": plugin_properties.get("name", directory_name),
                     "type": plugin_properties["type"],
+                    "format": plugin_properties["format"],
                     "layer": plugin_properties["layer"],
                     "invocation": plugin_properties.get("invocation", "python3"),
                     "datum": plugin_properties.get("datum", "????"),

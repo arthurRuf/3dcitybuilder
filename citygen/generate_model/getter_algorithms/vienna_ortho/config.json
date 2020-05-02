@@ -7,6 +7,7 @@
         "name": "Vienna City",
         "invocation": "python3",
         "type": "getter",
+        "format": "wmts",
         "layer": "ortho",
         "datum": "ETRS89",
         "cropIncluded": false,

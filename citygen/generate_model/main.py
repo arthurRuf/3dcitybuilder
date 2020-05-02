@@ -30,11 +30,18 @@ def appContext_setup():
     temp_folder = QgsProcessingUtils.tempFolder()
     appContext.execution.temp_folder = f"{temp_folder}"
     appContext.execution.raw_temp_folder = f"{appContext.execution.temp_folder}/raw"
-    appContext.execution.normalizer_temp_folder = f"{appContext.execution.temp_folder}/normalized"
+    appContext.execution.normalized_temp_folder = f"{appContext.execution.temp_folder}/normalized"
 
     file_management.create_dirs(appContext.execution.temp_folder)
     file_management.create_dirs(appContext.execution.raw_temp_folder)
-    file_management.create_dirs(appContext.execution.normalizer_temp_folder)
+    file_management.create_dirs(appContext.execution.normalized_temp_folder)
+
+    if appContext.user_parameters.ortho_output == "":
+        appContext.user_parameters.ortho_output = f"{appContext.execution.normalized_temp_folder}/ortho.tif"
+    if appContext.user_parameters.dsm_output == "":
+        appContext.user_parameters.dsm_output = f"{appContext.execution.normalized_temp_folder}/dsm.tif"
+    if appContext.user_parameters.dtm_output == "":
+        appContext.user_parameters.dtm_output = f"{appContext.execution.normalized_temp_folder}/dtm.tif"
 
     logger.plugin_log(f"Plugin Temp folder: {appContext.execution.temp_folder}")
 

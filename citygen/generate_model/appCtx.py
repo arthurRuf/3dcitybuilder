@@ -14,7 +14,9 @@ class appContext:
         "y1": 0,
         "x2": 0,
         "y2": 0,
-        "output": "",
+        "ortho_output": "",
+        "dsm_output": "",
+        "dtm_output": ""
     })
 
     steps = DotDict.DotDict({
@@ -60,7 +62,7 @@ class appContext:
         "id": "",
         "temp_folder": "",
         "raw_temp_folder": "",
-        "normalizer_temp_folder": "",
+        "normalized_temp_folder": "",
         "overall": {
             "description": "",
             "current": 0,

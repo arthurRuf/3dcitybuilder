@@ -23,7 +23,7 @@
 """
 from qgis.PyQt.QtCore import QSettings, QTranslator, QCoreApplication
 from qgis.PyQt.QtGui import QIcon
-from qgis.PyQt.QtWidgets import QAction, QFileDialog, QErrorMessage
+from qgis.PyQt.QtWidgets import QAction, QFileDialog, QErrorMessage, QFileDialog
 from qgis.core import QgsProject, Qgis, QgsMessageLog
 from qgis.gui import QgsMessageBar
 
@@ -200,13 +200,11 @@ class citygen:
 
         layer_list = QgsProject.instance().layerTreeRoot().children()
         getter_list = plugin_management.get_list()
-        appContext.plugins.getter_ortho_list = list(filter(lambda x: "ortho" in x["layer"], list(getter_list)))
-        appContext.plugins.getter_dsm_list = list(filter(lambda x: "dsm" in x["layer"], list(getter_list)))
-        appContext.plugins.getter_dtm_list = list(filter(lambda x: "dtm" in x["layer"], list(getter_list)))
-        appContext.plugins.getter_dtm_list = sorted(appContext.plugins.getter_dtm_list, key=lambda k: k['position'])
 
         ### BEGIN Ortho ###
+        appContext.plugins.getter_ortho_list = list(filter(lambda x: "ortho" in x["layer"], list(getter_list)))
         self.dlg.cbxOrthoSource.currentIndexChanged.connect(self.cbxOrthoSource_on_change)
+        self.cbxOrthoSource_on_change(0)
         self.dlg.cbxOrthoLayer.currentIndexChanged.connect(self.cbxOrthoLayer_on_change)
         self.dlg.cbxOrthoSource.clear()
         self.dlg.cbxOrthoSource.addItems([plugin["name"] for plugin in appContext.plugins.getter_ortho_list])
@@ -216,7 +214,9 @@ class citygen:
         ### END Ortho ###
 
         ### BEGIN DSM ###
+        appContext.plugins.getter_dsm_list = list(filter(lambda x: "dsm" in x["layer"], list(getter_list)))
         self.dlg.cbxDSMSource.currentIndexChanged.connect(self.cbxDSMSource_on_change)
+        self.cbxDSMSource_on_change(0)
         self.dlg.cbxDSMLayer.currentIndexChanged.connect(self.cbxDSMLayer_on_change)
         self.dlg.cbxDSMSource.clear()
         self.dlg.cbxDSMSource.addItems([plugin["name"] for plugin in appContext.plugins.getter_dsm_list])
@@ -226,7 +226,9 @@ class citygen:
         ### END DSM ###
 
         ### BEGIN DTM ###
+        appContext.plugins.getter_dtm_list = list(filter(lambda x: "dtm" in x["layer"], list(getter_list)))
         self.dlg.cbxDTMSource.currentIndexChanged.connect(self.cbxDTMSource_on_change)
+        self.cbxDTMSource_on_change(0)
         self.dlg.cbxDTMLayer.currentIndexChanged.connect(self.cbxDTMLayer_on_change)
         self.dlg.cbxDTMSource.clear()
         self.dlg.cbxDTMSource.addItems([plugin["name"] for plugin in appContext.plugins.getter_dtm_list])
@@ -239,6 +241,9 @@ class citygen:
         self.dlg.btnCancel.clicked.connect(self.on_cancel)
         self.dlg.btnTest.clicked.connect(self.on_test)
         self.dlg.btnClear.clicked.connect(self.on_clear)
+        self.dlg.btnOrthoSateTo.clicked.connect(self.btnOrthoSateTo_on_click)
+        self.dlg.btnDSMSateTo.clicked.connect(self.btnDSMSateTo_on_click)
+        self.dlg.btnDTMSateTo.clicked.connect(self.btnDTMSateTo_on_click)
 
         # show the dialog
         self.dlg.show()
@@ -251,6 +256,10 @@ class citygen:
     def on_run(self):
         logger.general_log("clicked on_run")
         self.dlg.tabMain.setCurrentIndex(1)
+
+        appContext.user_parameters.ortho_output = self.dlg.edtOrthoSateTo.text()
+        appContext.user_parameters.dsm_output = self.dlg.edtDSMSateTo.text()
+        appContext.user_parameters.dtm_output = self.dlg.edtDTMSateTo.text()
 
         start()
         self.dlg.btnCancel.setText("Close")
@@ -267,43 +276,73 @@ class citygen:
         logger.general_log("clicked on_clear")
         self.dlg.txtLog.setText("")
 
+    def select_output_file(self):
+        filename, _filter = QFileDialog.getSaveFileName(
+            self.dlg, "Select output file ", "", '*.*')
+        return filename
+
     ## BEGIN Ortho ##
     def cbxOrthoSource_on_change(self, selected_index):
         appContext.steps.getters.ortho = appContext.plugins.getter_ortho_list[selected_index]
-        if selected_index == 0:
+        if appContext.steps.getters.ortho.format == "layer":
             self.dlg.frmOrthoLayer.setVisible(True)
         else:
             self.dlg.frmOrthoLayer.setHidden(True)
 
+        if appContext.steps.getters.ortho.format == "file":
+            self.dlg.frmOrthoSateTo.setVisible(True)
+        else:
+            self.dlg.frmOrthoSateTo.setHidden(True)
+
     def cbxOrthoLayer_on_change(self, selected_index):
-        appContext.steps.getters.ortho.parameters.input_layer = QgsProject.instance().layerTreeRoot().children()[
+        appContext.user_parameters.ortho_input = QgsProject.instance().layerTreeRoot().children()[
             selected_index].layer()
 
+    def btnOrthoSateTo_on_click(self):
+        filename = self.select_output_file()
+        self.dlg.edtOrthoSateTo.setText(filename)
     ## END Ortho ##
 
     ## BEGIN DSM ##
     def cbxDSMSource_on_change(self, selected_index):
         appContext.steps.getters.dsm = appContext.plugins.getter_dsm_list[selected_index]
-        if selected_index == 0:
+        if appContext.steps.getters.dsm.format == "layer":
             self.dlg.frmDSMLayer.setVisible(True)
         else:
             self.dlg.frmDSMLayer.setHidden(True)
 
+        if appContext.steps.getters.dsm.format == "file":
+            self.dlg.frmDSMSateTo.setVisible(True)
+        else:
+            self.dlg.frmDSMSateTo.setHidden(True)
+
     def cbxDSMLayer_on_change(self, selected_index):
-        appContext.steps.getters.dsm.parameters.input_layer = QgsProject.instance().layerTreeRoot().children()[
+        appContext.user_parameters.dsm_input = QgsProject.instance().layerTreeRoot().children()[
             selected_index].layer()
 
+    def btnDSMSateTo_on_click(self):
+        filename = self.select_output_file()
+        self.dlg.edtDSMSateTo.setText(filename)
     ## END DSM ##
 
     ## BEGIN DTM ##
     def cbxDTMSource_on_change(self, selected_index):
         appContext.steps.getters.dtm = appContext.plugins.getter_dtm_list[selected_index]
-        if selected_index == 0:
+        if appContext.steps.getters.dtm.format == "layer":
             self.dlg.frmDTMLayer.setVisible(True)
         else:
             self.dlg.frmDTMLayer.setHidden(True)
 
+        if appContext.steps.getters.dtm.format == "file":
+            self.dlg.frmDTMSateTo.setVisible(True)
+        else:
+            self.dlg.frmDTMSateTo.setHidden(True)
+
     def cbxDTMLayer_on_change(self, selected_index):
-        appContext.steps.getters.dtm.parameters.input_layer = QgsProject.instance().layerTreeRoot().children()[
+        appContext.user_parameters.dtm_input = QgsProject.instance().layerTreeRoot().children()[
             selected_index].layer()
+
+    def btnDTMSateTo_on_click(self):
+        filename = self.select_output_file()
+        self.dlg.edtDTMSateTo.setText(filename)
     ## END DTM ##
