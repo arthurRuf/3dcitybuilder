@@ -1,5 +1,6 @@
 import sys, os
 from qgis.core import QgsRasterLayer, QgsProject
+from ..appCtx import appContext
 
 
 def addLayer(filePath, baseName, provider="gdal"):
@@ -12,7 +13,9 @@ def addLayer(filePath, baseName, provider="gdal"):
 
 
 def load_layers():
-    pass
+    dsm_layer = addLayer(appContext.steps.gis.dsm.input_file, "dsm")
+    QgsProject.instance().addMapLayer(dsm_layer)
+
     # dsm_layer = addLayer("/Users/arthurrufhosangdacosta/qgis_data/rasters/Image1.tif", "mds")
     # dtm_layer = addLayer("/Users/arthurrufhosangdacosta/qgis_data/rasters/Image2.tif", "mdt")
     # footprint_layer = addLayer("/Users/arthurrufhosangdacosta/qgis_data/rasters/Image1.tif", "footprint")
