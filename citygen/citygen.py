@@ -29,7 +29,7 @@ from qgis.gui import QgsMessageBar
 
 from .generate_model.main import start
 from .generate_model.appCtx import appContext
-from .generate_model.bibliotecas import DotDict, execute, file_menagement, internet, path_manager, path_manager, \
+from .generate_model.bibliotecas import DotDict, execute, plugin_management, internet, path_manager, path_manager, \
     progress_bar, plugin_management, logger
 
 # Initialize Qt resources from file resources.py

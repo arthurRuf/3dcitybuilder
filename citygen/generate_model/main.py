@@ -1,6 +1,6 @@
 import sys, os, random, string
 from qgis.core import QgsProcessingUtils, QgsRasterLayer, QgsProject
-from .bibliotecas import logger, file_menagement
+from .bibliotecas import logger, file_management
 from .appCtx import appContext
 
 from .getters import getters_management
@@ -28,13 +28,13 @@ def appContext_setup():
 
     appContext.execution.id = ''.join(random.choices(string.ascii_letters + string.digits, k=16))
     temp_folder = QgsProcessingUtils.tempFolder()
-    appContext.execution.temp_folder = f"{temp_folder}/{appContext.execution.id}"
+    appContext.execution.temp_folder = f"{temp_folder}"
     appContext.execution.raw_temp_folder = f"{appContext.execution.temp_folder}/raw"
-    appContext.execution.normalized_temp_folder = f"{appContext.execution.temp_folder}/normalized"
+    appContext.execution.normalizer_temp_folder = f"{appContext.execution.temp_folder}/normalized"
 
-    file_menagement.create_dirs(appContext.execution.temp_folder)
-    file_menagement.create_dirs(appContext.execution.raw_temp_folder)
-    file_menagement.create_dirs(appContext.execution.normalized_temp_folder)
+    file_management.create_dirs(appContext.execution.temp_folder)
+    file_management.create_dirs(appContext.execution.raw_temp_folder)
+    file_management.create_dirs(appContext.execution.normalizer_temp_folder)
 
     logger.plugin_log(f"Plugin Temp folder: {appContext.execution.temp_folder}")
 

@@ -1,5 +1,5 @@
 import time, shutil, logging, os, sys, requests
-from ...bibliotecas import progress_bar, inputa, internet, file_menagement
+from ...bibliotecas import progress_bar, inputa, internet, plugin_management
 
 
 def configure(appResources, appContext):
@@ -15,10 +15,10 @@ def execute(appResources, appContext):
                           raw_file)
 
     # NORMALIZING
-    file_menagement.unzip(raw_file, f"{appContext.execution.raw_temp_folder}/dtm/")
+    plugin_management.unzip(raw_file, f"{appContext.execution.raw_temp_folder}/dtm/")
 
     normalized_file = f"{appContext.execution.normalizer_temp_folder}/dtm/dtm.tif"
-    file_menagement.copy(f"{appContext.execution.raw_temp_folder}/dtm/35_4_dgm.tif", normalized_file)
+    plugin_management.copy(f"{appContext.execution.raw_temp_folder}/dtm/35_4_dgm.tif", normalized_file)
 
     appContext.steps.gis.dtm.input_file = normalized_file
 

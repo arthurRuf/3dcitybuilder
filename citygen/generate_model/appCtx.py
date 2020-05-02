@@ -60,7 +60,7 @@ class appContext:
         "id": "",
         "temp_folder": "",
         "raw_temp_folder": "",
-        "normalized_temp_folder": "",
+        "normalizer_temp_folder": "",
         "overall": {
             "description": "",
             "current": 0,

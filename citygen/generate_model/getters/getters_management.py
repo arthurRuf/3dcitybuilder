@@ -13,7 +13,7 @@ def execute_getters():
     # DSM
     logger.increase_overall_current()
     logger.update_progress(step_current=1, step_description="Digital Surface Model (DSM)", step_maximum=100)
-    # plugin_management.execute_plugin(appContext.steps.getters.dsm.id)
+    plugin_management.execute_plugin(appContext.steps.getters.dsm.id)
     logger.plugin_log("Done!")
 
     # DTM

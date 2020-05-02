@@ -30,7 +30,8 @@ def update_progress(step_current=None, step_description=None, step_maximum=None,
     if overall_maximum is not None:
         appContext.execution.overall.maximum = overall_maximum
 
-    appContext.qgis.segf.dlg.lblStepDescription.setText(f"{appContext.execution.overall.description} - {appContext.execution.step.description}")
+    if appContext.execution.overall.description != "" or appContext.execution.step.description != "":
+        appContext.qgis.segf.dlg.lblStepDescription.setText(f"{appContext.execution.overall.description} - {appContext.execution.step.description}")
     appContext.qgis.dlg.prgStepProgress.setValue(appContext.execution.step.current)
     appContext.qgis.dlg.prgStepProgress.setMaximum(appContext.execution.step.maximum)
 

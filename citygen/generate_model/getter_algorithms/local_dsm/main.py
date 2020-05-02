@@ -1,5 +1,5 @@
 import time, shutil, logging, os, sys, requests
-from ...bibliotecas import progress_bar, inputa, internet, file_menagement
+from ...bibliotecas import progress_bar, inputa, internet, plugin_management
 
 
 
@@ -15,10 +15,10 @@ def execute(appResources, appContext):
     internet.download_file(url, file_destination)
 
     # NORMALIZING
-    file_menagement.unzip(file_destination, f"{appResources.constants.temp_raw_folder}/dsm/")
+    plugin_management.unzip(file_destination, f"{appResources.constants.temp_raw_folder}/dsm/")
 
     normalized_file = f"{appResources.constants.temp_normalizer_folder}/dsm/dsm.tif"
-    file_menagement.copy(f"{appResources.constants.temp_raw_folder}/dsm/34_4_dom.tif", normalized_file)
+    plugin_management.copy(f"{appResources.constants.temp_raw_folder}/dsm/34_4_dom.tif", normalized_file)
 
     appContext.steps.gis.dsm.input_file = normalized_file
 

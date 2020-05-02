@@ -77,23 +77,22 @@ def load_plugin_list():
 
 
 def run_plugin_method(plugin_id, method_name):
-    try:
-        path = f"{appContext.plugins.path}/{plugin_id}"
-        plugin_main_module = importlib.machinery.SourceFileLoader('main', f'{path}/main.py').load_module()
+
+    logger.plugin_log(f"plugin_id: {plugin_id}")
+    path = f"{appContext.plugins.path}/{plugin_id}"
+    plugin_main_module = importlib.machinery.SourceFileLoader('main', f'{path}/main.py').load_module()
 
 
 
-        appResources = DotDict.DotDict({
-            "configure_plugin": configure_plugin,
-            "execute_plugin": execute_plugin,
-            "bibliotecas": bibliotecas
-        })
+    appResources = DotDict.DotDict({
+        "configure_plugin": configure_plugin,
+        "execute_plugin": execute_plugin,
+        "bibliotecas": bibliotecas
+    })
 
-        method = getattr(plugin_main_module, method_name)
-        method(appResources, appContext)
+    method = getattr(plugin_main_module, method_name)
+    method(appResources, appContext)
 
-    except AttributeError:
-        logger.plugin_log(f"Unable to configure {plugin_id}")
 
 
 def configure_plugin(plugin_id):
