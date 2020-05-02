@@ -6,7 +6,7 @@
       "properties": {
         "invocation": "python3",
         "type": "getter",
-        "name": "Select a layer",
+        "name": "Select a layer from the project",
         "format": "layer",
         "position": 0,
         "layer": "ortho",

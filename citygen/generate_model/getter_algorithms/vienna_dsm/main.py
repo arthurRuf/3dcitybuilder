@@ -1,6 +1,5 @@
-import logging, os
+import os
 from qgis.core import QgsProcessingUtils, QgsRasterLayer, QgsProject
-
 
 def configure(appResources, appContext):
     pass
@@ -46,4 +45,5 @@ def execute(appResources, appContext):
 
     appContext.steps.gis.dsm.input_file = normalized_file
 
-    logging.info("Done!")
+    appResources.bibliotecas.logger.update_progress(step_current=1, step_maximum=1)
+    appResources.bibliotecas.logger.plugin_log("Done!")

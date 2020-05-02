@@ -57,5 +57,5 @@ def start():
     gis.generate_3d_model()
     logger.plugin_log("Process complete without errors!")
 
-    logger.update_progress(step_current=100, step_description="Done!", step_maximum=100,
-                           overall_current=100, overall_description="", overall_maximum=100)
+    logger.update_progress(step_current=1, step_description="Done!", step_maximum=1,
+                           overall_current=1, overall_description="", overall_maximum=1)

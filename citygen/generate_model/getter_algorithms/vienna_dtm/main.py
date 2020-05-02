@@ -1,4 +1,4 @@
-import logging, os
+import os
 from qgis.core import QgsProcessingUtils, QgsRasterLayer, QgsProject
 
 
@@ -18,7 +18,7 @@ def addLayer(filePath, baseName, provider="gdal"):
 def execute(appResources, appContext):
     print(os.path)
 
-    appResources.bibliotecas.logger.update_progress(step_current=1, step_maximum=100)
+    appResources.bibliotecas.logger.update_progress(step_current=1, step_maximum=5)
     raw_folder = f"{appContext.execution.raw_temp_folder}/dtm"
     raw_file = f"{raw_folder}/dtm.zip"
     appResources.bibliotecas.file_management.create_dirs(raw_folder)
@@ -46,4 +46,5 @@ def execute(appResources, appContext):
 
     appContext.steps.gis.dtm.input_file = normalized_file
 
-    logging.info("Done!")
+    appResources.bibliotecas.logger.update_progress(step_current=1, step_maximum=1)
+    appResources.bibliotecas.logger.plugin_log("Done!")

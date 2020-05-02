@@ -4,7 +4,7 @@
     {
       "type": "feature",
       "properties": {
-        "name": "Select a layer",
+        "name": "Select a layer from the project",
         "invocation": "python3",
         "type": "getter",
         "format": "layer",

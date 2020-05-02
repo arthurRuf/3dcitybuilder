@@ -276,9 +276,9 @@ class citygen:
         logger.general_log("clicked on_clear")
         self.dlg.txtLog.setText("")
 
-    def select_output_file(self):
+    def select_output_file(self, extension="Images (*.tif)"):
         filename, _filter = QFileDialog.getSaveFileName(
-            self.dlg, "Select output file ", "", '*.*')
+            self.dlg, "Select output file ", "", extension)
         return filename
 
     ## BEGIN Ortho ##

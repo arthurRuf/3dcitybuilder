@@ -1,10 +1,15 @@
 import sys, os
 from qgis.core import QgsRasterLayer, QgsProject
 from ..appCtx import appContext
+from ..bibliotecas import logger
+
 
 
 def addLayer(filePath, baseName, provider="gdal"):
-    layer = QgsRasterLayer(filePath, baseName, "gdal")
+    logger.plugin_log(f"filePath: {filePath}")
+    logger.plugin_log(f"baseName: {baseName}")
+    logger.plugin_log(f"provider: {provider}")
+    layer = QgsRasterLayer(filePath, baseName, provider)
 
     if not layer.isValid():
         raise Exception("Error!")
@@ -36,12 +41,12 @@ def load_layers():
 
 
 def identify_footprint():
-    # logging.info("Identifying footprint.infos")
+    # logger.plugin_log("Identifying footprint.infos")
     pass
 
 
 def extrude_footprint():
-    # logging.info("Extruding footprint.infos")
+    # logger.plugin_log("Extruding footprint.infos")
 
     """
         { '-t' : False, 'GRASS_MIN_AREA_PARAMETER' : 0.0001, 'GRASS_OUTPUT_TYPE_PARAMETER' : 0, 'GRASS_REGION_CELLSIZE_PARAMETER' : 0, 'GRASS_REGION_PARAMETER' : None, 'GRASS_SNAP_TOLERANCE_PARAMETER' : -1, 'GRASS_VECTOR_DSCO' : '', 'GRASS_VECTOR_EXPORT_NOCAT' : False, 'GRASS_VECTOR_LCO' : '', 'elevation' : None, 'height' : 99999, 'height_column' : '', 'input' : '/Users/arthurrufhosangdacosta/qgis_data/footprint.geojson|layername=footprint|geometrytype=Polygon', 'method' : 0, 'null_value' : None, 'output' : 'TEMPORARY_OUTPUT', 'scale' : 1, 'type' : [0,1,2], 'where' : '', 'zshift' : 0 }
@@ -58,9 +63,9 @@ def extrude_footprint():
 
 def join_layers():
     pass
-    # logging.info("Applying Satellite Image on Terrain Digital Model")
-    # logging.info("Placing 3D buildings model into CityModel")
-    # logging.info("Generating output file")
+    # logger.plugin_log("Applying Satellite Image on Terrain Digital Model")
+    # logger.plugin_log("Placing 3D buildings model into CityModel")
+    # logger.plugin_log("Generating output file")
     # f = open(os.path.expanduser(appContext.user_parameters.output), "w+")
 
 
