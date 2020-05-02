@@ -19,7 +19,7 @@ def addLayer(filePath, baseName, provider="gdal"):
 
 def load_layers():
     if appContext.steps.gis.ortho.input_file != "":
-        ortho_layer = addLayer(appContext.steps.gis.ortho.input_file, "ortho")
+        ortho_layer = addLayer(appContext.steps.gis.ortho.input_file, "ortho", appContext.steps.gis.ortho.provider)
         QgsProject.instance().addMapLayer(ortho_layer)
     else:
         ortho_layer = appContext.steps.gis.ortho.input_layer
