@@ -18,7 +18,7 @@ class appContext:
     })
 
     steps = DotDict.DotDict({
-        "crawler": {
+        "getters": {
             "ortho": {
                 "id": "",
                 "parameters": {

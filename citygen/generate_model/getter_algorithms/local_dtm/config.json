@@ -6,7 +6,7 @@
       "properties": {
         "name": "Select a layer",
         "invocation": "python3",
-        "type": "crawler",
+        "type": "getter",
         "position": 0,
         "layer": "dtm",
         "datum": "ETRS89",

@@ -3,7 +3,7 @@ from qgis.core import QgsProcessingUtils, QgsRasterLayer, QgsProject
 from .bibliotecas import logger, file_menagement
 from .appCtx import appContext
 
-from .crawler import crawler_management
+from .getters import getters_management
 from .gis import gis
 
 
@@ -45,7 +45,7 @@ def start():
     appContext_setup()
 
     logger.plugin_log("Getting files...")
-    crawler_management.execute_crawlers()
+    getters_management.execute_getters()
 
     gis.generate_3d_model()
     logger.plugin_log("Process complete without errors!")

@@ -1,5 +1,5 @@
 import time, shutil, logging, os, sys, requests
-from ...bibliotecas import progress_bar, inputa, getter, file_menagement
+from ...bibliotecas import progress_bar, inputa, internet, file_menagement
 
 
 
@@ -12,7 +12,7 @@ def execute(appResources, appContext):
 
     file_destination = f"{appResources.constants.temp_raw_folder}/dsm/dsm.zip"
     url = 'https://www.wien.gv.at/ma41datenviewer/downloads/ma41/geodaten/dom_tif/34_4_dom_tif.zip'
-    getter.download_file(url, file_destination)
+    internet.download_file(url, file_destination)
 
     # NORMALIZING
     file_menagement.unzip(file_destination, f"{appResources.constants.temp_raw_folder}/dsm/")

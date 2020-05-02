@@ -1,5 +1,5 @@
 import time, shutil, logging, os, sys, requests
-from ...bibliotecas import progress_bar, inputa, getter, file_menagement
+from ...bibliotecas import progress_bar, inputa, internet, file_menagement
 
 
 def configure(appResources, appContext):
@@ -11,8 +11,8 @@ def execute(appResources, appContext):
 
     raw_file = f"{appContext.execution.raw_temp_folder}/raw/dtm/dtm.zip"
 
-    getter.download_file('https://www.wien.gv.at/ma41datenviewer/downloads/ma41/geodaten/dgm_tif/35_4_dgm_tif.zip',
-                         raw_file)
+    internet.download_file('https://www.wien.gv.at/ma41datenviewer/downloads/ma41/geodaten/dgm_tif/35_4_dgm_tif.zip',
+                          raw_file)
 
     # NORMALIZING
     file_menagement.unzip(raw_file, f"{appContext.execution.raw_temp_folder}/dtm/")

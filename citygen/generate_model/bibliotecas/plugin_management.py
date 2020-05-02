@@ -7,7 +7,7 @@ from ..appCtx import appContext
 
 def get_list():
     plugin_list = load_plugin_list()
-    return list(filter(lambda x: "crawler" in x["type"], plugin_list))
+    return list(filter(lambda x: "getter" in x["type"], plugin_list))
 
 
 def load_plugin_list():
@@ -15,11 +15,11 @@ def load_plugin_list():
 
     file_re = os.path.dirname(os.path.realpath(__file__))
     path = pathlib.Path(file_re)
-    plugins_path = str(path.parent) + "/plugins"
+    plugins_path = str(path.parent) + "/getter_algorithms"
 
     appContext.plugins.path = plugins_path
 
-    logger.plugin_log("Loading crawlers from: " + plugins_path)
+    logger.plugin_log("Loading getters from: " + plugins_path)
 
     directory_list = os.listdir(plugins_path)
 

@@ -29,7 +29,7 @@ from qgis.gui import QgsMessageBar
 
 from .generate_model.main import start
 from .generate_model.appCtx import appContext
-from .generate_model.bibliotecas import DotDict, execute, file_menagement, getter, path_manager, path_manager, \
+from .generate_model.bibliotecas import DotDict, execute, file_menagement, internet, path_manager, path_manager, \
     progress_bar, plugin_management, logger
 
 # Initialize Qt resources from file resources.py
@@ -199,10 +199,10 @@ class citygen:
         appContext.qgis.dlg = self.dlg
 
         layer_list = QgsProject.instance().layerTreeRoot().children()
-        crawler_list = plugin_management.get_list()
-        appContext.plugins.getter_ortho_list = list(filter(lambda x: "ortho" in x["layer"], list(crawler_list)))
-        appContext.plugins.getter_dsm_list = list(filter(lambda x: "dsm" in x["layer"], list(crawler_list)))
-        appContext.plugins.getter_dtm_list = list(filter(lambda x: "dtm" in x["layer"], list(crawler_list)))
+        getter_list = plugin_management.get_list()
+        appContext.plugins.getter_ortho_list = list(filter(lambda x: "ortho" in x["layer"], list(getter_list)))
+        appContext.plugins.getter_dsm_list = list(filter(lambda x: "dsm" in x["layer"], list(getter_list)))
+        appContext.plugins.getter_dtm_list = list(filter(lambda x: "dtm" in x["layer"], list(getter_list)))
         appContext.plugins.getter_dtm_list = sorted(appContext.plugins.getter_dtm_list, key=lambda k: k['position'])
 
         ### BEGIN Ortho ###
@@ -269,41 +269,41 @@ class citygen:
 
     ## BEGIN Ortho ##
     def cbxOrthoSource_on_change(self, selected_index):
-        appContext.steps.crawler.ortho = appContext.plugins.getter_ortho_list[selected_index]
+        appContext.steps.getters.ortho = appContext.plugins.getter_ortho_list[selected_index]
         if selected_index == 0:
             self.dlg.frmOrthoLayer.setVisible(True)
         else:
             self.dlg.frmOrthoLayer.setHidden(True)
 
     def cbxOrthoLayer_on_change(self, selected_index):
-        appContext.steps.crawler.ortho.parameters.input_layer = QgsProject.instance().layerTreeRoot().children()[
+        appContext.steps.getters.ortho.parameters.input_layer = QgsProject.instance().layerTreeRoot().children()[
             selected_index].layer()
 
     ## END Ortho ##
 
     ## BEGIN DSM ##
     def cbxDSMSource_on_change(self, selected_index):
-        appContext.steps.crawler.dsm = appContext.plugins.getter_dsm_list[selected_index]
+        appContext.steps.getters.dsm = appContext.plugins.getter_dsm_list[selected_index]
         if selected_index == 0:
             self.dlg.frmDSMLayer.setVisible(True)
         else:
             self.dlg.frmDSMLayer.setHidden(True)
 
     def cbxDSMLayer_on_change(self, selected_index):
-        appContext.steps.crawler.dsm.parameters.input_layer = QgsProject.instance().layerTreeRoot().children()[
+        appContext.steps.getters.dsm.parameters.input_layer = QgsProject.instance().layerTreeRoot().children()[
             selected_index].layer()
 
     ## END DSM ##
 
     ## BEGIN DTM ##
     def cbxDTMSource_on_change(self, selected_index):
-        appContext.steps.crawler.dtm = appContext.plugins.getter_dtm_list[selected_index]
+        appContext.steps.getters.dtm = appContext.plugins.getter_dtm_list[selected_index]
         if selected_index == 0:
             self.dlg.frmDTMLayer.setVisible(True)
         else:
             self.dlg.frmDTMLayer.setHidden(True)
 
     def cbxDTMLayer_on_change(self, selected_index):
-        appContext.steps.crawler.dtm.parameters.input_layer = QgsProject.instance().layerTreeRoot().children()[
+        appContext.steps.getters.dtm.parameters.input_layer = QgsProject.instance().layerTreeRoot().children()[
             selected_index].layer()
     ## END DTM ##

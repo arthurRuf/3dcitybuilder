@@ -6,7 +6,7 @@
       "properties": {
         "name": "Vienna City",
         "invocation": "python3",
-        "type": "crawler",
+        "type": "getter",
         "layer": "dsm",
         "datum": "ETRS89",
         "cropIncluded": false,

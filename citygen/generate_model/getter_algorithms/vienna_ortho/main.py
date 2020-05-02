@@ -1,5 +1,5 @@
 import time, shutil, logging, os, sys, requests
-from ...bibliotecas import progress_bar, inputa, getter,file_menagement
+from ...bibliotecas import progress_bar, inputa, internet,file_menagement
 
 
 def configure(appResources, appContext):
@@ -7,4 +7,8 @@ def configure(appResources, appContext):
 
 
 def execute(appResources, appContext):
+
+   # WMTS!!!
+   # https://maps.wien.gv.at/wmts/1.0.0/WMTSCapabilities-arcmap.xml
+
     logging.info("Done!")
