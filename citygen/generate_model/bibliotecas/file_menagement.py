@@ -1,13 +1,17 @@
-import zipfile, shutil
-from . import progress_bar
+import zipfile, shutil,os
+from . import progress_bar, logger
 
+def create_dirs(path):
+    os.makedirs(path, exist_ok=True)
 
 def unzip_file(zip_file, destination):
     zf = zipfile.ZipFile(f"{zip_file}")
 
     p = progress_bar.create(len(zf.infolist()))
+    logger.update_progress(step_current=0, step_maximum=len(zf.infolist()))
     for file in zf.infolist():
         progress_bar.update(p)
+        logger.increase_step_current()
         zf.extract(file, path=f"{destination}/")
 
     progress_bar.done(p)
@@ -15,3 +19,6 @@ def unzip_file(zip_file, destination):
 
 def copy_file(source, destination):
     shutil.copy(f"{source}", f"{destination}")
+
+def move_file(source, destination):
+    shutil.move(f"{source}", f"{destination}")

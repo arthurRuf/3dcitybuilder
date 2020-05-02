@@ -1,4 +1,5 @@
-from .bibliotecas import DotDict
+import sys, os, random, string
+from .bibliotecas import DotDict, logger
 
 
 class appContext:
@@ -51,7 +52,27 @@ class appContext:
     })
 
     qgis = DotDict.DotDict({
-        "iface": None
+        "iface": None,
+        "dlg": None
+    })
+
+    execution = DotDict.DotDict({
+        "id": "",
+        "temp_folder": "",
+        "raw_temp_folder": "",
+        "normalized_temp_folder": "",
+        "overall": {
+            "description": "",
+            "current": 0,
+            "maximum": 100
+
+        },
+        "step": {
+            "description": "",
+            "current": 0,
+            "maximum": 100
+
+        }
     })
 
     def updateContext(self, newContext):

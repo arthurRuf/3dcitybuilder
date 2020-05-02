@@ -196,12 +196,14 @@ class citygen:
         # Loading Vars
         appContext.qgis.iface = self.iface
         appContext.qgis.segf = self
+        appContext.qgis.dlg = self.dlg
 
         layer_list = QgsProject.instance().layerTreeRoot().children()
         crawler_list = plugin_management.get_list()
         appContext.plugins.getter_ortho_list = list(filter(lambda x: "ortho" in x["layer"], list(crawler_list)))
         appContext.plugins.getter_dsm_list = list(filter(lambda x: "dsm" in x["layer"], list(crawler_list)))
         appContext.plugins.getter_dtm_list = list(filter(lambda x: "dtm" in x["layer"], list(crawler_list)))
+        appContext.plugins.getter_dtm_list = sorted(appContext.plugins.getter_dtm_list, key=lambda k: k['position'])
 
         ### BEGIN Ortho ###
         self.dlg.cbxOrthoSource.currentIndexChanged.connect(self.cbxOrthoSource_on_change)
@@ -248,6 +250,8 @@ class citygen:
 
     def on_run(self):
         logger.general_log("clicked on_run")
+        self.dlg.tabMain.setCurrentIndex(1)
+
         start()
         self.dlg.btnCancel.setText("Close")
         self.dlg.btnRun.setText("Run again")

@@ -1,7 +1,8 @@
 import os, importlib, json, pathlib
 
 from . import DotDict, logger
-from .. import appCtx
+from .. import bibliotecas
+from ..appCtx import appContext
 
 
 def get_list():
@@ -15,6 +16,8 @@ def load_plugin_list():
     file_re = os.path.dirname(os.path.realpath(__file__))
     path = pathlib.Path(file_re)
     plugins_path = str(path.parent) + "/plugins"
+
+    appContext.plugins.path = plugins_path
 
     logger.plugin_log("Loading crawlers from: " + plugins_path)
 
@@ -50,7 +53,7 @@ def load_plugin_list():
 
                 plugin_list.append({
                     "id": directory_name,
-                    "position": 0 if directory_name in ["getter_ortho_local", "dsm_local", "dtm_local"] else index + 1,
+                    "position": 0 if directory_name in ["local_ortho", "local_dsm", "local_dtm"] else index + 1,
                     "name": plugin_properties.get("name", directory_name),
                     "type": plugin_properties["type"],
                     "layer": plugin_properties["layer"],
@@ -75,24 +78,19 @@ def load_plugin_list():
 
 def run_plugin_method(plugin_id, method_name):
     try:
-        pluginMain = importlib.import_module(f"plugins.{plugin_id}.main", ".")
-        plugin = importlib.import_module(f"plugins.{plugin_id}", ".")
+        path = f"{appContext.plugins.path}/{plugin_id}"
+        plugin_main_module = importlib.machinery.SourceFileLoader('main', f'{path}/main.py').load_module()
+
+
 
         appResources = DotDict.DotDict({
             "configure_plugin": configure_plugin,
             "execute_plugin": execute_plugin,
-            "qgis_instance": {},
-            "constants": {
-                "temp_folder": "../temp",
-                "temp_raw_folder": "../temp/raw",
-                "temp_normalized_folder": "../temp/normalized",
-                "temp_gis_folder": "../temp/gis",
-            },
-            "plugin": plugin
+            "bibliotecas": bibliotecas
         })
 
-        method = getattr(pluginMain, method_name)
-        method(appResources, appCtx)
+        method = getattr(plugin_main_module, method_name)
+        method(appResources, appContext)
 
     except AttributeError:
         logger.plugin_log(f"Unable to configure {plugin_id}")

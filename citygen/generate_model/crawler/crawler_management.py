@@ -4,14 +4,20 @@ from ..bibliotecas import progress_bar, plugin_management, logger
 
 
 def execute_crawlers():
-    # logging.info("Retrieving Satellite Imagery...")
+    # Ortho
+    logger.increase_overall_current("Data Retrieve")
+    logger.update_progress(step_current=1, step_description="Satellite Image (Ortho)", step_maximum=100)
     # plugin_management.execute_plugin(appContext.steps.crawler.ortho.id)
-    # logging.info("Done!")
-
-    logger.plugin_log("Retrieving Surface Digital Model...")
-    plugin_management.execute_plugin(appContext.steps.crawler.dsm.id)
     logger.plugin_log("Done!")
 
-    # logging.info("Retrieving Terrain Digital Model...")
+    # DSM
+    logger.increase_overall_current()
+    logger.update_progress(step_current=1, step_description="Digital Surface Model (DSM)", step_maximum=100)
+    # plugin_management.execute_plugin(appContext.steps.crawler.dsm.id)
+    logger.plugin_log("Done!")
+
+    # DTM
+    logger.increase_overall_current()
+    logger.update_progress(step_current=1, step_description="Digital Terrain Model (DTM)", step_maximum=100)
     # plugin_management.execute_plugin(appContext.steps.crawler.dtm.id)
-    # logging.info("Done")
+    logger.plugin_log("Done!")
