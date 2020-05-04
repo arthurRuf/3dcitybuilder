@@ -16,12 +16,12 @@ def execute(appResources, appContext):
 
     appResources.bibliotecas.logger.plugin_log(f"raw_file: {raw_file}")
     appResources.bibliotecas.logger.plugin_log(
-        f"https://www.wien.gv.at/ma41datenviewer/downloads/ma41/geodaten/dom_tif/34_4_dom_tif.zip")
+        f"https://www.wien.gv.at/ma41datenviewer/downloads/ma41/geodaten/dom_tif/dsmsc_dtm.zip")
 
     appResources.bibliotecas.logger.update_progress(step_description="Downloading DSM...")
     appResources.bibliotecas.internet.download_file(
         # 'https://www.wien.gv.at/ma41datenviewer/downloads/ma41/geodaten/dom_tif/34_4_dom_tif.zip',
-        'https://ttc-hosang.s3.amazonaws.com/test/34_4_dom_tif.zip',
+        'https://ttc-hosang.s3.amazonaws.com/test/sc_dsm.zip',
         raw_file)
 
     # NORMALIZING
@@ -33,15 +33,15 @@ def execute(appResources, appContext):
     appResources.bibliotecas.file_management.create_dirs(normalized_folder)
     appResources.bibliotecas.logger.update_progress(step_description="Moving files...")
 
-    postgis_id = QgsProject.instance().crs().postgisSrid()
-    processing.run("qgis:reprojectlayer", f"{appContext.execution.raw_temp_folder}/dsm/34_4_dom.tif", f"EPSG:{postgis_id}", normalized_file)
+    # postgis_id = QgsProject.instance().crs().postgisSrid()
+    # processing.run("qgis:reprojectlayer", f"{appContext.execution.raw_temp_folder}/dsm/dsm.tif", f"EPSG:{postgis_id}", normalized_file)
 
     # appResources.bibliotecas.file_management.move_file(f"{appContext.execution.raw_temp_folder}/dsm/34_4_dom.tif",
     #                                               normalized_file)
 
     appContext.update_layer(
         appContext,
-        normalized_file,
+        f"{appContext.execution.raw_temp_folder}/dsm/dsm.tif",
         "dsm",
         "gdal"
     )

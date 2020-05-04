@@ -1,55 +1,92 @@
-import sys, os
-from qgis.core import QgsRasterLayer, QgsProject
+import sys, os, processing
+import qgis
+from qgis.core import QgsRasterLayer, QgsProject, QgsCoordinateReferenceSystem
 from ..appCtx import appContext
 from ..bibliotecas import logger
-
-
-
-def addLayer(filePath, baseName, provider="gdal"):
-    logger.plugin_log(f"filePath: {filePath}")
-    logger.plugin_log(f"baseName: {baseName}")
-    logger.plugin_log(f"provider: {provider}")
-    layer = QgsRasterLayer(filePath, baseName, provider)
-
-    if not layer.isValid():
-        raise Exception("Error!")
-
-    return layer
+from ..normalizer import normalizer
 
 
 def load_layers():
-    if appContext.steps.gis.ortho.input_file != "":
-        ortho_layer = addLayer(appContext.steps.gis.ortho.input_file, "ortho", appContext.steps.gis.ortho.provider)
-        QgsProject.instance().addMapLayer(ortho_layer)
-    else:
-        ortho_layer = appContext.steps.gis.ortho.input_layer
-
-    if appContext.steps.gis.dsm.input_file != "":
-        dsm_layer = addLayer(appContext.steps.gis.dsm.input_file, "dsm")
-        QgsProject.instance().addMapLayer(dsm_layer)
-    else:
-        dsm_layer = appContext.steps.gis.dsm.input_layer
-
-    if appContext.steps.gis.dtm.input_file != "":
-        dtm_layer = addLayer(appContext.steps.gis.dtm.input_file, "dtm")
-        QgsProject.instance().addMapLayer(dtm_layer)
-    else:
-        dtm_layer = appContext.steps.gis.dtm.input_layer
-
-    # footprint_layer = addLayer("/Users/arthurrufhosangdacosta/qgis_data/rasters/Image1.tif", "footprint")
-    # QgsProject.instance().addMapLayer(footprint_layer)
+    QgsProject.instance().addMapLayer(appContext.layers.ortho.layer_loaded)
+    QgsProject.instance().addMapLayer(appContext.layers.dtm.layer_loaded)
+    QgsProject.instance().addMapLayer(appContext.layers.dsm.layer_loaded)
 
 
 def identify_footprint():
-    # logger.plugin_log("Identifying footprint.infos")
-    pass
+    logger.plugin_log("Identifying footprint.infos")
+    # appContext.steps.gis.footprint.input_file =
+    # footprint_layer = appContext.update_layer(
+    #     appContext,
+    #     f"{appContext.layers.footprint.layer_path}|layername=footprint|geometrytype=Polygon",
+    #     "footprint",
+    #     "ogr"
+    # )
+    footprint_layer = appContext.update_layer(
+        appContext,
+        f"/Users/arthurrufhosangdacosta/qgis_data/extrusion/footprintg.geojson",
+        "footprint",
+        "ogr",
+        "vector"
+    )
 
 
 def extrude_footprint():
-    # logger.plugin_log("Extruding footprint.infos")
+    logger.plugin_log("Extruding footprint.infos")
+    # vectorlayer = qgis.utils.iface.mapCanvas().currentLayer()
+    # rasterfile = qgis.utils.iface.mapCanvas().currentLayer()
+
+    vectorlayer = appContext.layers.footprint.layer_loaded
+    rasterfile = appContext.layers.dsm.layer_loaded
+
+    logger.plugin_log(
+        f"appContext.user_parameters.building_height_method: {appContext.user_parameters.building_height_method}")
+
+    building_height_method = 2
+    if appContext.user_parameters.building_height_method == 0:
+        building_height_method = 1
+    elif appContext.user_parameters.building_height_method == 1:
+        building_height_method = 2
+    elif appContext.user_parameters.building_height_method == 2:
+        building_height_method = 4
+    elif appContext.user_parameters.building_height_method == 3:
+        building_height_method = 9
+    elif appContext.user_parameters.building_height_method == 4:
+        building_height_method = 10
+    elif appContext.user_parameters.building_height_method == 5:
+        building_height_method = 11
+    elif appContext.user_parameters.building_height_method == 6:
+        building_height_method = 12
+
+    logger.plugin_log(f"building_height_method: {building_height_method}")
+
+    # QGIS Analysis -> Supports only SUM, MEAN and COUNT
+    # zonalstats = qgis.analysis.QgsZonalStatistics(vectorlayer, rasterfile, "d")
+    # zonalstats.calculateStatistics(None)
+    output = "/Users/arthurrufhosangdacosta/Desktop/a.geojson"
+    processing.run("grass7:v.rast.stats", {
+        'map': vectorlayer.dataProvider().dataSourceUri(),
+        'raster': rasterfile.dataProvider().dataSourceUri(),
+        'column_prefix': 'citygen',
+        'method': [1,2,3,4,5,6,7,8,9,10,11,12],
+        'percentile': 90,
+        'output': output,
+        'GRASS_REGION_PARAMETER': None,
+        'GRASS_REGION_CELLSIZE_PARAMETER': 0,
+        'GRASS_SNAP_TOLERANCE_PARAMETER': -1,
+        'GRASS_MIN_AREA_PARAMETER': 0.000001,
+        'GRASS_OUTPUT_TYPE_PARAMETER': 3,
+        'GRASS_VECTOR_DSCO': '',
+        'GRASS_VECTOR_LCO': '',
+        'GRASS_VECTOR_EXPORT_NOCAT': True
+    })
+
+    footprint = appContext.update_layer(appContext, output, "footprint", "ogr", "vector")
+    footprint = normalizer.equalize_layer(footprint, "footprint", "vector")
+    footprint = appContext.update_layer(appContext, footprint, "footprint", "ogr", "vector")
+    QgsProject.instance().addMapLayer(footprint)
 
     """
-        { '-t' : False, 'GRASS_MIN_AREA_PARAMETER' : 0.0001, 'GRASS_OUTPUT_TYPE_PARAMETER' : 0, 'GRASS_REGION_CELLSIZE_PARAMETER' : 0, 'GRASS_REGION_PARAMETER' : None, 'GRASS_SNAP_TOLERANCE_PARAMETER' : -1, 'GRASS_VECTOR_DSCO' : '', 'GRASS_VECTOR_EXPORT_NOCAT' : False, 'GRASS_VECTOR_LCO' : '', 'elevation' : None, 'height' : 99999, 'height_column' : '', 'input' : '/Users/arthurrufhosangdacosta/qgis_data/footprint.geojson|layername=footprint|geometrytype=Polygon', 'method' : 0, 'null_value' : None, 'output' : 'TEMPORARY_OUTPUT', 'scale' : 1, 'type' : [0,1,2], 'where' : '', 'zshift' : 0 }
+        { '-t' : False, 'GRASS_MIN_AREA_PARAMETER' : 0.0001, 'GRASS_OUTPUT_TYPE_PARAMETER' : 0, 'GRASS_REGION_CELLSIZE_PARAMETER' : 0, 'GRASS_REGION_PARAMETER' : None, 'GRASS_SNAP_TOLERANCE_PARAMETER' : -1, 'GRASS_VECTOR_DSCO' : '', 'GRASS_VECTOR_EXPORT_NOCAT' : False, 'GRASS_VECTOR_LCO' : '', 'elevation' : None, 'height' : 99999, 'height_column' : '', 'input' : '/Users/arthurrufhosangdacosta/qgis_data/extrusion/footprintg.geojson|layername=footprint|geometrytype=Polygon', 'method' : 0, 'null_value' : None, 'output' : 'TEMPORARY_OUTPUT', 'scale' : 1, 'type' : [0,1,2], 'where' : '', 'zshift' : 0 }
 
         g.proj -c proj4="+proj=longlat +datum=WGS84 +no_defs"
         v.in.ogr min_area=0.0001 snap=-1.0 input="/Users/arthurrufhosangdacosta/qgis_data/footprint.geojson" layer="footprint" output="vector_5e99e857c69b23" --overwrite -o

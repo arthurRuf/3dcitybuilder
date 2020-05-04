@@ -21,7 +21,7 @@ def execute(appResources, appContext):
     appResources.bibliotecas.logger.update_progress(step_description="Downloading DTM...")
     appResources.bibliotecas.internet.download_file(
         # 'https://www.wien.gv.at/ma41datenviewer/downloads/ma41/geodaten/dgm_tif/35_4_dgm_tif.zip',
-        "https://ttc-hosang.s3.amazonaws.com/test/35_4_dgm_tif.zip",
+        "https://ttc-hosang.s3.amazonaws.com/test/sc_dtm.zip",
         raw_file)
 
     # NORMALIZING
@@ -34,8 +34,8 @@ def execute(appResources, appContext):
     appResources.bibliotecas.logger.update_progress(step_description="Moving files...")
 
     postgis_id = QgsProject.instance().crs().postgisSrid()
-    processing.run("qgis:reprojectlayer", f"{appContext.execution.raw_temp_folder}/dtm/35_4_dgm.tif",
-                      f"EPSG:{postgis_id}", normalized_file)
+    # processing.run("qgis:reprojectlayer", f"{appContext.execution.raw_temp_folder}/dtm/dtm.tif",
+    #                   f"EPSG:{postgis_id}", normalized_file)
 
     # appResources.bibliotecas.file_management.move_file(f"{appContext.execution.raw_temp_folder}/dtm/35_4_dgm.tif",
     #                                                    normalized_file)
@@ -43,7 +43,7 @@ def execute(appResources, appContext):
 
     appContext.update_layer(
         appContext,
-        normalized_file,
+        f"{appContext.execution.raw_temp_folder}/dtm/dtm.tif",
         "dtm",
         "gdal"
     )

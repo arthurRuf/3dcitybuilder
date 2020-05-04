@@ -4,6 +4,7 @@ from .bibliotecas import logger, file_management
 from .appCtx import appContext
 
 from .getters import getters_management
+from .normalizer import normalizer
 from .gis import gis
 
 
@@ -32,16 +33,16 @@ def appContext_setup():
     appContext.execution.raw_temp_folder = f"{appContext.execution.temp_folder}/raw"
     appContext.execution.normalized_temp_folder = f"{appContext.execution.temp_folder}/normalized"
 
-    file_management.create_dirs(appContext.execution.temp_folder)
-    file_management.create_dirs(appContext.execution.raw_temp_folder)
-    file_management.create_dirs(appContext.execution.normalized_temp_folder)
+
+    file_management.create_temp_dirs(appContext.execution.raw_temp_folder)
+    file_management.create_temp_dirs(appContext.execution.normalized_temp_folder)
 
     if appContext.user_parameters.ortho_output == "":
         appContext.user_parameters.ortho_output = f"{appContext.execution.normalized_temp_folder}/ortho.tif"
-    if appContext.user_parameters.dsm_output == "":
-        appContext.user_parameters.dsm_output = f"{appContext.execution.normalized_temp_folder}/dsm.tif"
     if appContext.user_parameters.dtm_output == "":
         appContext.user_parameters.dtm_output = f"{appContext.execution.normalized_temp_folder}/dtm.tif"
+    if appContext.user_parameters.dsm_output == "":
+        appContext.user_parameters.dsm_output = f"{appContext.execution.normalized_temp_folder}/dsm.tif"
 
     logger.plugin_log(f"Plugin Temp folder: {appContext.execution.temp_folder}")
 
@@ -53,6 +54,9 @@ def start():
 
     logger.plugin_log("Getting files...")
     getters_management.execute_getters()
+
+    logger.plugin_log("Normalizing...")
+    normalizer.equalize_crs()
 
     gis.generate_3d_model()
     logger.plugin_log("Process complete without errors!")

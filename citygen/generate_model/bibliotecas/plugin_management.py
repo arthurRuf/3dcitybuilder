@@ -53,7 +53,7 @@ def load_plugin_list():
 
                 plugin_list.append({
                     "id": directory_name,
-                    "position": 0 if directory_name in ["local_ortho", "local_dsm", "local_dtm"] else index + 1,
+                    "position": 0 if directory_name in ["local_ortho", "local_dtm", "local_dsm"] else index + 1,
                     "name": plugin_properties.get("name", directory_name),
                     "type": plugin_properties["type"],
                     "format": plugin_properties["format"],
