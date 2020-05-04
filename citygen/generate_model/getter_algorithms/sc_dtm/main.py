@@ -40,7 +40,6 @@ def execute(appResources, appContext):
     # appResources.bibliotecas.file_management.move_file(f"{appContext.execution.raw_temp_folder}/dtm/35_4_dgm.tif",
     #                                                    normalized_file)
 
-
     appContext.update_layer(
         appContext,
         f"{appContext.execution.raw_temp_folder}/dtm/dtm.tif",

@@ -22,22 +22,26 @@ def equalize_layer(layer_loaded, layer_name, layer_type="raster"):
         source_epsg = layer_loaded.crs().postgisSrid()
 
         if layer_type == "raster":
-            result_path = f"{appContext.execution.raw_temp_folder}/{layer_name}/{layer_name}_readyYYY.tif"
+            result_path = f"{appContext.execution.raw_temp_folder}/{layer_name}/{layer_name}_ready.tif"
 
-            processing.run("gdal:warpreproject",
-                           {'INPUT': layer_loaded.dataProvider().dataSourceUri(),
-                            'SOURCE_CRS': QgsCoordinateReferenceSystem(f'EPSG:{source_epsg}'),
-                            'TARGET_CRS': QgsCoordinateReferenceSystem(f'EPSG:{project_postgis_id}'),
-                            'RESAMPLING': 0,
-                            'NODATA': None,
-                            'TARGET_RESOLUTION': None,
-                            'OPTIONS': '',
-                            'DATA_TYPE': 0,
-                            'TARGET_EXTENT': None,
-                            'TARGET_EXTENT_CRS': None,
-                            'MULTITHREADING': False,
-                            'EXTRA': '',
-                            'OUTPUT': result_path})
+            processing.run(
+                "gdal:warpreproject",
+                {
+                    'INPUT': layer_loaded.dataProvider().dataSourceUri(),
+                    'SOURCE_CRS': QgsCoordinateReferenceSystem(f'EPSG:{source_epsg}'),
+                    'TARGET_CRS': QgsCoordinateReferenceSystem(f'EPSG:{project_postgis_id}'),
+                    'RESAMPLING': 0,
+                    'NODATA': None,
+                    'TARGET_RESOLUTION': None,
+                    'OPTIONS': '',
+                    'DATA_TYPE': 0,
+                    'TARGET_EXTENT': None,
+                    'TARGET_EXTENT_CRS': None,
+                    'MULTITHREADING': False,
+                    'EXTRA': '',
+                    'OUTPUT': result_path
+                }
+            )
         else:
             processing.run('qgis:reprojectlayer', layer_loaded.dataProvider().dataSourceUri(),
                            f'EPSG:{project_postgis_id}',

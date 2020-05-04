@@ -35,11 +35,10 @@ def execute(appResources, appContext):
 
     postgis_id = QgsProject.instance().crs().postgisSrid()
     processing.run("qgis:reprojectlayer", f"{appContext.execution.raw_temp_folder}/ortho/ortho.tif",
-                      f"EPSG:{postgis_id}", normalized_file)
+                   f"EPSG:{postgis_id}", normalized_file)
 
     # appResources.bibliotecas.file_management.move_file(f"{appContext.execution.raw_temp_folder}/ortho/35_4_dgm.tif",
     #                                                    normalized_file)
-
 
     appContext.update_layer(
         appContext,

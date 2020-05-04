@@ -122,7 +122,7 @@ class appContext:
         }
     })
 
-    def update_layer(self, layer_path, layer_name, layer_data_provider="gdal", layer_type="raster"):
+    def update_layer(self, layer_path: object, layer_name: object, layer_data_provider: object = "gdal", layer_type: object = "raster") -> object:
         self.layers[layer_name].layer_name = layer_name
         self.layers[layer_name].layer_path = layer_path
         self.layers[layer_name].layer_data_provider = layer_data_provider

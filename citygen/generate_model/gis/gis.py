@@ -62,23 +62,38 @@ def extrude_footprint():
     # QGIS Analysis -> Supports only SUM, MEAN and COUNT
     # zonalstats = qgis.analysis.QgsZonalStatistics(vectorlayer, rasterfile, "d")
     # zonalstats.calculateStatistics(None)
-    output = "/Users/arthurrufhosangdacosta/Desktop/a.geojson"
-    processing.run("grass7:v.rast.stats", {
-        'map': vectorlayer.dataProvider().dataSourceUri(),
-        'raster': rasterfile.dataProvider().dataSourceUri(),
-        'column_prefix': 'citygen',
-        'method': [1,2,3,4,5,6,7,8,9,10,11,12],
-        'percentile': 90,
-        'output': output,
-        'GRASS_REGION_PARAMETER': None,
-        'GRASS_REGION_CELLSIZE_PARAMETER': 0,
-        'GRASS_SNAP_TOLERANCE_PARAMETER': -1,
-        'GRASS_MIN_AREA_PARAMETER': 0.000001,
-        'GRASS_OUTPUT_TYPE_PARAMETER': 3,
-        'GRASS_VECTOR_DSCO': '',
-        'GRASS_VECTOR_LCO': '',
-        'GRASS_VECTOR_EXPORT_NOCAT': True
-    })
+
+
+    # processing.run("grass7:v.rast.stats", {
+    #     'map': vectorlayer.dataProvider().dataSourceUri(),
+    #     'raster': rasterfile.dataProvider().dataSourceUri(),
+    #     'column_prefix': 'citygen',
+    #     'method': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+    #     'percentile': 90,
+    #     'output': output,
+    #     'GRASS_REGION_PARAMETER': None,
+    #     'GRASS_REGION_CELLSIZE_PARAMETER': 0,
+    #     'GRASS_SNAP_TOLERANCE_PARAMETER': -1,
+    #     'GRASS_MIN_AREA_PARAMETER': 0.000001,
+    #     'GRASS_OUTPUT_TYPE_PARAMETER': 3,
+    #     'GRASS_VECTOR_DSCO': '',
+    #     'GRASS_VECTOR_LCO': '',
+    #     'GRASS_VECTOR_EXPORT_NOCAT': True
+    # })
+
+    output = f"{appContext.execution.raw_temp_folder}/footprint/footprint_height.shp"
+
+    processing.run(
+        "saga:addrastervaluestofeatures",
+        {
+            'SHAPES': vectorlayer.dataProvider().dataSourceUri(), # '/Users/arthurrufhosangdacosta/qgis_data/extrusion/footprintshp.shp|layername=footprintshp',
+            'GRIDS': [
+                rasterfile.dataProvider().dataSourceUri(), # '/Users/arthurrufhosangdacosta/qgis_data/extrusion/dsm.tif'
+            ],
+            'RESAMPLING': 3,
+            'RESULT': output
+        }
+    )
 
     footprint = appContext.update_layer(appContext, output, "footprint", "ogr", "vector")
     footprint = normalizer.equalize_layer(footprint, "footprint", "vector")
@@ -105,9 +120,12 @@ def join_layers():
     # logger.plugin_log("Generating output file")
     # f = open(os.path.expanduser(appContext.user_parameters.output), "w+")
 
+def configure_layers_layout():
+    pass
 
 def generate_3d_model():
     load_layers()
     identify_footprint()
     extrude_footprint()
     join_layers()
+    configure_layers_layout()
