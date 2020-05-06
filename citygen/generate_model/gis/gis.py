@@ -65,10 +65,8 @@ def extrude_footprint():
         "saga:addrastervaluestofeatures",
         {
             'SHAPES': appContext.layers.footprint.layer.dataProvider().dataSourceUri(),
-            # '/Users/arthurrufhosangdacosta/qgis_data/extrusion/footprintshp.shp|layername=footprintshp',
             'GRIDS': [
                 appContext.layers.dsm.layer.dataProvider().dataSourceUri()
-                # '/Users/arthurrufhosangdacosta/qgis_data/extrusion/dsm.tif'
             ],
             'RESAMPLING': 3,
             'RESULT': output
@@ -91,30 +89,27 @@ def run_footprint():
     extrude_footprint()
 
 
+def move(source, destination, layer_name):
+    file_management.copy_file(file_management.path_cleanup(source), destination)
+
+    if "|" in source:
+        destination = f"{destination}|{source.split('|')[1]}"
+
+    appContext.update_layer(appContext, destination, layer_name)
+
+
 def save_files():
     if (appContext.user_parameters.ortho_output != ""):
-        file_management.move_file(
-            file_management.path_cleanup(appContext.layers.ortho.layer.dataProvider().dataSourceUri()),
-            file_management.path_cleanup(appContext.user_parameters.ortho_output),
-        )
+        move( appContext.layers.ortho.layer.dataProvider().dataSourceUri(), appContext.user_parameters.ortho_output, "ortho")
 
     if (appContext.user_parameters.dtm_output != ""):
-        file_management.move_file(
-            file_management.path_cleanup(appContext.layers.dtm.layer.dataProvider().dataSourceUri()),
-            file_management.path_cleanup(appContext.user_parameters.dtm_output),
-        )
+        move( appContext.layers.dtm.layer.dataProvider().dataSourceUri(), appContext.user_parameters.dtm_output, "dtm")
 
     if (appContext.user_parameters.dsm_output != ""):
-        file_management.move_file(
-            file_management.path_cleanup(appContext.layers.dsm.layer.dataProvider().dataSourceUri()),
-            file_management.path_cleanup(appContext.user_parameters.dsm_output),
-        )
+        move( appContext.layers.dsm.layer.dataProvider().dataSourceUri(), appContext.user_parameters.dsm_output, "dsm")
 
     if (appContext.user_parameters.footprint_output != ""):
-        file_management.move_file(
-            file_management.path_cleanup(appContext.layers.footprint.layer.dataProvider().dataSourceUri()),
-            file_management.path_cleanup(appContext.user_parameters.footprint_output),
-        )
+        move( appContext.layers.footprint.layer.dataProvider().dataSourceUri(), appContext.user_parameters.footprint_output, "footprint")
 
 
 def load_layers_to_project():
@@ -152,7 +147,6 @@ def generate_3d_model():
     run_footprint()
     save_files()
     load_layers_to_project()
-
 
 # a = ['Actions', 'AddToSelection', 'AllStyleCategories', 'AttributeTable', 'Cross', 'CustomProperties', 'Diagrams',
 #      'EditFailed', 'EditResult', 'EmptyGeometry', 'FastInsert', 'FeatureAvailability', 'FeaturesAvailable',
