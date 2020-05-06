@@ -271,6 +271,7 @@ class citygen:
         self.dlg.btnOrthoSateTo.clicked.connect(self.btnOrthoSateTo_on_click)
         self.dlg.btnDTMSateTo.clicked.connect(self.btnDTMSateTo_on_click)
         self.dlg.btnDSMSateTo.clicked.connect(self.btnDSMSateTo_on_click)
+        self.dlg.btnFootprintSateTo.clicked.connect(self.btnFootprintSateTo_on_click)
 
         # show the dialog
         self.dlg.show()
@@ -288,6 +289,7 @@ class citygen:
         appContext.user_parameters.ortho_output = self.dlg.edtOrthoSateTo.text()
         appContext.user_parameters.dtm_output = self.dlg.edtDTMSateTo.text()
         appContext.user_parameters.dsm_output = self.dlg.edtDSMSateTo.text()
+        appContext.user_parameters.footprint_output = self.dlg.edtFootprintSateTo.text()
 
         start()
         self.dlg.btnCancel.setText("Close")
@@ -401,7 +403,7 @@ class citygen:
             selected_index].layer()
 
     def btnFootprintSateTo_on_click(self):
-        filename = self.select_output_file()
+        filename = self.select_output_file("ShapeFil (*.shp)")
         self.dlg.edtFootprintSateTo.setText(filename)
 
     def cbxFootprintAlgorithm_on_change(self, selected_index):
