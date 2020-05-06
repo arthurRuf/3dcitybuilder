@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>521</width>
-    <height>1159</height>
+    <height>924</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -26,7 +26,7 @@
    <item>
     <widget class="QTabWidget" name="tabMain">
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <property name="usesScrollButtons">
       <bool>true</bool>
@@ -287,7 +287,11 @@
               </widget>
              </item>
              <item>
-              <widget class="QLineEdit" name="edtDSMSateTo"/>
+              <widget class="QLineEdit" name="edtDSMSateTo">
+               <property name="placeholderText">
+                <string>TEMP</string>
+               </property>
+              </widget>
              </item>
              <item>
               <widget class="QPushButton" name="btnDSMSateTo">
