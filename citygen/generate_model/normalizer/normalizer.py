@@ -39,9 +39,11 @@ def equalize_layer(layer_name, loaded_layer, layer_type):
             result_path = f"{appContext.execution.raw_temp_folder}/{layer_name}/{layer_name}_ready.shp"
             processing.run(
                 'qgis:reprojectlayer',
-                loaded_layer.dataProvider().dataSourceUri(),
-                f'EPSG:{project_epsg.postgisSrid()}',
-                result_path
+                {
+                    'INPUT': loaded_layer.dataProvider().dataSourceUri(),
+                    'TARGET_CRS': f'EPSG:{project_epsg.postgisSrid()}',
+                    'OUTPUT': result_path
+                }
             )
 
         appContext.update_layer(
@@ -49,8 +51,6 @@ def equalize_layer(layer_name, loaded_layer, layer_type):
             result_path,
             layer_name
         )
-
-
 
     return result_path
 
