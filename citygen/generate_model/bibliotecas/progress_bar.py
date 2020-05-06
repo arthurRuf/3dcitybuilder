@@ -25,13 +25,13 @@ def ProgressBar(iterObj):
             endT = time.time()
             timeStr = ' [%s, %s]' % (SecToStr(endT - startT),
                                      SecToStr((endT - startT) * (L / float(nn) - 1)))
-        sys.stdout.write('\r' + barStr + activity[nn % 4] + timeStr);
-        sys.stdout.flush()
+        # sys.stdout.write('\r' + barStr + activity[nn % 4] + timeStr);
+        # sys.stdout.flush()
         yield item
     barStr = u'%4d%% |%s|' % (100, u'\u2588' * 25)
     timeStr = '   [%s, 0:00:00]\n' % (SecToStr(time.time() - startT))
-    sys.stdout.write('\r' + barStr + timeStr);
-    sys.stdout.flush()
+    # sys.stdout.write('\r' + barStr + timeStr);
+    # sys.stdout.flush()
 
 
 def SecToStr(sec):
@@ -71,12 +71,12 @@ def update(progress_bar_obj, current_step=None):
         endT = time.time()
         timeStr = ' [%s, %s]' % (SecToStr(endT - startT),
                                  SecToStr((endT - startT) * (L / float(currentPorcentage) - 1)))
-    sys.stdout.write('\r' + barStr + activity[int(currentPorcentage % 4)] + timeStr)
-    sys.stdout.flush()
+    # sys.stdout.write('\r' + barStr + activity[int(currentPorcentage % 4)] + timeStr)
+    # sys.stdout.flush()
 
     progress_bar_obj.current = current
 
 def done(progress_bar_obj):
     barStr = u'%4d%% |%s|' % (100, u'\u2588' * 25)
     timeStr = '   [%s, 0:00:00]\n' % (SecToStr(time.time() - progress_bar_obj.start_time))
-    sys.stdout.write('\r' + barStr + timeStr);
+    # sys.stdout.write('\r' + barStr + timeStr);
