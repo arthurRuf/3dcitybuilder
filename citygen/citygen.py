@@ -214,49 +214,53 @@ class citygen:
         ### BEGIN Ortho ###
         appContext.plugins.getter_ortho_list = list(filter(lambda x: "ortho" in x["layer"], list(getter_list)))
         self.dlg.cbxOrthoSource.currentIndexChanged.connect(self.cbxOrthoSource_on_change)
-        self.cbxOrthoSource_on_change(0)
         self.dlg.cbxOrthoLayer.currentIndexChanged.connect(self.cbxOrthoLayer_on_change)
         self.dlg.cbxOrthoSource.clear()
         self.dlg.cbxOrthoSource.addItems([plugin["name"] for plugin in appContext.plugins.getter_ortho_list])
 
         self.dlg.cbxOrthoLayer.clear()
         self.dlg.cbxOrthoLayer.addItems([layer.name() for layer in layer_list])
+
+        self.cbxOrthoSource_on_change(0)
         ### END Ortho ###
 
         ### BEGIN DTM ###
         appContext.plugins.getter_dtm_list = list(filter(lambda x: "dtm" in x["layer"], list(getter_list)))
         self.dlg.cbxDTMSource.currentIndexChanged.connect(self.cbxDTMSource_on_change)
-        self.cbxDTMSource_on_change(0)
         self.dlg.cbxDTMLayer.currentIndexChanged.connect(self.cbxDTMLayer_on_change)
         self.dlg.cbxDTMSource.clear()
         self.dlg.cbxDTMSource.addItems([plugin["name"] for plugin in appContext.plugins.getter_dtm_list])
 
         self.dlg.cbxDTMLayer.clear()
         self.dlg.cbxDTMLayer.addItems([layer.name() for layer in layer_list])
+
+        self.cbxDTMSource_on_change(0)
         ### END DTM ###
 
         ### BEGIN DSM ###
         appContext.plugins.getter_dsm_list = list(filter(lambda x: "dsm" in x["layer"], list(getter_list)))
         self.dlg.cbxDSMSource.currentIndexChanged.connect(self.cbxDSMSource_on_change)
-        self.cbxDSMSource_on_change(0)
         self.dlg.cbxDSMLayer.currentIndexChanged.connect(self.cbxDSMLayer_on_change)
         self.dlg.cbxDSMSource.clear()
         self.dlg.cbxDSMSource.addItems([plugin["name"] for plugin in appContext.plugins.getter_dsm_list])
 
         self.dlg.cbxDSMLayer.clear()
         self.dlg.cbxDSMLayer.addItems([layer.name() for layer in layer_list])
+
+        self.cbxDSMSource_on_change(0)
         ### END DSM ###
 
         ### BEGIN Footprint ###
         appContext.plugins.getter_footprint_list = list(filter(lambda x: "footprint" in x["layer"], list(getter_list)))
         self.dlg.cbxFootprintSource.currentIndexChanged.connect(self.cbxFootprintSource_on_change)
-        self.cbxFootprintSource_on_change(0)
         self.dlg.cbxFootprintLayer.currentIndexChanged.connect(self.cbxFootprintLayer_on_change)
         self.dlg.cbxFootprintSource.clear()
         self.dlg.cbxFootprintSource.addItems([plugin["name"] for plugin in appContext.plugins.getter_footprint_list])
 
         self.dlg.cbxFootprintLayer.clear()
         self.dlg.cbxFootprintLayer.addItems([layer.name() for layer in layer_list])
+
+        self.cbxFootprintSource_on_change(0)
         ### END Footprint ###
 
         self.dlg.btnRun.clicked.connect(self.on_run)
