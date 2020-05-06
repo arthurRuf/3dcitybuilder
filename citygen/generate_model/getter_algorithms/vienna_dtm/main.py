@@ -26,22 +26,12 @@ def execute(appResources, appContext):
     appResources.bibliotecas.logger.update_progress(step_description="Uncompromising...")
     appResources.bibliotecas.file_management.unzip_file(raw_file, f"{appContext.execution.raw_temp_folder}/dtm/")
 
-    normalized_folder = f"{appContext.execution.normalized_temp_folder}/dtm"
-    normalized_file = f"{appContext.execution.raw_temp_folder}/dtm/dtm_ready.tif"
-    appResources.bibliotecas.file_management.create_dirs(normalized_folder)
-    appResources.bibliotecas.logger.update_progress(step_description="Moving files...")
-
-    postgis_id = QgsProject.instance().crs().postgisSrid()
-    processing.run("qgis:reprojectlayer", f"{appContext.execution.raw_temp_folder}/dtm/35_4_dgm.tif",
-                      f"EPSG:{postgis_id}", normalized_file)
-
-    # appResources.bibliotecas.file_management.move_file(f"{appContext.execution.raw_temp_folder}/dtm/35_4_dgm.tif",
-    #                                                    normalized_file)
+    result = f"{appContext.execution.raw_temp_folder}/dtm/35_4_dgm.tif"
 
 
     appContext.update_layer(
         appContext,
-        normalized_file,
+        result,
         "dtm",
         "gdal"
     )
