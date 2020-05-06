@@ -21,3 +21,9 @@ def execute_getters():
     logger.update_progress(step_current=1, step_description="Digital Surface Model (DSM)", step_maximum=100)
     plugin_management.execute_plugin(appContext.user_parameters.dsm_getter.id)
     logger.plugin_log("Done!")
+
+    # Footprint
+    logger.increase_overall_current()
+    logger.update_progress(step_current=1, step_description="Footprint", step_maximum=100)
+    plugin_management.execute_plugin(appContext.user_parameters.footprint_getter.id)
+    logger.plugin_log("Done!")

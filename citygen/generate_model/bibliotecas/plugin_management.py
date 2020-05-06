@@ -71,14 +71,13 @@ def load_plugin_list():
         except Exception:
             logger.plugin_log(f"Fail to load {directory_name} plugin!")
 
-            plugin_list = sorted(plugin_list, key=lambda k: k['position'])
+    plugin_list = sorted(plugin_list, key=lambda k: (k['position'], k['name']))
 
-            logger.plugin_log("Done!")
+    logger.plugin_log("Done!")
     return plugin_list
 
 
 def run_plugin_method(plugin_id, method_name):
-
     logger.plugin_log(f"plugin_id: {plugin_id}")
     path = f"{appContext.plugins.path}/{plugin_id}"
     plugin_main_module = importlib.machinery.SourceFileLoader('main', f'{path}/main.py').load_module()

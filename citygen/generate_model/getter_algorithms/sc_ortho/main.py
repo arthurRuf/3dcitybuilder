@@ -15,8 +15,6 @@ def execute(appResources, appContext):
     appResources.bibliotecas.file_management.create_dirs(raw_folder)
 
     appResources.bibliotecas.logger.plugin_log(f"raw_file: {raw_file}")
-    appResources.bibliotecas.logger.plugin_log(
-        f"https://www.wien.gv.at/ma41datenviewer/downloads/ma41/geodaten/dgm_tif/35_4_dgm_tif.zip")
 
     appResources.bibliotecas.logger.update_progress(step_description="Downloading DTM...")
     appResources.bibliotecas.internet.download_file(

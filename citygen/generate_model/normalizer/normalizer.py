@@ -5,21 +5,14 @@ from ..appCtx import appContext
 from ..bibliotecas import logger
 
 
-def equalize_layer(layer_loaded, layer_name, layer_type="raster"):
-    project_postgis_id = QgsProject.instance().crs().postgisSrid()
+def equalize_layer(layer_name, loaded_layer, layer_type):
+    project_epsg = QgsProject.instance().crs()
+    layer_epsg = loaded_layer.crs()
 
-    result_path = layer_loaded.dataProvider().dataSourceUri()
+    result_path = loaded_layer.dataProvider().dataSourceUri()
 
-    if layer_loaded.crs() != QgsProject.instance().crs() and layer_loaded.dataProvider().name() != 'wms':
-        logger.plugin_log(f"Converting layer {layer_loaded.name()} CRS...")
-        if layer_type == "raster":
-            f"{appContext.user_parameters[f'{layer_name}_output']}"
-            f"{appContext.user_parameters[f'{layer_name}_output']}/{layer_name}.tif"
-        else:
-            f"{appContext.user_parameters[f'{layer_name}_output']}"
-            f"{appContext.user_parameters[f'{layer_name}_output']}/{layer_name}.shp"
-
-        source_epsg = layer_loaded.crs().postgisSrid()
+    if project_epsg != layer_epsg and loaded_layer.dataProvider().name() != 'wms':
+        logger.plugin_log(f"Converting layer {loaded_layer.name()} CRS...")
 
         if layer_type == "raster":
             result_path = f"{appContext.execution.raw_temp_folder}/{layer_name}/{layer_name}_ready.tif"
@@ -27,9 +20,9 @@ def equalize_layer(layer_loaded, layer_name, layer_type="raster"):
             processing.run(
                 "gdal:warpreproject",
                 {
-                    'INPUT': layer_loaded.dataProvider().dataSourceUri(),
-                    'SOURCE_CRS': QgsCoordinateReferenceSystem(f'EPSG:{source_epsg}'),
-                    'TARGET_CRS': QgsCoordinateReferenceSystem(f'EPSG:{project_postgis_id}'),
+                    'INPUT': loaded_layer.dataProvider().dataSourceUri(),
+                    'SOURCE_CRS': QgsCoordinateReferenceSystem(f'EPSG:{layer_epsg.postgisSrid()}'),
+                    'TARGET_CRS': QgsCoordinateReferenceSystem(f'EPSG:{project_epsg.postgisSrid()}'),
                     'RESAMPLING': 0,
                     'NODATA': None,
                     'TARGET_RESOLUTION': None,
@@ -43,18 +36,36 @@ def equalize_layer(layer_loaded, layer_name, layer_type="raster"):
                 }
             )
         else:
-            processing.run('qgis:reprojectlayer', layer_loaded.dataProvider().dataSourceUri(),
-                           f'EPSG:{project_postgis_id}',
-                           result_path)
+            result_path = f"{appContext.execution.raw_temp_folder}/{layer_name}/{layer_name}_ready.shp"
+            processing.run(
+                'qgis:reprojectlayer',
+                loaded_layer.dataProvider().dataSourceUri(),
+                f'EPSG:{project_epsg.postgisSrid()}',
+                result_path
+            )
+
+        appContext.update_layer(
+            appContext,
+            result_path,
+            layer_name
+        )
+
+
 
     return result_path
 
 
-def equalize_crs():
-    ortho = equalize_layer(appContext.layers.ortho.layer_loaded, "ortho")
-    dtm = equalize_layer(appContext.layers.dtm.layer_loaded, "dtm")
-    dsm = equalize_layer(appContext.layers.dsm.layer_loaded, "dsm")
+def clip_layer():
+    pass
 
-    appContext.update_layer(appContext, ortho, "ortho", appContext.layers.ortho.layer_data_provider)
-    appContext.update_layer(appContext, dtm, "dtm", appContext.layers.dtm.layer_data_provider)
-    appContext.update_layer(appContext, dsm, "dsm", appContext.layers.dsm.layer_data_provider)
+
+def equalize_crs():
+    ortho = equalize_layer("ortho", appContext.layers.ortho.layer, "raster")
+    dtm = equalize_layer("dtm", appContext.layers.dtm.layer, "raster")
+    dsm = equalize_layer("dsm", appContext.layers.dsm.layer, "raster")
+
+    clip_layer()
+
+    appContext.update_layer(appContext, ortho, "ortho", appContext.layers.ortho.data_provider)
+    appContext.update_layer(appContext, dtm, "dtm", appContext.layers.dtm.data_provider)
+    appContext.update_layer(appContext, dsm, "dsm", appContext.layers.dsm.data_provider)

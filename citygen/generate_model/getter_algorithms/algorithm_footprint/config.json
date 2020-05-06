@@ -1,0 +1,48 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "feature",
+      "properties": {
+        "name": "Footprint Extraction Algorithm",
+        "invocation": "python3",
+        "type": "getter",
+        "format": "algorithm",
+        "position": 0,
+        "layer": "footprint",
+        "datum": "ETRS89",
+        "cropIncluded": false,
+        "requirements": [
+          "urllib"
+        ]
+      },
+      "geometry": {
+        "type": "Multipolygon",
+        "coordinates": [
+          [
+            [
+              [
+                -180,
+                90
+              ],
+              [
+                180,
+                90
+              ],
+              [
+                180,
+                -90
+              ],
+              [
+                -180,
+                -90
+              ]
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}
+
+

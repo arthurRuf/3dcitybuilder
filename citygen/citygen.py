@@ -24,7 +24,7 @@
 from qgis.PyQt.QtCore import QSettings, QTranslator, QCoreApplication
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QAction, QFileDialog, QErrorMessage, QFileDialog
-from qgis.core import QgsProject, Qgis, QgsMessageLog
+from qgis.core import QgsProject, Qgis, QgsMessageLog, QgsCoordinateReferenceSystem
 from qgis.gui import QgsMessageBar
 
 from .generate_model.main import start
@@ -206,6 +206,11 @@ class citygen:
         self.dlg.cbxBuildingHeightMethod.currentIndexChanged.connect(self.cbxBuildingHeightMethod_on_change)
         self.cbxBuildingHeightMethod_on_change(0)
 
+        # CmbClip
+        self.dlg.cmbClip.currentIndexChanged.connect(self.cmbClip_on_change)
+        self.dlg.cmbClip.clear()
+        self.dlg.cmbClip.addItems([layer.name() for layer in layer_list])
+
         ### BEGIN Ortho ###
         appContext.plugins.getter_ortho_list = list(filter(lambda x: "ortho" in x["layer"], list(getter_list)))
         self.dlg.cbxOrthoSource.currentIndexChanged.connect(self.cbxOrthoSource_on_change)
@@ -242,14 +247,26 @@ class citygen:
         self.dlg.cbxDSMLayer.addItems([layer.name() for layer in layer_list])
         ### END DSM ###
 
+        ### BEGIN Footprint ###
+        appContext.plugins.getter_footprint_list = list(filter(lambda x: "footprint" in x["layer"], list(getter_list)))
+        self.dlg.cbxFootprintSource.currentIndexChanged.connect(self.cbxFootprintSource_on_change)
+        self.cbxFootprintSource_on_change(0)
+        self.dlg.cbxFootprintLayer.currentIndexChanged.connect(self.cbxFootprintLayer_on_change)
+        self.dlg.cbxFootprintSource.clear()
+        self.dlg.cbxFootprintSource.addItems([plugin["name"] for plugin in appContext.plugins.getter_footprint_list])
+
+        self.dlg.cbxFootprintLayer.clear()
+        self.dlg.cbxFootprintLayer.addItems([layer.name() for layer in layer_list])
+        ### END Footprint ###
+
         self.dlg.btnRun.clicked.connect(self.on_run)
         self.dlg.btnCancel.clicked.connect(self.on_cancel)
         self.dlg.btnTest.clicked.connect(self.on_test)
         self.dlg.btnClear.clicked.connect(self.on_clear)
+        self.dlg.btnFixCRS.clicked.connect(self.on_fixCRS)
         self.dlg.btnOrthoSateTo.clicked.connect(self.btnOrthoSateTo_on_click)
         self.dlg.btnDTMSateTo.clicked.connect(self.btnDTMSateTo_on_click)
         self.dlg.btnDSMSateTo.clicked.connect(self.btnDSMSateTo_on_click)
-
 
         # show the dialog
         self.dlg.show()
@@ -262,6 +279,7 @@ class citygen:
     def on_run(self):
         logger.general_log("clicked on_run")
         self.dlg.tabMain.setCurrentIndex(2)
+
 
         appContext.user_parameters.ortho_output = self.dlg.edtOrthoSateTo.text()
         appContext.user_parameters.dtm_output = self.dlg.edtDTMSateTo.text()
@@ -282,6 +300,10 @@ class citygen:
         logger.general_log("clicked on_clear")
         self.dlg.txtLog.setText("")
 
+    def on_fixCRS(self):
+        my_crs = QgsCoordinateReferenceSystem("EPSG:3395")
+        QgsProject.instance().setCrs(my_crs)
+
     def select_output_file(self, extension="Images (*.tif)"):
         filename, _filter = QFileDialog.getSaveFileName(
             self.dlg, "Select output file ", "", extension)
@@ -292,18 +314,28 @@ class citygen:
             if index == selected_index:
                 appContext.user_parameters.building_height_method = method
 
+    ## cmbClip ##
+    def cmbClip_on_change(self, selected_index):
+        if selected_index > 0:
+            appContext.user_parameters.clip_layer = QgsProject.instance().layerTreeRoot().children()[
+                selected_index - 1].layer()
+        else:
+            appContext.user_parameters.clip_layer = None
+
     ## BEGIN Ortho ##
+    def get_first_layer_by_name(self, layer_name, default=0):
+        for index, i in enumerate(QgsProject.instance().layerTreeRoot().children()):
+            if layer_name in i.layer().name().lower():
+                return index
+        return default
+
     def cbxOrthoSource_on_change(self, selected_index):
         appContext.user_parameters.ortho_getter = appContext.plugins.getter_ortho_list[selected_index]
-        if appContext.user_parameters.ortho_getter.format == "layer":
-            self.dlg.frmOrthoLayer.setVisible(True)
-        else:
-            self.dlg.frmOrthoLayer.setHidden(True)
 
-        if appContext.user_parameters.ortho_getter.format == "file":
-            self.dlg.frmOrthoSateTo.setVisible(True)
-        else:
-            self.dlg.frmOrthoSateTo.setHidden(True)
+        self.dlg.frmOrthoLayer.setVisible(appContext.user_parameters.ortho_getter.format == "layer")
+        self.dlg.frmOrthoSateTo.setVisible(appContext.user_parameters.ortho_getter.format == "file")
+
+        self.dlg.cbxOrthoLayer.setCurrentIndex(self.get_first_layer_by_name("ortho", 0))
 
     def cbxOrthoLayer_on_change(self, selected_index):
         appContext.user_parameters.ortho_input = QgsProject.instance().layerTreeRoot().children()[
@@ -318,15 +350,10 @@ class citygen:
     ## BEGIN DTM ##
     def cbxDTMSource_on_change(self, selected_index):
         appContext.user_parameters.dtm_getter = appContext.plugins.getter_dtm_list[selected_index]
-        if appContext.user_parameters.dtm_getter.format == "layer":
-            self.dlg.frmDTMLayer.setVisible(True)
-        else:
-            self.dlg.frmDTMLayer.setHidden(True)
+        self.dlg.frmDTMLayer.setVisible(appContext.user_parameters.dtm_getter.format == "layer")
+        self.dlg.frmDTMSateTo.setVisible(appContext.user_parameters.dtm_getter.format == "file")
 
-        if appContext.user_parameters.dtm_getter.format == "file":
-            self.dlg.frmDTMSateTo.setVisible(True)
-        else:
-            self.dlg.frmDTMSateTo.setHidden(True)
+        self.dlg.cbxDTMLayer.setCurrentIndex(self.get_first_layer_by_name("dtm", 0))
 
     def cbxDTMLayer_on_change(self, selected_index):
         appContext.user_parameters.dtm_input = QgsProject.instance().layerTreeRoot().children()[
@@ -335,20 +362,16 @@ class citygen:
     def btnDTMSateTo_on_click(self):
         filename = self.select_output_file()
         self.dlg.edtDTMSateTo.setText(filename)
+
     ## END DTM ##
 
     ## BEGIN DSM ##
     def cbxDSMSource_on_change(self, selected_index):
         appContext.user_parameters.dsm_getter = appContext.plugins.getter_dsm_list[selected_index]
-        if appContext.user_parameters.dsm_getter.format == "layer":
-            self.dlg.frmDSMLayer.setVisible(True)
-        else:
-            self.dlg.frmDSMLayer.setHidden(True)
+        self.dlg.frmDSMLayer.setVisible(appContext.user_parameters.dsm_getter.format == "layer")
+        self.dlg.frmDSMSateTo.setVisible(appContext.user_parameters.dsm_getter.format == "file")
 
-        if appContext.user_parameters.dsm_getter.format == "file":
-            self.dlg.frmDSMSateTo.setVisible(True)
-        else:
-            self.dlg.frmDSMSateTo.setHidden(True)
+        self.dlg.cbxDSMLayer.setCurrentIndex(self.get_first_layer_by_name("dsm", 0))
 
     def cbxDSMLayer_on_change(self, selected_index):
         appContext.user_parameters.dsm_input = QgsProject.instance().layerTreeRoot().children()[
@@ -360,3 +383,25 @@ class citygen:
 
     ## END DSM ##
 
+    ## BEGIN Footprint ##
+    def cbxFootprintSource_on_change(self, selected_index):
+        appContext.user_parameters.footprint_getter = appContext.plugins.getter_footprint_list[selected_index]
+
+        self.dlg.frmFootprintLayer.setVisible(appContext.user_parameters.footprint_getter.format == "layer")
+        self.dlg.frmFootprintSateTo.setVisible(appContext.user_parameters.footprint_getter.format in ["file", "algorithm"])
+
+        self.dlg.cbxFootprintLayer.setCurrentIndex(self.get_first_layer_by_name("footprint", 0))
+
+    def cbxFootprintLayer_on_change(self, selected_index):
+        appContext.user_parameters.footprint_input = QgsProject.instance().layerTreeRoot().children()[
+            selected_index].layer()
+
+    def btnFootprintSateTo_on_click(self):
+        filename = self.select_output_file()
+        self.dlg.edtFootprintSateTo.setText(filename)
+
+    def cbxFootprintAlgorithm_on_change(self, selected_index):
+        appContext.user_parameters.footprint_input = QgsProject.instance().layerTreeRoot().children()[
+            selected_index].layer()
+
+    ## END Footprint ##

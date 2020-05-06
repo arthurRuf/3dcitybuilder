@@ -1,42 +1,21 @@
 import sys, os, processing
 import qgis
 from qgis.core import QgsRasterLayer, QgsProject, QgsCoordinateReferenceSystem
+import qgis._3d as d
+from PyQt5.QtGui import QColor
 from ..appCtx import appContext
-from ..bibliotecas import logger
+from ..bibliotecas import logger, file_management, plugin_management
 from ..normalizer import normalizer
 
 
-def load_layers():
-    QgsProject.instance().addMapLayer(appContext.layers.ortho.layer_loaded)
-    QgsProject.instance().addMapLayer(appContext.layers.dtm.layer_loaded)
-    QgsProject.instance().addMapLayer(appContext.layers.dsm.layer_loaded)
-
-
 def identify_footprint():
-    logger.plugin_log("Identifying footprint.infos")
-    # appContext.steps.gis.footprint.input_file =
-    # footprint_layer = appContext.update_layer(
-    #     appContext,
-    #     f"{appContext.layers.footprint.layer_path}|layername=footprint|geometrytype=Polygon",
-    #     "footprint",
-    #     "ogr"
-    # )
-    footprint_layer = appContext.update_layer(
-        appContext,
-        f"/Users/arthurrufhosangdacosta/qgis_data/extrusion/footprintg.geojson",
-        "footprint",
-        "ogr",
-        "vector"
-    )
+    plugin_management.run_plugin_method(appContext.user_parameters.footprint_getter.id, "identify_footprint")
 
 
 def extrude_footprint():
     logger.plugin_log("Extruding footprint.infos")
     # vectorlayer = qgis.utils.iface.mapCanvas().currentLayer()
     # rasterfile = qgis.utils.iface.mapCanvas().currentLayer()
-
-    vectorlayer = appContext.layers.footprint.layer_loaded
-    rasterfile = appContext.layers.dsm.layer_loaded
 
     logger.plugin_log(
         f"appContext.user_parameters.building_height_method: {appContext.user_parameters.building_height_method}")
@@ -63,7 +42,6 @@ def extrude_footprint():
     # zonalstats = qgis.analysis.QgsZonalStatistics(vectorlayer, rasterfile, "d")
     # zonalstats.calculateStatistics(None)
 
-
     # processing.run("grass7:v.rast.stats", {
     #     'map': vectorlayer.dataProvider().dataSourceUri(),
     #     'raster': rasterfile.dataProvider().dataSourceUri(),
@@ -86,9 +64,11 @@ def extrude_footprint():
     processing.run(
         "saga:addrastervaluestofeatures",
         {
-            'SHAPES': vectorlayer.dataProvider().dataSourceUri(), # '/Users/arthurrufhosangdacosta/qgis_data/extrusion/footprintshp.shp|layername=footprintshp',
+            'SHAPES': appContext.layers.footprint.layer.dataProvider().dataSourceUri(),
+            # '/Users/arthurrufhosangdacosta/qgis_data/extrusion/footprintshp.shp|layername=footprintshp',
             'GRIDS': [
-                rasterfile.dataProvider().dataSourceUri(), # '/Users/arthurrufhosangdacosta/qgis_data/extrusion/dsm.tif'
+                appContext.layers.dsm.layer.dataProvider().dataSourceUri()
+                # '/Users/arthurrufhosangdacosta/qgis_data/extrusion/dsm.tif'
             ],
             'RESAMPLING': 3,
             'RESULT': output
@@ -96,36 +76,69 @@ def extrude_footprint():
     )
 
     footprint = appContext.update_layer(appContext, output, "footprint", "ogr", "vector")
-    footprint = normalizer.equalize_layer(footprint, "footprint", "vector")
-    footprint = appContext.update_layer(appContext, footprint, "footprint", "ogr", "vector")
-    QgsProject.instance().addMapLayer(footprint)
-
-    """
-        { '-t' : False, 'GRASS_MIN_AREA_PARAMETER' : 0.0001, 'GRASS_OUTPUT_TYPE_PARAMETER' : 0, 'GRASS_REGION_CELLSIZE_PARAMETER' : 0, 'GRASS_REGION_PARAMETER' : None, 'GRASS_SNAP_TOLERANCE_PARAMETER' : -1, 'GRASS_VECTOR_DSCO' : '', 'GRASS_VECTOR_EXPORT_NOCAT' : False, 'GRASS_VECTOR_LCO' : '', 'elevation' : None, 'height' : 99999, 'height_column' : '', 'input' : '/Users/arthurrufhosangdacosta/qgis_data/extrusion/footprintg.geojson|layername=footprint|geometrytype=Polygon', 'method' : 0, 'null_value' : None, 'output' : 'TEMPORARY_OUTPUT', 'scale' : 1, 'type' : [0,1,2], 'where' : '', 'zshift' : 0 }
-
-        g.proj -c proj4="+proj=longlat +datum=WGS84 +no_defs"
-        v.in.ogr min_area=0.0001 snap=-1.0 input="/Users/arthurrufhosangdacosta/qgis_data/footprint.geojson" layer="footprint" output="vector_5e99e857c69b23" --overwrite -o
-        g.region n=-26.9003043 s=-27.014627 e=-48.5893986 w=-48.7151464 res=100.0
-        v.extrude input=vector_5e99e857c69b23 type="point,line,area" zshift=0 height=99999 method="nearest" scale=1 output=outputb6f924da998943208ddbe68621dbf0cd --overwrite
-        v.out.ogr type="auto" input="outputb6f924da998943208ddbe68621dbf0cd" output="/private/var/folders/6k/gwc2zlsd7tl7ph27q44pcm0w0000gn/T/processing_DsnlEY/1fbe88153eac46d284f78212695de208/output.gpkg" format="GPKG" --overwrite
-
-    """
-    pass
+    normalizer.equalize_layer("footprint", footprint, "vector")
 
 
-def join_layers():
-    pass
-    # logger.plugin_log("Applying Satellite Image on Terrain Digital Model")
-    # logger.plugin_log("Placing 3D buildings model into CityModel")
-    # logger.plugin_log("Generating output file")
-    # f = open(os.path.expanduser(appContext.user_parameters.output), "w+")
+def run_footprint():
+    if appContext.user_parameters.footprint_getter.format == "algorithm":
+        identify_footprint()
+    extrude_footprint()
 
-def configure_layers_layout():
-    pass
+
+def save_files():
+    if (appContext.user_parameters.ortho_output != ""):
+        file_management.move_file(
+            appContext.layers.ortho.layer.dataProvider().dataSourceUri(),
+            appContext.user_parameters.ortho_output,
+        )
+
+    if (appContext.user_parameters.dtm_output != ""):
+        file_management.move_file(
+            appContext.layers.dtm.layer.dataProvider().dataSourceUri(),
+            appContext.user_parameters.dtm_output,
+        )
+
+    if (appContext.user_parameters.dsm_output != ""):
+        file_management.move_file(
+            appContext.layers.dsm.layer.dataProvider().dataSourceUri(),
+            appContext.user_parameters.dsm_output,
+        )
+
+    if (appContext.user_parameters.footprint_output != ""):
+        file_management.move_file(
+            appContext.layers.footprint.layer.dataProvider().dataSourceUri(),
+            appContext.user_parameters.footprint_output,
+        )
+
+
+def load_layers_to_project():
+    QgsProject.instance().addMapLayer(appContext.layers.ortho.layer)
+    QgsProject.instance().addMapLayer(appContext.layers.dtm.layer)
+    QgsProject.instance().addMapLayer(appContext.layers.dsm.layer)
+
+    # Footprint
+
+    symbol = d.QgsPolygon3DSymbol()
+    symbol.setAddBackFaces(False)
+    symbol.setAltitudeBinding(1)
+    symbol.setAltitudeClamping(0)
+    symbol.setCullingMode(0)
+
+    renderer = d.QgsVectorLayer3DRenderer()
+    renderer.setSymbol(symbol)
+
+    materialSettings = d.QgsPhongMaterialSettings()
+    materialSettings.setAmbient(QColor(255, 0, 0))
+    materialSettings.setDiffuse(QColor(255, 0, 0))
+    materialSettings.setSpecular(QColor(255, 0, 0))
+    symbol.setMaterial(materialSettings)
+
+    appContext.layers.footprint.layer.setRenderer3D(renderer)
+    # renderer.setLayer(appContext.layers.footprint.layer)
+    QgsProject.instance().addMapLayer(appContext.layers.footprint.layer)
+
 
 def generate_3d_model():
-    load_layers()
-    identify_footprint()
-    extrude_footprint()
-    join_layers()
-    configure_layers_layout()
+    run_footprint()
+    save_files()
+    load_layers_to_project()

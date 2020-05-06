@@ -6,7 +6,7 @@ from .bibliotecas import DotDict, logger
 def add_layer(filePath, type="raster", layer_name="", provider="gdal"):
     layer = None
 
-    if (type == "vector"):
+    if type == "vector":
         layer = QgsVectorLayer(filePath, layer_name, provider)
     else:
         layer = QgsRasterLayer(filePath, layer_name, provider)
@@ -52,7 +52,9 @@ class appContext:
     plugins = DotDict.DotDict({
         "getter_ortho_list": [],
         "getter_dtm_list": [],
-        "getter_dsm_list": []
+        "getter_dsm_list": [],
+        "getter_footprint_list": [],
+        "footprint_algorithm":[],
     })
 
     user_parameters = DotDict.DotDict({
@@ -64,38 +66,37 @@ class appContext:
         "ortho_getter": None,
         "dtm_getter": None,
         "dsm_getter": None,
+        "footprint_getter": None,
 
         "ortho_output": "",
         "dtm_output": "",
         "dsm_output": "",
+        "footprint_output": "",
 
-        "building_height_method": ""
+        "building_height_method": "",
+        "clip_layer": None
     })
 
     layers = DotDict.DotDict({
         "ortho": {
-            "layer_name": None,
-            "layer_path": None,
-            "layer_data_provider": None,
-            "layer_loaded": None
+            "layer": None,
+            "data_provider": None,
+            "type": "raster"
         },
         "dtm": {
-            "layer_name": None,
-            "layer_path": None,
-            "layer_data_provider": None,
-            "layer_loaded": None
+            "layer": None,
+            "data_provider": None,
+            "type": "raster"
         },
         "dsm": {
-            "layer_name": None,
-            "layer_path": None,
-            "layer_data_provider": None,
-            "layer_loaded": None
+            "layer": None,
+            "data_provider": None,
+            "type": "raster"
         },
         "footprint": {
-            "layer_name": None,
-            "layer_path": None,
-            "layer_data_provider": None,
-            "layer_loaded": None
+            "layer": None,
+            "data_provider": None,
+            "type": "vector"
         },
     })
 
@@ -122,19 +123,20 @@ class appContext:
         }
     })
 
-    def update_layer(self, layer_path: object, layer_name: object, layer_data_provider: object = "gdal", layer_type: object = "raster") -> object:
-        self.layers[layer_name].layer_name = layer_name
-        self.layers[layer_name].layer_path = layer_path
-        self.layers[layer_name].layer_data_provider = layer_data_provider
+    def update_layer(self, path, name, data_provider=None, type=None):
+        data_provider = data_provider or self.layers[name].data_provider
+        type = type or self.layers[name].type
 
-        self.layers[layer_name].layer_loaded = add_layer(layer_path, layer_type, layer_name, layer_data_provider)
+        self.layers[name].data_provider = data_provider
 
-        return self.layers[layer_name].layer_loaded
+        layer = add_layer(path, type, name, data_provider)
 
-    def update_layer_with_loaded(self, layer_loaded, layer_name):
-        self.layers[layer_name].layer_name = layer_loaded.name()
-        self.layers[layer_name].layer_path = layer_loaded.dataProvider().dataSourceUri()
-        self.layers[layer_name].layer_data_provider = layer_loaded.dataProvider().name()
-        self.layers[layer_name].layer_loaded = layer_loaded
+        self.layers[name].layer = layer
 
-        return self.layers[layer_name].layer_loaded
+        return layer
+
+    def update_layer_with_loaded(self, layer, layer_name):
+        self.layers[layer_name].layer = layer
+        self.layers[layer_name].data_provider = layer.dataProvider().name()
+
+        return layer

@@ -33,16 +33,23 @@ def appContext_setup():
     appContext.execution.raw_temp_folder = f"{appContext.execution.temp_folder}/raw"
     appContext.execution.normalized_temp_folder = f"{appContext.execution.temp_folder}/normalized"
 
-
     file_management.create_temp_dirs(appContext.execution.raw_temp_folder)
     file_management.create_temp_dirs(appContext.execution.normalized_temp_folder)
 
-    if appContext.user_parameters.ortho_output == "":
+    if appContext.user_parameters.ortho_output == "" and \
+            appContext.user_parameters.ortho_getter.format == "file":
         appContext.user_parameters.ortho_output = f"{appContext.execution.normalized_temp_folder}/ortho.tif"
-    if appContext.user_parameters.dtm_output == "":
+    if appContext.user_parameters.dtm_output == "" and \
+            appContext.user_parameters.dtm_getter.format == "file":
         appContext.user_parameters.dtm_output = f"{appContext.execution.normalized_temp_folder}/dtm.tif"
-    if appContext.user_parameters.dsm_output == "":
+    if appContext.user_parameters.dsm_output == "" and \
+            appContext.user_parameters.dsm_getter.format == "file":
         appContext.user_parameters.dsm_output = f"{appContext.execution.normalized_temp_folder}/dsm.tif"
+    if appContext.user_parameters.footprint_output == "" and \
+            (appContext.user_parameters.footprint_getter.format == "file" or
+             appContext.user_parameters.footprint_getter.format == "algorithm"
+            ):
+        appContext.user_parameters.footprint_output = f"{appContext.execution.normalized_temp_folder}/footprint.tif"
 
     logger.plugin_log(f"Plugin Temp folder: {appContext.execution.temp_folder}")
 
@@ -50,6 +57,8 @@ def appContext_setup():
 
 
 def start():
+    logger.plugin_log("OUTPUT LOCATION: " + appContext.user_parameters.ortho_output)
+
     appContext_setup()
 
     logger.plugin_log("Getting files...")
@@ -60,6 +69,8 @@ def start():
 
     gis.generate_3d_model()
     logger.plugin_log("Process complete without errors!")
+
+    logger.plugin_log("OUTPUT LOCATION: " + appContext.user_parameters.ortho_output)
 
     logger.update_progress(step_current=1, step_description="Done!", step_maximum=1,
                            overall_current=1, overall_description="", overall_maximum=1)
