@@ -28,3 +28,6 @@ def copy_file(source, destination):
 
 def move_file(source, destination):
     shutil.move(f"{source}", f"{destination}")
+
+def path_cleanup(path):
+    return path.split("|")[0]

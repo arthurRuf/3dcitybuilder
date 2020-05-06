@@ -88,26 +88,26 @@ def run_footprint():
 def save_files():
     if (appContext.user_parameters.ortho_output != ""):
         file_management.move_file(
-            appContext.layers.ortho.layer.dataProvider().dataSourceUri(),
-            appContext.user_parameters.ortho_output,
+            file_management.path_cleanup(appContext.layers.ortho.layer.dataProvider().dataSourceUri()),
+            file_management.path_cleanup(appContext.user_parameters.ortho_output),
         )
 
     if (appContext.user_parameters.dtm_output != ""):
         file_management.move_file(
-            appContext.layers.dtm.layer.dataProvider().dataSourceUri(),
-            appContext.user_parameters.dtm_output,
+            file_management.path_cleanup(appContext.layers.dtm.layer.dataProvider().dataSourceUri()),
+            file_management.path_cleanup(appContext.user_parameters.dtm_output),
         )
 
     if (appContext.user_parameters.dsm_output != ""):
         file_management.move_file(
-            appContext.layers.dsm.layer.dataProvider().dataSourceUri(),
-            appContext.user_parameters.dsm_output,
+            file_management.path_cleanup(appContext.layers.dsm.layer.dataProvider().dataSourceUri()),
+            file_management.path_cleanup(appContext.user_parameters.dsm_output),
         )
 
     if (appContext.user_parameters.footprint_output != ""):
         file_management.move_file(
-            appContext.layers.footprint.layer.dataProvider().dataSourceUri(),
-            appContext.user_parameters.footprint_output,
+            file_management.path_cleanup(appContext.layers.footprint.layer.dataProvider().dataSourceUri()),
+            file_management.path_cleanup(appContext.user_parameters.footprint_output),
         )
 
 
