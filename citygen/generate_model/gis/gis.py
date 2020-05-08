@@ -42,44 +42,55 @@ def extrude_footprint():
     # zonalstats = qgis.analysis.QgsZonalStatistics(vectorlayer, rasterfile, "d")
     # zonalstats.calculateStatistics(None)
 
-    # processing.run("grass7:v.rast.stats", {
-    #     'map': vectorlayer.dataProvider().dataSourceUri(),
-    #     'raster': rasterfile.dataProvider().dataSourceUri(),
-    #     'column_prefix': 'citygen',
-    #     'method': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-    #     'percentile': 90,
-    #     'output': output,
-    #     'GRASS_REGION_PARAMETER': None,
-    #     'GRASS_REGION_CELLSIZE_PARAMETER': 0,
-    #     'GRASS_SNAP_TOLERANCE_PARAMETER': -1,
-    #     'GRASS_MIN_AREA_PARAMETER': 0.000001,
-    #     'GRASS_OUTPUT_TYPE_PARAMETER': 3,
-    #     'GRASS_VECTOR_DSCO': '',
-    #     'GRASS_VECTOR_LCO': '',
-    #     'GRASS_VECTOR_EXPORT_NOCAT': True
-    # })
+    output = ""
 
-    output = f"{appContext.execution.raw_temp_folder}/footprint/footprint_height.shp"
 
-    processing.run(
-        "saga:addrastervaluestofeatures",
-        {
-            'SHAPES': appContext.layers.footprint.layer.dataProvider().dataSourceUri(),
-            'GRIDS': [
-                appContext.layers.dsm.layer.dataProvider().dataSourceUri()
-            ],
-            'RESAMPLING': 3,
-            'RESULT': output
-        }
-    )
+
+    if appContext.user_parameters.building_height_method.algorithm == "grass7:v.rast.stats":
+        output = f"{appContext.execution.raw_temp_folder}/footprint/footprint_height.gpkg"
+
+        processing.run(
+            "grass7:v.rast.stats",
+            {
+                'map': appContext.layers.footprint.layer.dataProvider().dataSourceUri(),
+                'raster': appContext.layers.dsm.layer.dataProvider().dataSourceUri(),
+                'column_prefix': 'cbuilding',
+                'method': [appContext.user_parameters.building_height_method.method_id],
+                'percentile': 90,
+                'output': output,
+                'GRASS_REGION_PARAMETER': None,
+                'GRASS_REGION_CELLSIZE_PARAMETER': 0,
+                'GRASS_SNAP_TOLERANCE_PARAMETER': -1,
+                'GRASS_MIN_AREA_PARAMETER': 0.0001,
+                'GRASS_OUTPUT_TYPE_PARAMETER': 3,
+                'GRASS_VECTOR_DSCO': '',
+                'GRASS_VECTOR_LCO': '',
+                'GRASS_VECTOR_EXPORT_NOCAT': False
+            }
+        )
+    elif appContext.user_parameters.building_height_method.algorithm == "saga:addrastervaluestofeatures":
+        output = f"{appContext.execution.raw_temp_folder}/footprint/footprint_height.shp"
+
+        processing.run(
+            "saga:addrastervaluestofeatures",
+            {
+                'SHAPES': appContext.layers.footprint.layer.dataProvider().dataSourceUri(),
+                'GRIDS': [
+                    appContext.layers.dsm.layer.dataProvider().dataSourceUri()
+                ],
+                'RESAMPLING': appContext.user_parameters.building_height_method.method_id,
+                'RESULT': output
+            }
+        )
+
 
     footprint = appContext.update_layer(appContext, output, "footprint", "ogr", "vector")
 
     normalizer.normalize_layer("footprint", "vector")
 
-    findex = len(footprint.dataProvider().fields())-1
+    findex = len(footprint.dataProvider().fields()) - 1
     if findex != -1:
-        footprint.dataProvider().renameAttributes({findex: "building_heigth"})
+        footprint.dataProvider().renameAttributes({findex: "building_height"})
         footprint.updateFields()
 
 
@@ -100,16 +111,18 @@ def move(source, destination, layer_name):
 
 def save_files():
     if (appContext.user_parameters.ortho_output != ""):
-        move( appContext.layers.ortho.layer.dataProvider().dataSourceUri(), appContext.user_parameters.ortho_output, "ortho")
+        move(appContext.layers.ortho.layer.dataProvider().dataSourceUri(), appContext.user_parameters.ortho_output,
+             "ortho")
 
     if (appContext.user_parameters.dtm_output != ""):
-        move( appContext.layers.dtm.layer.dataProvider().dataSourceUri(), appContext.user_parameters.dtm_output, "dtm")
+        move(appContext.layers.dtm.layer.dataProvider().dataSourceUri(), appContext.user_parameters.dtm_output, "dtm")
 
     if (appContext.user_parameters.dsm_output != ""):
-        move( appContext.layers.dsm.layer.dataProvider().dataSourceUri(), appContext.user_parameters.dsm_output, "dsm")
+        move(appContext.layers.dsm.layer.dataProvider().dataSourceUri(), appContext.user_parameters.dsm_output, "dsm")
 
     if (appContext.user_parameters.footprint_output != ""):
-        move( appContext.layers.footprint.layer.dataProvider().dataSourceUri(), appContext.user_parameters.footprint_output, "footprint")
+        move(appContext.layers.footprint.layer.dataProvider().dataSourceUri(),
+             appContext.user_parameters.footprint_output, "footprint")
 
 
 def load_layers_to_project():

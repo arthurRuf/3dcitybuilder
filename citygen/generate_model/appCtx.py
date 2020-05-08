@@ -25,31 +25,48 @@ class appContext:
     BUILDING_HEIGHT_METHODS = [
         {
             "title": "Minimum",
-            "grassGIS_method_id": 1
+            "algorithm": "grass7:v.rast.stats",
+            "method_id": 1
         },
         {
             "title": "Maximum",
-            "grassGIS_method_id": 2
+            "algorithm": "grass7:v.rast.stats",
+            "method_id": 2
         },
         {
             "title": "Average",
-            "grassGIS_method_id": 4
+            "algorithm": "grass7:v.rast.stats",
+            "method_id": 4
         },
         {
             "title": "First Quartile",
-            "grassGIS_method_id": 9
+            "algorithm": "grass7:v.rast.stats",
+            "method_id": 9
         },
         {
             "title": "Median",
-            "grassGIS_method_id": 10
+            "algorithm": "grass7:v.rast.stats",
+            "method_id": 10
         },
         {
             "title": "Third Quartile",
-            "grassGIS_method_id": 11
+            "algorithm": "grass7:v.rast.stats",
+            "method_id": 11
         },
         {
             "title": "Percentile",
-            "grassGIS_method_id": 12
+            "algorithm": "grass7:v.rast.stats",
+            "method_id": 12
+        },
+        {
+            "title": "Nearest Neighbor",
+            "algorithm": "saga:addrastervaluestofeatures",
+            "method_id": 0
+        },
+        {
+            "title": "B-Spline Interpolation",
+            "algorithm": "saga:addrastervaluestofeatures",
+            "method_id": 4
         }
     ]
 
