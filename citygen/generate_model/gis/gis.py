@@ -75,12 +75,12 @@ def extrude_footprint():
 
     footprint = appContext.update_layer(appContext, output, "footprint", "ogr", "vector")
 
+    normalizer.normalize_layer("footprint", "vector")
+
     findex = len(footprint.dataProvider().fields())-1
     if findex != -1:
         footprint.dataProvider().renameAttributes({findex: "building_heigth"})
         footprint.updateFields()
-
-    normalizer.equalize_layer("footprint", footprint, "vector")
 
 
 def run_footprint():

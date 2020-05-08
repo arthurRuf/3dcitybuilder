@@ -18,8 +18,8 @@ def execute(appResources, appContext):
 
     appResources.bibliotecas.logger.update_progress(step_description="Downloading DTM...")
     appResources.bibliotecas.internet.download_file(
-        # 'https://www.wien.gv.at/ma41datenviewer/downloads/ma41/geodaten/dgm_tif/35_4_dgm_tif.zip',
-        "https://ttc-hosang.s3.amazonaws.com/test/35_4_dgm_tif.zip",
+        'https://www.wien.gv.at/ma41datenviewer/downloads/ma41/geodaten/dgm_tif/35_4_dgm_tif.zip',
+        # "https://ttc-hosang.s3.amazonaws.com/test/35_4_dgm_tif.zip",
         raw_file)
 
     # NORMALIZING
@@ -33,7 +33,8 @@ def execute(appResources, appContext):
         appContext,
         result,
         "dtm",
-        "gdal"
+        "gdal",
+        31256
     )
 
     appResources.bibliotecas.logger.update_progress(step_current=1, step_maximum=1)

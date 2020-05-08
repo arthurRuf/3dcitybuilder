@@ -33,7 +33,8 @@ def execute(appResources, appContext):
         appContext,
         result,
         "dtm",
-        "gdal"
+        "gdal",
+        4674
     )
 
     appResources.bibliotecas.logger.update_progress(step_current=1, step_maximum=1)

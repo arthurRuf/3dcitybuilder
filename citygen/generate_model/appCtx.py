@@ -3,7 +3,7 @@ from qgis.core import QgsVectorLayer, QgsRasterLayer
 from .bibliotecas import DotDict, logger
 
 
-def add_layer(filePath, type="raster", layer_name="", provider="gdal"):
+def add_layer(filePath, type="raster", layer_name="", provider="gdal", crs_id=None):
     layer = None
 
     if type == "vector":
@@ -13,6 +13,10 @@ def add_layer(filePath, type="raster", layer_name="", provider="gdal"):
 
     if not layer.isValid():
         raise Exception("Error!")
+
+    if crs_id != None:
+        crs = layer.crs()
+        crs.createFromId(crs_id)
 
     return layer
 
@@ -81,22 +85,26 @@ class appContext:
         "ortho": {
             "layer": None,
             "data_provider": None,
-            "type": "raster"
+            "type": "raster",
+            "crs": None
         },
         "dtm": {
             "layer": None,
             "data_provider": None,
-            "type": "raster"
+            "type": "raster",
+            "crs": None
         },
         "dsm": {
             "layer": None,
             "data_provider": None,
-            "type": "raster"
+            "type": "raster",
+            "crs": None
         },
         "footprint": {
             "layer": None,
             "data_provider": None,
-            "type": "vector"
+            "type": "vector",
+            "crs": None
         },
     })
 
@@ -123,13 +131,16 @@ class appContext:
         }
     })
 
-    def update_layer(self, path, name, data_provider=None, type=None):
+    def update_layer(self, path, name, data_provider=None, type=None, crs=None):
         data_provider = data_provider or self.layers[name].data_provider
         type = type or self.layers[name].type
+        crs = crs or self.layers[name].crs or None
 
         self.layers[name].data_provider = data_provider
+        self.layers[name].type = type
+        self.layers[name].crs = crs
 
-        layer = add_layer(path, type, name, data_provider)
+        layer = add_layer(path, type, name, data_provider, crs)
 
         self.layers[name].layer = layer
 

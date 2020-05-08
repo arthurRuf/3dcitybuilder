@@ -209,7 +209,7 @@ class citygen:
         # CmbClip
         self.dlg.cmbClip.currentIndexChanged.connect(self.cmbClip_on_change)
         self.dlg.cmbClip.clear()
-        self.dlg.cmbClip.addItems([layer.name() for layer in layer_list])
+        self.dlg.cmbClip.addItems(["Don't clip Polygons"] + [layer.name() for layer in layer_list])
 
         ### BEGIN Ortho ###
         appContext.plugins.getter_ortho_list = list(filter(lambda x: "ortho" in x["layer"], list(getter_list)))

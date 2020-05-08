@@ -65,7 +65,7 @@ def start():
     getters_management.execute_getters()
 
     logger.plugin_log("Normalizing...")
-    normalizer.equalize_crs()
+    normalizer.normalize_layers()
 
     gis.generate_3d_model()
     logger.plugin_log("Process complete without errors!")

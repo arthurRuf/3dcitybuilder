@@ -9,7 +9,7 @@
         "type": "getter",
         "format": "file",
         "layer": "dsm",
-        "datum": "ETRS89",
+        "datum": "4674",
         "cropIncluded": false,
         "requirements": [
           "urllib"

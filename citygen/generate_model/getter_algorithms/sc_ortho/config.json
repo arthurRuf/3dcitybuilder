@@ -10,7 +10,7 @@
         "type": "getter",
         "format": "file",
         "layer": "ortho",
-        "datum": "ETRS89",
+        "datum": "4674",
         "cropIncluded": false,
         "requirements": [
           "urllib"

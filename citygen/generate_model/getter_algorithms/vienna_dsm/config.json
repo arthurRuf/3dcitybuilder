@@ -9,7 +9,7 @@
         "type": "getter",
         "format": "file",
         "layer": "dsm",
-        "datum": "ETRS89",
+        "epsg_code": "31256",
         "cropIncluded": false,
         "requirements": [
           "urllib"
