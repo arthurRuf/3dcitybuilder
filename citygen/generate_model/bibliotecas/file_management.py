@@ -22,6 +22,10 @@ def unzip_file(zip_file, destination):
 
     progress_bar.done(p)
 
+def unzip_file_list(zip_file_list, destination_list):
+    for index, url in enumerate(zip_file_list):
+        unzip_file(zip_file_list[index], destination_list[index])
+
 
 def copy_file(source, destination):
     shutil.copy(f"{source}", f"{destination}")

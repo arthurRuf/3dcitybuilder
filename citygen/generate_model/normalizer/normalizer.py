@@ -70,7 +70,7 @@ def equalize_layer(layer_name, loaded_layer, layer_type):
             appContext,
             result_path,
             layer_name,
-            project_csr.postgisSrid()
+            crs=project_csr.postgisSrid()
         )
 
     return result_path
