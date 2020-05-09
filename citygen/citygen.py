@@ -204,7 +204,8 @@ class citygen:
         self.dlg.cbxBuildingHeightMethod.clear()
         self.dlg.cbxBuildingHeightMethod.addItems([method["title"] for method in appContext.BUILDING_HEIGHT_METHODS])
         self.dlg.cbxBuildingHeightMethod.currentIndexChanged.connect(self.cbxBuildingHeightMethod_on_change)
-        self.cbxBuildingHeightMethod_on_change(0)
+        self.dlg.cbxBuildingHeightMethod.setCurrentIndex(1)
+        self.cbxBuildingHeightMethod_on_change(1)
 
         # CmbClip
         self.dlg.cmbClip.currentIndexChanged.connect(self.cmbClip_on_change)
