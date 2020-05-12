@@ -1,4 +1,6 @@
 import sys, os, random, string
+from typing import Dict, List, Union
+
 from qgis.core import QgsVectorLayer, QgsRasterLayer
 from .bibliotecas import DotDict, logger
 
@@ -22,14 +24,14 @@ def add_layer(filePath, type="raster", layer_name="", provider="gdal", crs_id=No
 
 
 class appContext:
-    BUILDING_HEIGHT_METHODS = [
+    BUILDING_HEIGHT_METHODS: List[Dict[str, Union[str, int]]] = [
         {
-            "title": "Minimum",
+            "title": "Minimum Value",
             "algorithm": "grass7:v.rast.stats",
             "method_id": 1
         },
         {
-            "title": "Maximum",
+            "title": "Maximum Value",
             "algorithm": "grass7:v.rast.stats",
             "method_id": 2
         },
@@ -118,6 +120,12 @@ class appContext:
             "crs": None
         },
         "footprint": {
+            "layer": None,
+            "data_provider": None,
+            "type": "vector",
+            "crs": None
+        },
+        "clipping_polygon": {
             "layer": None,
             "data_provider": None,
             "type": "vector",

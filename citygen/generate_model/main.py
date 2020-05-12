@@ -24,8 +24,8 @@ from .gis import gis
 #     os.mkdir("temp/normalized/dsm")
 
 def appContext_setup():
-    logger.update_progress(step_current=0, step_description="Loading...", step_maximum=100,
-                           overall_current=1, overall_description="Initialization", overall_maximum=100)
+    logger.update_progress(step_current=0, step_description="Loading...", step_maximum=27,
+                           overall_current=1, overall_description="Initialization", overall_maximum=12)
 
     appContext.execution.id = ''.join(random.choices(string.ascii_letters + string.digits, k=16))
     temp_folder = QgsProcessingUtils.tempFolder()
@@ -54,6 +54,9 @@ def appContext_setup():
     logger.plugin_log(f"Plugin Temp folder: {appContext.execution.temp_folder}")
 
     logger.update_progress(step_current=100, overall_current=2)
+
+    if appContext.user_parameters.clip_layer == "viewport":
+        appContext.user_parameters.clip_layer = gis.create_viewport_polygon()
 
 
 def start():

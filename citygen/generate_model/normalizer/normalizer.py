@@ -129,6 +129,7 @@ def clip_layer(layer_name, loaded_layer, layer_type):
     return result_path
 
 
+
 def normalize_layer(layer_name, layer_type):
     equalize_layer(layer_name, appContext.layers[layer_name].layer, layer_type)
     layer_final_path = clip_layer(layer_name, appContext.layers[layer_name].layer, layer_type)

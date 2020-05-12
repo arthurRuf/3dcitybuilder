@@ -31,6 +31,7 @@ from .generate_model.main import start
 from .generate_model.appCtx import appContext
 from .generate_model.bibliotecas import DotDict, execute, plugin_management, internet, path_manager, path_manager, \
     progress_bar, plugin_management, logger
+from .generate_model.gis.gis import create_viewport_polygon
 
 # Initialize Qt resources from file resources.py
 from .resources import *
@@ -210,7 +211,7 @@ class citygen:
         # CmbClip
         self.dlg.cmbClip.currentIndexChanged.connect(self.cmbClip_on_change)
         self.dlg.cmbClip.clear()
-        self.dlg.cmbClip.addItems(["Don't clip Polygons"] + [layer.name() for layer in layer_list])
+        self.dlg.cmbClip.addItems(["Don't clip", "Use map viewport"] + [layer.name() for layer in layer_list])
 
         ### BEGIN Ortho ###
         appContext.plugins.getter_ortho_list = list(filter(lambda x: "ortho" in x["layer"], list(getter_list)))
@@ -323,11 +324,13 @@ class citygen:
 
     ## cmbClip ##
     def cmbClip_on_change(self, selected_index):
-        if selected_index > 0:
-            appContext.user_parameters.clip_layer = QgsProject.instance().layerTreeRoot().children()[
-                selected_index - 1].layer()
-        else:
+        if selected_index == 0:
             appContext.user_parameters.clip_layer = None
+        elif selected_index == 1:
+            appContext.user_parameters.clip_layer = "viewport"
+        else:
+            appContext.user_parameters.clip_layer = QgsProject.instance().layerTreeRoot().children()[
+                selected_index - 2].layer()
 
     ## BEGIN Ortho ##
     def get_first_layer_by_name(self, layer_name, default=0):
