@@ -5,8 +5,6 @@
       "type": "feature",
       "properties": {
         "name": "Vienna City",
-        "invocation": "python3",
-        "type": "getter",
         "format": "wmts",
         "layer": "ortho",
         "epsg_code": "31256",

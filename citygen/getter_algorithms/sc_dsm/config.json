@@ -5,11 +5,9 @@
       "type": "feature",
       "properties": {
         "name": "SIGSC",
-        "invocation": "python3",
-        "type": "getter",
         "format": "file",
         "layer": "dsm",
-        "datum": "4674",
+        "epsg_code": "4674",
         "cropIncluded": false,
         "requirements": [
           "urllib"

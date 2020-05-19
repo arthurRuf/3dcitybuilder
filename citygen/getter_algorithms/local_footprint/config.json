@@ -5,12 +5,9 @@
       "type": "feature",
       "properties": {
         "name": "Select a layer from the project",
-        "invocation": "python3",
-        "type": "getter",
         "format": "layer",
-        "position": 1,
+        "position": 0,
         "layer": "footprint",
-        "datum": "ETRS89",
         "cropIncluded": false,
         "requirements": [
           "urllib"

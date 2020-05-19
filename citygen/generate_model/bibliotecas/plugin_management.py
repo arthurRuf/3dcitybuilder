@@ -7,7 +7,7 @@ from ..appCtx import appContext
 
 def get_list():
     plugin_list = load_plugin_list()
-    return list(filter(lambda x: "getter" in x["type"], plugin_list))
+    return list(plugin_list)
 
 
 def load_plugin_list():
@@ -26,8 +26,10 @@ def load_plugin_list():
     plugin_list = []
     for index, directory_name in enumerate(directory_list):
         try:
-            with open(rf'{plugins_path}/{directory_name}/config.json') as file:
+            if "__init__.py" == directory_name:
+                raise Exception("a")
 
+            with open(rf'{plugins_path}/{directory_name}/config.json') as file:
                 plugin_configuration_file = json.load(file)
 
                 if "features" not in plugin_configuration_file \
@@ -42,10 +44,6 @@ def load_plugin_list():
                 plugin_properties = plugin_feature["properties"]
                 plugin_geometry = plugin_feature["geometry"]
 
-                if "type" not in plugin_properties:
-                    logger.plugin_log(
-                        f"Invalid config.json file for plugin {directory_name}.\n Property 'type' is mandatory on features[0].properties.")
-                    raise Exception()
                 if "layer" not in plugin_properties:
                     logger.plugin_log(
                         f"Invalid config.json file for plugin {directory_name}.\n Property 'layer' is mandatory on features[0].properties.")
@@ -53,16 +51,13 @@ def load_plugin_list():
 
                 plugin_list.append({
                     "id": directory_name,
-                    "position": 0 if directory_name in ["local_ortho", "local_dtm", "local_dsm"] else index + 1,
+                    "position": 0 if directory_name in ["local_ortho", "local_dtm", "local_dsm", "local_footprint"] else index + 1,
                     "name": plugin_properties.get("name", directory_name),
-                    "type": plugin_properties["type"],
                     "format": plugin_properties["format"],
                     "layer": plugin_properties["layer"],
-                    "invocation": plugin_properties.get("invocation", "python3"),
                     "epsg_code": plugin_properties.get("epsg_code", None),
                     "cropIncluded": plugin_properties.get("cropIncluded", False),
                     "requirements": plugin_properties.get("requirements", []),
-                    "normalizer": plugin_properties.get("normalizer", {"id": "none"}),
                     "parameters": plugin_properties.get("parameters", {}),
                     "geometry": plugin_geometry
                 })
@@ -70,6 +65,7 @@ def load_plugin_list():
             logger.plugin_log(f"Fail to load {directory_name} plugin! The plugin does not have a config.yml file")
         except Exception:
             logger.plugin_log(f"Fail to load {directory_name} plugin!")
+
 
     plugin_list = sorted(plugin_list, key=lambda k: (k['position'], k['name']))
 
@@ -80,7 +76,7 @@ def load_plugin_list():
 def run_plugin_method(plugin_id, method_name):
     logger.plugin_log(f"plugin_id: {plugin_id}")
     path = f"{appContext.plugins.path}/{plugin_id}"
-    plugin_main_module = importlib.machinery.SourceFileLoader('main', f'{path}/main.py').load_module()
+    plugin_main_module = importlib.machinery.SourceFileLoader('mainnn', f'{path}/main.py').load_module()
 
 
 

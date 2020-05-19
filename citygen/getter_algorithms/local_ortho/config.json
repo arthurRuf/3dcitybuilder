@@ -4,13 +4,11 @@
     {
       "type": "feature",
       "properties": {
-        "invocation": "python3",
-        "type": "getter",
         "name": "Select a layer from the project",
         "format": "layer",
         "position": 0,
         "layer": "ortho",
-        "datum": "ETRS89",
+        "epsg_code": "4674",
         "cropIncluded": false,
         "requirements": [
           "urllib"

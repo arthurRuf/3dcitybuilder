@@ -5,16 +5,16 @@
       "type": "feature",
       "properties": {
         "name": "Select a layer from the project",
-        "invocation": "python3",
-        "type": "getter",
         "format": "layer",
         "position": 0,
         "layer": "dtm",
-        "datum": "ETRS89",
         "cropIncluded": false,
         "requirements": [
           "urllib"
-        ]
+        ],
+        "parameters": {
+
+        }
       },
       "geometry": {
         "type": "Multipolygon",
