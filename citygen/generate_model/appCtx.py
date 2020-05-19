@@ -135,7 +135,9 @@ class appContext:
 
     qgis = DotDict.DotDict({
         "iface": None,
-        "dlg": None
+        "dlg": None,
+        "geopandas": None,
+        "osmx": None
     })
 
     execution = DotDict.DotDict({

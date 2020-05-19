@@ -21,6 +21,11 @@
  *                                                                         *
  ***************************************************************************/
 """
+
+import sys
+
+sys.path.append("/Volumes/TarDisk/ruf/workspace/ttc/3dcitybuilder/citygen/libs/")
+
 from qgis.PyQt.QtCore import QSettings, QTranslator, QCoreApplication
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QAction, QFileDialog, QErrorMessage, QFileDialog
@@ -33,6 +38,7 @@ from .generate_model.bibliotecas import DotDict, execute, plugin_management, int
     progress_bar, plugin_management, logger
 from .generate_model.gis.gis import create_viewport_polygon
 
+geopandas = None
 # Initialize Qt resources from file resources.py
 from .resources import *
 # Import the code for the dialog
@@ -198,6 +204,8 @@ class citygen:
         appContext.qgis.iface = self.iface
         appContext.qgis.segf = self
         appContext.qgis.dlg = self.dlg
+        # appContext.qgis.geopandas = geopandas
+        # appContext.qgis.osmx = osmx
 
         layer_list = QgsProject.instance().layerTreeRoot().children()
         getter_list = plugin_management.get_list()
@@ -286,7 +294,6 @@ class citygen:
     def on_run(self):
         logger.general_log("clicked on_run")
         self.dlg.tabMain.setCurrentIndex(2)
-
 
         appContext.user_parameters.ortho_output = self.dlg.edtOrthoSateTo.text()
         appContext.user_parameters.dtm_output = self.dlg.edtDTMSateTo.text()
@@ -398,7 +405,8 @@ class citygen:
         appContext.user_parameters.footprint_getter = appContext.plugins.getter_footprint_list[selected_index]
 
         self.dlg.frmFootprintLayer.setVisible(appContext.user_parameters.footprint_getter.format == "layer")
-        self.dlg.frmFootprintSateTo.setVisible(appContext.user_parameters.footprint_getter.format in ["file", "algorithm"])
+        self.dlg.frmFootprintSateTo.setVisible(
+            appContext.user_parameters.footprint_getter.format in ["file", "algorithm"])
 
         self.dlg.cbxFootprintLayer.setCurrentIndex(self.get_first_layer_by_name("footprint", 0))
 

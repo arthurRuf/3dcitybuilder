@@ -15,7 +15,7 @@ def load_plugin_list():
 
     file_re = os.path.dirname(os.path.realpath(__file__))
     path = pathlib.Path(file_re)
-    plugins_path = str(path.parent) + "/getter_algorithms"
+    plugins_path = str(path.parent.parent) + "/getter_algorithms"
 
     appContext.plugins.path = plugins_path
 

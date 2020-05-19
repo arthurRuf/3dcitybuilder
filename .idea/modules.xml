@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/citygen.iml" filepath="$PROJECT_DIR$/.idea/citygen.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../test/osmnx-examples/.idea/osmnx-examples.iml" filepath="$PROJECT_DIR$/../test/osmnx-examples/.idea/osmnx-examples.iml" />
     </modules>
   </component>
 </project>
