@@ -1,7 +1,14 @@
-import sys, os, processing
+import sys
+
+# sys.path.append("/Volumes/TarDisk/ruf/workspace/ttc/3dcitybuilder/citygen/generate_model/gis/dependencies/")
+# sys.path.append("/Volumes/TarDisk/ruf/workspace/ttc/3dcitybuilder/citygen/generate_model/gis/dependencies/osmnx/")
+# sys.path.append("/Volumes/TarDisk/ruf/workspace/ttc/3dcitybuilder/citygen/generate_model/gis/dependencies/geopandas/")
+
+import os, processing
 import qgis
-# import geopandas as gdp
-# import osmx as ox
+import geopandas as gdp
+import osmnx as ox
+
 from qgis.core import QgsRasterLayer, QgsProject, QgsCoordinateReferenceSystem, QgsProperty, QgsVectorLayer, QgsFeature, \
     QgsGeometry, QgsPointXY, QgsVectorFileWriter, QgsFields, QgsSimpleLineSymbolLayer
 import qgis._3d as d
@@ -9,7 +16,6 @@ from PyQt5.QtGui import QColor
 from ..appCtx import appContext, add_layer
 from ..bibliotecas import logger, file_management, plugin_management
 from ..normalizer import normalizer
-
 
 def create_viewport_polygon():
     extent = appContext.qgis.iface.mapCanvas().extent()
@@ -203,59 +209,59 @@ def load_layers_to_project():
 
 
 def add_roads():
-    # ox.config(log_console=True, use_cache=True)
+    ox.config(log_console=True, use_cache=True)
     polygon_path = appContext.user_parameters.clip_layer.dataProvider().dataSourceUri()
 
-    polygon_path = "/Users/arthurrufhosangdacosta/qgis_data/extrusion/polygon_clip_mask.shp"
-    # epsg_id = 4326
-    #
-    # epsg_id = QgsProject.instance().crs().postgisSrid()
-    # project_epsg = f'EPSG:{epsg_id}'
-    #
-    # # calif = gdp.read_file('input_data/ZillowNeighborhoods-CA')
-    # calif = gdp.read_file(polygon_path)
-    # polygon = calif['geometry'].iloc[0]
-    # graph = ox.graph_from_polygon(polygon, network_type='drive_service')
-    # graph_projected = ox.project_graph(graph, project_epsg)
-    #
-    # ox.save_graph_shapefile(graph_projected, filename='roads', folder=appContext.execution.normalized_temp_folder)
-    #
-    # layer = add_layer(
-    #     f"{appContext.execution.normalized_temp_folder}/roads/edges/edges.shp",
-    #     "vector",
-    #     "roads",
-    #     "ogr",
-    #     epsg_id
-    # )
-    #
-    # layer.renderer().symbol().setWidth(10.50000)
-    # layer.renderer().symbol().setColor(QColor("#000000"))
-    #
-    # symbol_layer = []
-    #
-    # symbol_layer[0] = QgsSimpleLineSymbolLayer()
-    # symbol_layer[0].setWidth(0.4)
-    # symbol_layer[0].setColor(QColor("#cdd31b"))
-    # symbol_layer[0].setPenJoinStyle(1)
-    # symbol_layer[0].setPenCapStyle(0)
-    #
-    # symbol_layer[1] = QgsSimpleLineSymbolLayer()
-    # symbol_layer[1].setWidth(10)
-    # symbol_layer[1].setColor(QColor("#3b3b3b"))
-    # symbol_layer[1].setPenJoinStyle(1)
-    # symbol_layer[1].setPenCapStyle(0)
-    #
-    # symbol_layer[2] = QgsSimpleLineSymbolLayer()
-    # symbol_layer[2].setWidth(10.5)
-    # symbol_layer[2].setColor(QColor("#000000"))
-    # symbol_layer[2].setPenJoinStyle(1)
-    # symbol_layer[2].setPenCapStyle(0)
-    #
-    # layer.renderer().symbol().appendSymbolLayer(symbol_layer[0])
-    # layer.renderer().symbol().appendSymbolLayer(symbol_layer[1])
-    # layer.renderer().symbol().appendSymbolLayer(symbol_layer[2])
-    #
-    # QgsProject.instance().addMapLayer(layer)
+    # polygon_path = "/Users/arthurrufhosangdacosta/qgis_data/extrusion/polygon_clip_mask.shp"
+    epsg_id = 4326
+
+    epsg_id = QgsProject.instance().crs().postgisSrid()
+    project_epsg = f'EPSG:{epsg_id}'
+
+    # calif = gdp.read_file('input_data/ZillowNeighborhoods-CA')
+    calif = gdp.read_file(polygon_path)
+    polygon = calif['geometry'].iloc[0]
+    graph = ox.graph_from_polygon(polygon, network_type='drive_service')
+    graph_projected = ox.project_graph(graph, project_epsg)
+
+    ox.save_graph_shapefile(graph_projected, filename='roads', folder=appContext.execution.normalized_temp_folder)
+
+    layer = add_layer(
+        f"{appContext.execution.normalized_temp_folder}/roads/edges/edges.shp",
+        "vector",
+        "roads",
+        "ogr",
+        epsg_id
+    )
+
+    layer.renderer().symbol().setWidth(10.50000)
+    layer.renderer().symbol().setColor(QColor("#000000"))
+
+    symbol_layer = []
+
+    symbol_layer[0] = QgsSimpleLineSymbolLayer()
+    symbol_layer[0].setWidth(0.4)
+    symbol_layer[0].setColor(QColor("#cdd31b"))
+    symbol_layer[0].setPenJoinStyle(1)
+    symbol_layer[0].setPenCapStyle(0)
+
+    symbol_layer[1] = QgsSimpleLineSymbolLayer()
+    symbol_layer[1].setWidth(10)
+    symbol_layer[1].setColor(QColor("#3b3b3b"))
+    symbol_layer[1].setPenJoinStyle(1)
+    symbol_layer[1].setPenCapStyle(0)
+
+    symbol_layer[2] = QgsSimpleLineSymbolLayer()
+    symbol_layer[2].setWidth(10.5)
+    symbol_layer[2].setColor(QColor("#000000"))
+    symbol_layer[2].setPenJoinStyle(1)
+    symbol_layer[2].setPenCapStyle(0)
+
+    layer.renderer().symbol().appendSymbolLayer(symbol_layer[0])
+    layer.renderer().symbol().appendSymbolLayer(symbol_layer[1])
+    layer.renderer().symbol().appendSymbolLayer(symbol_layer[2])
+
+    QgsProject.instance().addMapLayer(layer)
 
 
 def generate_3d_model():

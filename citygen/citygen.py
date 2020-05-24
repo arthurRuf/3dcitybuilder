@@ -24,8 +24,6 @@
 
 import sys
 
-sys.path.append("/Volumes/TarDisk/ruf/workspace/ttc/3dcitybuilder/citygen/libs/")
-
 from qgis.PyQt.QtCore import QSettings, QTranslator, QCoreApplication
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QAction, QFileDialog, QErrorMessage, QFileDialog

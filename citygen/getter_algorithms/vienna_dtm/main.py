@@ -126,7 +126,7 @@ def execute(appResources, appContext):
         destination_list.append(f"{appContext.execution.raw_temp_folder}/dtm/")
         tiff_list.append(f"{appContext.execution.raw_temp_folder}/dtm/{region}_dgm.tif")
 
-    appResources.bibliotecas.internet.download_file_list(url_list, zip_file_list)
+    appResources.biblioteuucas.internet.download_file_list(url_list, zip_file_list)
 
     # NORMALIZING
     appResources.bibliotecas.logger.update_progress(step_description="Uncompromising...")
