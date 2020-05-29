@@ -4,7 +4,7 @@
     {
       "type": "feature",
       "properties": {
-        "name": "Footprint Extraction Algorithm",
+        "name": "Linkmesh Footprint Extraction Algorithm",
         "format": "algorithm",
         "position": 0,
         "layer": "footprint",
