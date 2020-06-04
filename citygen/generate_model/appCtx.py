@@ -25,11 +25,7 @@ def add_layer(filePath, type="raster", layer_name="", provider="gdal", crs_id=No
 
 class appContext:
     BUILDING_HEIGHT_METHODS: List[Dict[str, Union[str, int]]] = [
-        {
-            "title": "Minimum Value",
-            "algorithm": "grass7:v.rast.stats",
-            "method_id": 1
-        },
+
         {
             "title": "Maximum Value",
             "algorithm": "grass7:v.rast.stats",
@@ -39,11 +35,6 @@ class appContext:
             "title": "Average",
             "algorithm": "grass7:v.rast.stats",
             "method_id": 4
-        },
-        {
-            "title": "First Quartile",
-            "algorithm": "grass7:v.rast.stats",
-            "method_id": 9
         },
         {
             "title": "Median",
@@ -59,16 +50,6 @@ class appContext:
             "title": "Percentile",
             "algorithm": "grass7:v.rast.stats",
             "method_id": 12
-        },
-        {
-            "title": "Nearest Neighbor",
-            "algorithm": "saga:addrastervaluestofeatures",
-            "method_id": 0
-        },
-        {
-            "title": "B-Spline Interpolation",
-            "algorithm": "saga:addrastervaluestofeatures",
-            "method_id": 4
         }
     ]
 
