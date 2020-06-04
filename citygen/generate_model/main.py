@@ -1,6 +1,6 @@
 import sys, os, random, string
 from qgis.core import QgsProcessingUtils, QgsRasterLayer, QgsProject
-from .bibliotecas import logger, file_management
+from .bibliotecas import logger, file_management, install_python_package
 from .appCtx import appContext
 
 from .getters import getters_management
@@ -58,6 +58,10 @@ def appContext_setup():
     if appContext.user_parameters.clip_layer == "viewport":
         appContext.user_parameters.clip_layer = gis.create_viewport_polygon()
 
+    install_python_package.install_package("geopandas")
+    install_python_package.install_package("numpy")
+    install_python_package.install_package("osmnx")
+
 
 def start():
     logger.plugin_log("OUTPUT LOCATION: " + appContext.user_parameters.ortho_output)
@@ -67,10 +71,8 @@ def start():
     logger.plugin_log("Getting files...")
     getters_management.execute_getters()
 
-    logger.plugin_log("Normalizing...")
-    normalizer.normalize_layers()
-
     gis.generate_3d_model()
+
     logger.plugin_log("Process complete without errors!")
 
     logger.plugin_log("OUTPUT LOCATION: " + appContext.user_parameters.ortho_output)
