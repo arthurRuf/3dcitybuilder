@@ -11,6 +11,7 @@ import osmnx as ox
 
 from qgis.core import QgsRasterLayer, QgsProject, QgsCoordinateReferenceSystem, QgsProperty, QgsVectorLayer, QgsFeature, \
     QgsGeometry, QgsPointXY, QgsVectorFileWriter, QgsFields, QgsSimpleLineSymbolLayer
+from qgis.core.additions.edit import edit
 import qgis._3d as d
 from PyQt5.QtGui import QColor
 from ..appCtx import appContext, add_layer
@@ -61,10 +62,6 @@ def create_viewport_polygon():
     loaded_layer = add_layer(path, "vector", "clipping_polygon", "ogr", layer.crs().postgisSrid())
 
     return loaded_layer
-
-
-def identify_footprint():
-    plugin_management.run_plugin_method(appContext.user_parameters.footprint_getter.id, "identify_footprint")
 
 
 def extrude_footprint():
@@ -142,14 +139,9 @@ def extrude_footprint():
 
     findex = len(footprint.dataProvider().fields()) - 1
     if findex != -1:
-        footprint.dataProvider().renameAttributes({findex: "building_height"})
-        footprint.updateFields()
-
-
-def run_footprint():
-    if appContext.user_parameters.footprint_getter.format == "algorithm":
-        identify_footprint()
-    extrude_footprint()
+        with edit(footprint):
+            footprint.dataProvider().renameAttributes({findex: "building_height"})
+            footprint.updateFields()
 
 
 def move(source, destination, layer_name):
@@ -210,7 +202,13 @@ def load_layers_to_project():
 
 def add_roads():
     ox.config(log_console=True, use_cache=True)
-    polygon_path = appContext.user_parameters.clip_layer.dataProvider().dataSourceUri()
+
+    polygon_path = ""
+    if appContext.user_parameters.clip_layer == "":
+        polygon_path = appContext.user_parameters.clip_layer.dataProvider().dataSourceUri()
+    else:
+        polygon = create_viewport_polygon()
+        polygon_path = polygon.dataProvider().dataSourceUri()
 
     # polygon_path = "/Users/arthurrufhosangdacosta/qgis_data/extrusion/polygon_clip_mask.shp"
     epsg_id = 4326
@@ -265,7 +263,7 @@ def add_roads():
 
 
 def generate_3d_model():
-    run_footprint()
+    extrude_footprint()
     save_files()
     # add_roads()
     load_layers_to_project()

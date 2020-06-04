@@ -26,8 +26,8 @@ def load_plugin_list():
     plugin_list = []
     for index, directory_name in enumerate(directory_list):
         try:
-            if "__init__.py" == directory_name:
-                raise Exception("a")
+            if "__init__.py" == directory_name or "DS_Store" == directory_name:
+                continue
 
             with open(rf'{plugins_path}/{directory_name}/config.json') as file:
                 plugin_configuration_file = json.load(file)
