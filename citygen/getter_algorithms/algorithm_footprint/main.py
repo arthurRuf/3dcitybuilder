@@ -27,7 +27,7 @@ def identify_footprint(appResources, appContext):
     # )
 
     neighbors_path = f"{appContext.execution.raw_temp_folder}/footprint/neighbors.tif"
-    pixelstopolygons_path = f"{appContext.execution.raw_temp_folder}/footprint/pixelstopolygons.tif"
+    pixelstopolygons_path = f"{appContext.execution.raw_temp_folder}/footprint/pixelstopolygons.shp"
     footprints_path = f"{appContext.execution.raw_temp_folder}/footprint/pixelstopolygons.shp"
 
     processing.run(
@@ -51,13 +51,25 @@ def identify_footprint(appResources, appContext):
         }
     )
 
+    # processing.run(
+    #     "native:pixelstopolygons",
+    #     {
+    #         'INPUT_RASTER': neighbors_path,
+    #         'RASTER_BAND': 1,
+    #         'FIELD_NAME': 'VALUE',
+    #         'OUTPUT': pixelstopolygons_path
+    #     }
+    # )
+
     processing.run(
-        "native:pixelstopolygons",
+        "qgis:rastercalculator",
         {
-            'INPUT_RASTER': neighbors_path,
-            'RASTER_BAND': 1,
-            'FIELD_NAME': 'VALUE',
-            'OUTPUT': pixelstopolygons_path
+            'EXPRESSION': '(\"Neighbors@1\") / (\"Neighbors@1\" > 0)',
+            'LAYERS': '',
+            'CELLSIZE': 9,
+            'EXTENT': None,
+            'CRS': QgsCoordinateReferenceSystem('EPSG:3395'),
+            'OUTPUT': 'TEMPORARY_OUTPUT'
         }
     )
 
@@ -70,4 +82,12 @@ def identify_footprint(appResources, appContext):
             'EIGHT_CONNECTEDNESS': False,
             'OUTPUT': footprints_path
         }
+    )
+
+    appContext.update_layer(
+        appContext,
+        footprints_path,
+        "footprint",
+        "gdal",
+        appContext
     )
