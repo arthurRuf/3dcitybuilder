@@ -191,7 +191,7 @@ def load_layers_to_project():
 
     materialSettings = d.QgsPhongMaterialSettings()
     materialSettings.setAmbient(QColor(246, 141, 131))
-    materialSettings.setDiffuse(QColor(179, 179, 179))
+    materialSettings.setDiffuse(QColor(192, 173, 159))
     materialSettings.setSpecular(QColor(255, 0, 0))
     symbol.setMaterial(materialSettings)
 
