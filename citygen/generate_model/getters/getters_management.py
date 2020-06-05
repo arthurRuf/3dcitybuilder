@@ -30,7 +30,7 @@ def execute_getters():
     # Footprint
     logger.increase_overall_current()
     logger.update_progress(step_current=1, step_description="Footprint", step_maximum=100)
-    if appContext.user_parameters.footprint_getter.format == "algorithm":
+    # if appContext.user_parameters.footprint_getter.format == "algorithm":
         # plugin_management.run_plugin_method(appContext.user_parameters.footprint_getter.id, "identify_footprint")
-        plugin_management.execute_plugin(appContext.user_parameters.footprint_getter.id)
+    plugin_management.execute_plugin(appContext.user_parameters.footprint_getter.id)
     logger.plugin_log("Done!")

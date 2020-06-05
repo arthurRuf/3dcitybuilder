@@ -334,8 +334,9 @@ class citygen:
         elif selected_index == 1:
             appContext.user_parameters.clip_layer = "viewport"
         else:
-            appContext.user_parameters.clip_layer = QgsProject.instance().layerTreeRoot().children()[
-                selected_index - 2].layer()
+            if len(QgsProject.instance().layerTreeRoot().children()) >= 1:
+                appContext.user_parameters.clip_layer = QgsProject.instance().layerTreeRoot().children()[
+                    selected_index - 2].layer()
 
     ## BEGIN Ortho ##
     def get_first_layer_by_name(self, layer_name, default=0):

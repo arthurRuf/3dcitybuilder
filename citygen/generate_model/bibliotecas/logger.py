@@ -1,6 +1,13 @@
+import os
+from pathlib import Path
 from qgis.core import Qgis, QgsMessageLog
 from ..appCtx import appContext
 
+
+def write_into_log_file(text):
+    home = str(Path.home())
+    with open(os.path.join(home, "citygen_log.txt"), 'a') as fd:
+        fd.write(f'\n{text}')
 
 def general_log(message):
     QgsMessageLog.logMessage(message)
@@ -8,10 +15,12 @@ def general_log(message):
 
 def message_bar_log(title, message="", level=Qgis.Success):
     appContext.qgis.iface.messageBar().pushMessage(title, message, level=level, duration=3)
+    write_into_log_file(f"message_bar_log: {title}: {message}")
 
 
 def plugin_log(message=""):
     appContext.qgis.segf.dlg.txtLog.append(message)
+    write_into_log_file(f"plugin_log: {message}")
 
 
 def update_progress(step_current=None, step_description=None, step_maximum=None,

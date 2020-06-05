@@ -131,10 +131,13 @@ def clip_layer(layer_name, loaded_layer, layer_type):
 
 
 def normalize_layer(layer_name, layer_type):
-    equalize_layer(layer_name, appContext.layers[layer_name].layer, layer_type)
-    layer_final_path = clip_layer(layer_name, appContext.layers[layer_name].layer, layer_type)
+    layer = appContext.layers[layer_name]
 
-    appContext.update_layer(appContext, layer_final_path, layer_name, appContext.layers[layer_name].data_provider)
+    if layer.data_provider != "wms":
+        equalize_layer(layer_name, layer.layer, layer_type)
+        layer_final_path = clip_layer(layer_name, layer.layer, layer_type)
+
+        appContext.update_layer(appContext, layer_final_path, layer_name, layer.data_provider)
 
 
 def normalize_layers():

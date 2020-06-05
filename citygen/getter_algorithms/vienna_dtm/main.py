@@ -14,15 +14,15 @@ def execute(appResources, appContext):
     appResources.bibliotecas.file_management.create_dirs(raw_folder)
 
     appResources.bibliotecas.logger.update_progress(step_description="Downloading DTM...")
-
+    
     region_list = [
         # "22_4",
         # "32_2",
         # "32_4",
         # "42_2",
         # "42_4",
-        "23_3",
-        "33_1",
+        # "23_3",
+        # "33_1",
         # "33_3",
         # "43_1",
         # "43_3",
@@ -65,7 +65,7 @@ def execute(appResources, appContext):
         # "25_2",
         # "25_4",
         # "35_2",
-        # "35_4",
+        "35_4",
         # "45_2",
         # "45_4",
         # "55_2",
@@ -114,6 +114,7 @@ def execute(appResources, appContext):
         # "58_1",
         # "48_4",
         # "58_2"
+
     ]
 
     url_list = []
@@ -126,7 +127,7 @@ def execute(appResources, appContext):
         destination_list.append(f"{appContext.execution.raw_temp_folder}/dtm/")
         tiff_list.append(f"{appContext.execution.raw_temp_folder}/dtm/{region}_dgm.tif")
 
-    appResources.biblioteuucas.internet.download_file_list(url_list, zip_file_list)
+    appResources.bibliotecas.internet.download_file_list(url_list, zip_file_list)
 
     # NORMALIZING
     appResources.bibliotecas.logger.update_progress(step_description="Uncompromising...")
