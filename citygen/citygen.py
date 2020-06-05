@@ -211,8 +211,8 @@ class citygen:
         self.dlg.cbxBuildingHeightMethod.clear()
         self.dlg.cbxBuildingHeightMethod.addItems([method["title"] for method in appContext.BUILDING_HEIGHT_METHODS])
         self.dlg.cbxBuildingHeightMethod.currentIndexChanged.connect(self.cbxBuildingHeightMethod_on_change)
-        self.dlg.cbxBuildingHeightMethod.setCurrentIndex(1)
-        self.cbxBuildingHeightMethod_on_change(1)
+        self.dlg.cbxBuildingHeightMethod.setCurrentIndex(0)
+        self.cbxBuildingHeightMethod_on_change(0)
 
         # CmbClip
         self.dlg.cmbClip.currentIndexChanged.connect(self.cmbClip_on_change)
@@ -339,10 +339,11 @@ class citygen:
                     selected_index - 2].layer()
 
     ## BEGIN Ortho ##
-    def get_first_layer_by_name(self, layer_name, default=0):
-        for index, i in enumerate(QgsProject.instance().layerTreeRoot().children()):
-            if layer_name in i.layer().name().lower():
-                return index
+    def get_first_layer_by_name(self, layer_name_list, default=0):
+        for index, layer_name in enumerate(layer_name_list):
+            for index, i in enumerate(QgsProject.instance().layerTreeRoot().children()):
+                if layer_name in i.layer().name().lower():
+                    return index
         return default
 
     def cbxOrthoSource_on_change(self, selected_index):
@@ -351,7 +352,7 @@ class citygen:
         self.dlg.frmOrthoLayer.setVisible(appContext.user_parameters.ortho_getter.format == "layer")
         self.dlg.frmOrthoSateTo.setVisible(appContext.user_parameters.ortho_getter.format == "file")
 
-        self.dlg.cbxOrthoLayer.setCurrentIndex(self.get_first_layer_by_name("ortho", 0))
+        self.dlg.cbxOrthoLayer.setCurrentIndex(self.get_first_layer_by_name(["ortho", "rgb", "bild"], 0))
 
     def cbxOrthoLayer_on_change(self, selected_index):
         appContext.user_parameters.ortho_input = QgsProject.instance().layerTreeRoot().children()[
@@ -369,7 +370,7 @@ class citygen:
         self.dlg.frmDTMLayer.setVisible(appContext.user_parameters.dtm_getter.format == "layer")
         self.dlg.frmDTMSateTo.setVisible(appContext.user_parameters.dtm_getter.format == "file")
 
-        self.dlg.cbxDTMLayer.setCurrentIndex(self.get_first_layer_by_name("dtm", 0))
+        self.dlg.cbxDTMLayer.setCurrentIndex(self.get_first_layer_by_name(["dtm", "mdt", "dgm", "dem"], 0))
 
     def cbxDTMLayer_on_change(self, selected_index):
         appContext.user_parameters.dtm_input = QgsProject.instance().layerTreeRoot().children()[
@@ -387,7 +388,7 @@ class citygen:
         self.dlg.frmDSMLayer.setVisible(appContext.user_parameters.dsm_getter.format == "layer")
         self.dlg.frmDSMSateTo.setVisible(appContext.user_parameters.dsm_getter.format == "file")
 
-        self.dlg.cbxDSMLayer.setCurrentIndex(self.get_first_layer_by_name("dsm", 0))
+        self.dlg.cbxDSMLayer.setCurrentIndex(self.get_first_layer_by_name(["dsm", "mds", "dom"], 0))
 
     def cbxDSMLayer_on_change(self, selected_index):
         appContext.user_parameters.dsm_input = QgsProject.instance().layerTreeRoot().children()[
@@ -407,7 +408,7 @@ class citygen:
         self.dlg.frmFootprintSateTo.setVisible(
             appContext.user_parameters.footprint_getter.format in ["file", "algorithm"])
 
-        self.dlg.cbxFootprintLayer.setCurrentIndex(self.get_first_layer_by_name("footprint", 0))
+        self.dlg.cbxFootprintLayer.setCurrentIndex(self.get_first_layer_by_name(["footprint", "building", "gebaeude"], 0))
 
     def cbxFootprintLayer_on_change(self, selected_index):
         appContext.user_parameters.footprint_input = QgsProject.instance().layerTreeRoot().children()[
@@ -417,7 +418,7 @@ class citygen:
         filename = self.select_output_file("ShapeFil (*.shp)")
         self.dlg.edtFootprintSateTo.setText(filename)
 
-    def cbxFootprintAlgorithm_on_change(self, selected_index):
+    def cbxBuildingHeightMethod_on_change(self, selected_index):
         appContext.user_parameters.footprint_input = QgsProject.instance().layerTreeRoot().children()[
             selected_index].layer()
 
