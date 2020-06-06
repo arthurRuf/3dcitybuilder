@@ -4,11 +4,10 @@
     {
       "type": "feature",
       "properties": {
-        "name": "Select a layer from the project",
-        "format": "layer",
-        "position": 0,
-        "layer": "ortho",
-        "epsg_code": "4674",
+        "name": "SIGSC",
+        "format": "file",
+        "layer": "dsm",
+        "crs": "4674",
         "cropIncluded": false,
         "requirements": [
           "urllib"

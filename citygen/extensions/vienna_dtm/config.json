@@ -4,10 +4,11 @@
     {
       "type": "feature",
       "properties": {
-        "name": "SIGSC",
+        "name": "Vienna City",
+        "position": 10,
         "format": "file",
-        "layer": "dsm",
-        "epsg_code": "4674",
+        "layer": "dtm",
+        "crs": "31256",
         "cropIncluded": false,
         "requirements": [
           "urllib"

@@ -10,11 +10,11 @@ def execute(appResources, appContext):
     print(os.path)
 
     appResources.bibliotecas.logger.update_progress(step_current=1, step_maximum=5)
-    raw_folder = f"{appContext.execution.raw_temp_folder}/dtm"
+    raw_folder = f"{appContext.execution.raw_temp_folder}/ortho"
     appResources.bibliotecas.file_management.create_dirs(raw_folder)
 
-    appResources.bibliotecas.logger.update_progress(step_description="Downloading DTM...")
-    
+    appResources.bibliotecas.logger.update_progress(step_description="Downloading ortho...")
+
     region_list = [
         # "22_4",
         # "32_2",
@@ -115,17 +115,30 @@ def execute(appResources, appContext):
         # "48_4",
         # "58_2"
 
+        ### TEST ###
+        "25_4",
+        "26_3",
+        "35_4",
+        "36_1",
+        "36_4",
+        "36_2",
+        "35_2",
+        "36_3",
+        "26_4",
     ]
 
     url_list = []
     zip_file_list = []
     destination_list = []
     tiff_list = []
+    tiff_epsg_list = []
     for region in region_list:
-        url_list.append(f"https://www.wien.gv.at/ma41datenviewer/downloads/ma41/geodaten/dgm_tif/{region}_dgm_tif.zip")
-        zip_file_list.append(f"{raw_folder}/dtm_{region}.zip")
-        destination_list.append(f"{appContext.execution.raw_temp_folder}/dtm/")
-        tiff_list.append(f"{appContext.execution.raw_temp_folder}/dtm/{region}_dgm.tif")
+        url_list.append(
+            f"https://www.wien.gv.at/ma41datenviewer/downloads/ma41/geodaten/op_img/{region}_op_2019.zip")
+        zip_file_list.append(f"{raw_folder}/ortho_{region}.zip")
+        destination_list.append(f"{appContext.execution.raw_temp_folder}/ortho/")
+        tiff_list.append(f"/Users/arthurrufhosangdacosta/qgis_data/temp/ortho/{region}_op_2019.tif")
+        tiff_epsg_list.append(f"/Users/arthurrufhosangdacosta/qgis_data/temp/ortho/{region}_op_epsg.tif")
 
     appResources.bibliotecas.internet.download_file_list(url_list, zip_file_list)
 
@@ -133,11 +146,34 @@ def execute(appResources, appContext):
     appResources.bibliotecas.logger.update_progress(step_description="Uncompromising...")
     appResources.bibliotecas.file_management.unzip_file_list(zip_file_list, destination_list)
 
-    result = f"{appContext.execution.raw_temp_folder}/dtm/dtm.tif"
+    for index, layer_path in enumerate(tiff_list):
+        output = tiff_epsg_list[index]
+
+        processing.run(
+            "gdal:warpreproject",
+            {
+                'INPUT': layer_path,
+                'SOURCE_CRS': appResources.qgis.core.QgsCoordinateReferenceSystem('EPSG:31256'),
+                'TARGET_CRS': appResources.qgis.core.QgsCoordinateReferenceSystem('EPSG:4326'),
+                'RESAMPLING': 0,
+                'NODATA': None,
+                'TARGET_RESOLUTION': None,
+                'OPTIONS': '',
+                'DATA_TYPE': 0,
+                'TARGET_EXTENT': None,
+                'TARGET_EXTENT_CRS': None,
+                'MULTITHREADING': False,
+                'EXTRA': '',
+                'OUTPUT': output
+            }
+        )
+
+    result = f"{appContext.execution.raw_temp_folder}/ortho/ortho.tif"
+    result = f"/Users/arthurrufhosangdacosta/qgis_data/temp/ortho/ortho.tif"
     processing.run(
         "gdal:merge",
         {
-            'INPUT': tiff_list,
+            'INPUT': tiff_epsg_list,
             'PCT': False,
             'SEPARATE': False,
             'NODATA_INPUT': None,
@@ -151,11 +187,12 @@ def execute(appResources, appContext):
     appContext.update_layer(
         appContext,
         result,
-        "dtm",
+        "ortho",
         "gdal",
-        31256
+        "raster",
+        4326
     )
-    # QgsProject.instance().addMapLayer(appContext.layers.dtm.layer)
+    # QgsProject.instance().addMapLayer(appContext.layers.ortho.layer)
 
     appResources.bibliotecas.logger.update_progress(step_current=1, step_maximum=1)
     appResources.bibliotecas.logger.plugin_log("Done!")

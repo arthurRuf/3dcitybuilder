@@ -1,13 +1,14 @@
 import os
 from pathlib import Path
+from datetime import datetime
 from qgis.core import Qgis, QgsMessageLog
 from ..appCtx import appContext
 
 
 def write_into_log_file(text):
     home = str(Path.home())
-    with open(os.path.join(home, "citygen_log.txt"), 'a') as fd:
-        fd.write(f'\n{text}')
+    with open(os.path.join(home, "citygen_log.txt"), "a") as fd:
+        fd.write(f"\n{str(datetime.now())}: {text}")
 
 def general_log(message):
     QgsMessageLog.logMessage(message)
@@ -20,7 +21,7 @@ def message_bar_log(title, message="", level=Qgis.Success):
 
 def plugin_log(message=""):
     appContext.qgis.segf.dlg.txtLog.append(message)
-    write_into_log_file(f"plugin_log: {message}")
+    write_into_log_file(f"plugin_log - {message}")
 
 
 def update_progress(step_current=None, step_description=None, step_maximum=None,

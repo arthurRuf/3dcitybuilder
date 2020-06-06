@@ -4,11 +4,10 @@
     {
       "type": "feature",
       "properties": {
-        "name": "SIGSC",
-        "position": 10,
-        "format": "file",
-        "layer": "dtm",
-        "epsg_code": "4674",
+        "name": "SIGSC WMTS",
+        "format": "wmts",
+        "layer": "ortho",
+        "crs": "31256",
         "cropIncluded": false,
         "requirements": [
           "urllib"

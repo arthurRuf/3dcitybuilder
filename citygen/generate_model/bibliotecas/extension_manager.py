@@ -1,7 +1,8 @@
 import os, importlib, json, pathlib
-
+import qgis
 from . import DotDict, logger
 from .. import bibliotecas
+from ..normalizer import normalizer
 from ..appCtx import appContext
 
 
@@ -15,7 +16,7 @@ def load_plugin_list():
 
     file_re = os.path.dirname(os.path.realpath(__file__))
     path = pathlib.Path(file_re)
-    plugins_path = os.path.join(str(path.parent.parent), "getter_algorithms")
+    plugins_path = os.path.join(str(path.parent.parent), "extensions")
 
     appContext.plugins.path = plugins_path
 
@@ -55,7 +56,7 @@ def load_plugin_list():
                     "name": plugin_properties.get("name", directory_name),
                     "format": plugin_properties["format"],
                     "layer": plugin_properties["layer"],
-                    "epsg_code": plugin_properties.get("epsg_code", None),
+                    "crs": plugin_properties.get("crs", None),
                     "cropIncluded": plugin_properties.get("cropIncluded", False),
                     "requirements": plugin_properties.get("requirements", []),
                     "parameters": plugin_properties.get("parameters", {}),
@@ -83,7 +84,9 @@ def run_plugin_method(plugin_id, method_name):
     appResources = DotDict.DotDict({
         "configure_plugin": configure_plugin,
         "execute_plugin": execute_plugin,
-        "bibliotecas": bibliotecas
+        "bibliotecas": bibliotecas,
+        "equalize_layer": normalizer.equalize_layer,
+        "qgis": qgis
     })
 
     method = getattr(plugin_main_module, method_name)

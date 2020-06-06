@@ -4,11 +4,10 @@
     {
       "type": "feature",
       "properties": {
-        "name": "Vienna City",
-        "position": 10,
-        "format": "file",
-        "layer": "dtm",
-        "epsg_code": "31256",
+        "name": "Vienna City WMS Server",
+        "format": "wmts",
+        "layer": "ortho",
+        "crs": "31256",
         "cropIncluded": false,
         "requirements": [
           "urllib"

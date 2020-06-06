@@ -15,7 +15,7 @@ from qgis.core.additions.edit import edit
 import qgis._3d as d
 from PyQt5.QtGui import QColor
 from ..appCtx import appContext, add_layer
-from ..bibliotecas import logger, file_management, plugin_management
+from ..bibliotecas import logger, file_management, extension_manager
 from ..normalizer import normalizer
 
 def create_viewport_polygon():

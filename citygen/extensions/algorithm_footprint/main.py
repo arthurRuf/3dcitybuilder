@@ -1,4 +1,5 @@
 import os, processing
+from qgis.core import QgsCoordinateReferenceSystem
 
 
 def configure(appResources, appContext):
@@ -63,7 +64,7 @@ def execute(appResources, appContext):
             'LAYERS': '',
             'CELLSIZE': 9,
             'EXTENT': None,
-            'CRS': QgsCoordinateReferenceSystem('EPSG:3395'),
+            'CRS': QgsCoordinateReferenceSystem('EPSG:4326'),
             'OUTPUT': 'TEMPORARY_OUTPUT'
         }
     )

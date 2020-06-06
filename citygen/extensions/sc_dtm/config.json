@@ -7,8 +7,8 @@
         "name": "SIGSC",
         "position": 10,
         "format": "file",
-        "layer": "ortho",
-        "epsg_code": "4674",
+        "layer": "dtm",
+        "crs": "4674",
         "cropIncluded": false,
         "requirements": [
           "urllib"

@@ -32,8 +32,8 @@ from qgis.gui import QgsMessageBar
 
 from .generate_model.main import start
 from .generate_model.appCtx import appContext
-from .generate_model.bibliotecas import DotDict, execute, plugin_management, internet, path_manager, path_manager, \
-    progress_bar, plugin_management, logger
+from .generate_model.bibliotecas import DotDict, execute, extension_manager, internet, path_manager, path_manager, \
+    progress_bar, extension_manager, logger
 from .generate_model.gis.gis import create_viewport_polygon
 
 geopandas = None
@@ -206,7 +206,7 @@ class citygen:
         # appContext.qgis.osmx = osmx
 
         layer_list = QgsProject.instance().layerTreeRoot().children()
-        getter_list = plugin_management.get_list()
+        getter_list = extension_manager.get_list()
 
         self.dlg.cbxBuildingHeightMethod.clear()
         self.dlg.cbxBuildingHeightMethod.addItems([method["title"] for method in appContext.BUILDING_HEIGHT_METHODS])
@@ -290,6 +290,11 @@ class citygen:
             pass
 
     def on_run(self):
+
+        if QgsProject.instance().crs().postgisSrid() == 0:
+            logger.plugin_log("Please set the Project CRS before generating the model.")
+            return
+
         logger.general_log("clicked on_run")
         self.dlg.tabMain.setCurrentIndex(2)
 
@@ -325,7 +330,7 @@ class citygen:
     def cbxBuildingHeightMethod_on_change(self, selected_index):
         for index, method in enumerate(appContext.BUILDING_HEIGHT_METHODS):
             if index == selected_index:
-                appContext.user_parameters.building_height_method = method
+                appContext.user_parameters.building_height_method = appContext.BUILDING_HEIGHT_METHODS[index]
 
     ## cmbClip ##
     def cmbClip_on_change(self, selected_index):
@@ -418,7 +423,7 @@ class citygen:
         filename = self.select_output_file("ShapeFil (*.shp)")
         self.dlg.edtFootprintSateTo.setText(filename)
 
-    def cbxBuildingHeightMethod_on_change(self, selected_index):
+    def cbxFootprintLayer_on_change(self, selected_index):
         appContext.user_parameters.footprint_input = QgsProject.instance().layerTreeRoot().children()[
             selected_index].layer()
 

@@ -5,73 +5,74 @@ from ..appCtx import appContext
 from ..bibliotecas import logger
 
 
-def equalize_layer(layer_name, loaded_layer, layer_type):
+def equalize_layer(layer_name, loaded_layer, layer_type, output_path=""):
     project_csr = QgsProject.instance().crs()
     layer_crs = loaded_layer.crs()
 
     result_path = loaded_layer.dataProvider().dataSourceUri()
 
-    if project_csr != layer_crs and loaded_layer.dataProvider().name() != 'wms':
-        logger.plugin_log(f"Converting layer {loaded_layer.name()} CRS...")
+    if loaded_layer.dataProvider().name() != 'wms':
+        project_epsg = f'EPSG:{project_csr.postgisSrid() or "ERR"}'
+        layer_epsg = f'EPSG:{layer_crs.postgisSrid() or appContext.layers[layer_name].crs}'
 
-        project_epsg = f'EPSG:{project_csr.postgisSrid()}'
-        layer_epsg = f'EPSG:{layer_crs.postgisSrid() or appContext.user_parameters.dtm_getter.epsg_code}'
+        if project_epsg != layer_epsg:
+            logger.plugin_log(f"Converting layer {loaded_layer.name()} CRS...")
 
-        if layer_type == "raster":
-            result_path = f"{appContext.execution.raw_temp_folder}/{layer_name}/{layer_name}_epsg.tif"
+            if layer_type == "raster":
+                result_path = output_path or f"{appContext.execution.raw_temp_folder}/{layer_name}/{layer_name}_epsg.tif"
 
-            processing.run(
-                "grass7:r.proj",
-                {
-                    'input': loaded_layer.dataProvider().dataSourceUri(),
-                    'crs': QgsCoordinateReferenceSystem(project_epsg),
-                    'method': 0,
-                    'memory': 300,
-                    'resolution': None,
-                    '-n': False,
-                    'output': result_path,
-                    'GRASS_REGION_PARAMETER': None,
-                    'GRASS_REGION_CELLSIZE_PARAMETER': 0,
-                    'GRASS_RASTER_FORMAT_OPT': '',
-                    'GRASS_RASTER_FORMAT_META': ''
-                }
+                # processing.run(
+                #     "grass7:r.proj",
+                #     {
+                #         'input': loaded_layer.dataProvider().dataSourceUri(),
+                #         'crs': QgsCoordinateReferenceSystem(project_epsg),
+                #         'method': 0,
+                #         'memory': 300,
+                #         'resolution': None,
+                #         '-n': False,
+                #         'output': result_path,
+                #         'GRASS_REGION_PARAMETER': None,
+                #         'GRASS_REGION_CELLSIZE_PARAMETER': 0,
+                #         'GRASS_RASTER_FORMAT_OPT': '',
+                #         'GRASS_RASTER_FORMAT_META': ''
+                #     }
+                # )
+
+                processing.run(
+                    "gdal:warpreproject",
+                    {
+                        'INPUT': loaded_layer.dataProvider().dataSourceUri(),
+                        'SOURCE_CRS': QgsCoordinateReferenceSystem(layer_epsg),
+                        'TARGET_CRS': QgsCoordinateReferenceSystem(project_epsg),
+                        'RESAMPLING': 0,
+                        'NODATA': None,
+                        'TARGET_RESOLUTION': None,
+                        'OPTIONS': '',
+                        'DATA_TYPE': 0,
+                        'TARGET_EXTENT': None,
+                        'TARGET_EXTENT_CRS': None,
+                        'MULTITHREADING': False,
+                        'EXTRA': '',
+                        'OUTPUT': result_path
+                    }
+                )
+            else:
+                result_path = output_path or f"{appContext.execution.raw_temp_folder}/{layer_name}/{layer_name}_epsg.shp"
+                processing.run(
+                    'qgis:reprojectlayer',
+                    {
+                        'INPUT': loaded_layer.dataProvider().dataSourceUri(),
+                        'TARGET_CRS': project_epsg,
+                        'OUTPUT': result_path
+                    }
+                )
+
+            appContext.update_layer(
+                appContext,
+                result_path,
+                layer_name,
+                crs=project_csr.postgisSrid()
             )
-
-            # processing.run(
-            #     "gdal:warpreproject",
-            #     {
-            #         'INPUT': loaded_layer.dataProvider().dataSourceUri(),
-            #         'SOURCE_CRS': QgsCoordinateReferenceSystem(layer_epsg),
-            #         'TARGET_CRS': QgsCoordinateReferenceSystem(project_epsg),
-            #         'RESAMPLING': 0,
-            #         'NODATA': None,
-            #         'TARGET_RESOLUTION': None,
-            #         'OPTIONS': '',
-            #         'DATA_TYPE': 0,
-            #         'TARGET_EXTENT': None,
-            #         'TARGET_EXTENT_CRS': None,
-            #         'MULTITHREADING': False,
-            #         'EXTRA': '',
-            #         'OUTPUT': result_path
-            #     }
-            # )
-        else:
-            result_path = f"{appContext.execution.raw_temp_folder}/{layer_name}/{layer_name}_epsg.shp"
-            processing.run(
-                'qgis:reprojectlayer',
-                {
-                    'INPUT': loaded_layer.dataProvider().dataSourceUri(),
-                    'TARGET_CRS': project_epsg,
-                    'OUTPUT': result_path
-                }
-            )
-
-        appContext.update_layer(
-            appContext,
-            result_path,
-            layer_name,
-            crs=project_csr.postgisSrid()
-        )
 
     return result_path
 
@@ -127,7 +128,6 @@ def clip_layer(layer_name, loaded_layer, layer_type):
         )
 
     return result_path
-
 
 
 def normalize_layer(layer_name, layer_type):

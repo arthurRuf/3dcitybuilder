@@ -4,10 +4,10 @@
     {
       "type": "feature",
       "properties": {
-        "name": "Vienna City",
+        "name": "Vienna City Download",
         "format": "wmts",
         "layer": "ortho",
-        "epsg_code": "31256",
+        "crs": "31256",
         "cropIncluded": false,
         "requirements": [
           "urllib"

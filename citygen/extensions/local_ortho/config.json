@@ -4,10 +4,11 @@
     {
       "type": "feature",
       "properties": {
-        "name": "Vienna City",
-        "format": "file",
-        "layer": "dsm",
-        "epsg_code": "31256",
+        "name": "Select a layer from the project",
+        "format": "layer",
+        "position": 0,
+        "layer": "ortho",
+        "crs": "4674",
         "cropIncluded": false,
         "requirements": [
           "urllib"

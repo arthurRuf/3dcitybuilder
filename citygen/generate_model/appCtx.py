@@ -25,7 +25,6 @@ def add_layer(filePath, type="raster", layer_name="", provider="gdal", crs_id=No
 
 class appContext:
     BUILDING_HEIGHT_METHODS: List[Dict[str, Union[str, int]]] = [
-
         {
             "title": "Maximum Value",
             "algorithm": "grass7:v.rast.stats",
