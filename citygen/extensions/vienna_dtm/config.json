@@ -8,7 +8,7 @@
         "position": 10,
         "format": "file",
         "layer": "dtm",
-        "crs": "31256",
+        "crs": "4326",
         "cropIncluded": false,
         "requirements": [
           "urllib"

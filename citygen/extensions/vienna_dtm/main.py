@@ -65,7 +65,7 @@ def execute(appResources, appContext):
         # "25_2",
         # "25_4",
         # "35_2",
-        "35_4",
+        # "35_4",
         # "45_2",
         # "45_4",
         # "55_2",
@@ -124,7 +124,7 @@ def execute(appResources, appContext):
         "36_2",
         "35_2",
         "36_3",
-        "26_4   ",
+        "26_4",
     ]
 
     url_list = []

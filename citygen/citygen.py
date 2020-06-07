@@ -273,7 +273,7 @@ class citygen:
 
         self.dlg.btnRun.clicked.connect(self.on_run)
         self.dlg.btnCancel.clicked.connect(self.on_cancel)
-        self.dlg.btnTest.clicked.connect(self.on_test)
+        # self.dlg.btnTest.clicked.connect(self.on_test)
         self.dlg.btnClear.clicked.connect(self.on_clear)
         self.dlg.btnFixCRS.clicked.connect(self.on_fixCRS)
         self.dlg.btnOrthoSateTo.clicked.connect(self.btnOrthoSateTo_on_click)
@@ -420,7 +420,7 @@ class citygen:
             selected_index].layer()
 
     def btnFootprintSateTo_on_click(self):
-        filename = self.select_output_file("ShapeFil (*.shp)")
+        filename = self.select_output_file("ShapeFil (*.shp);;GeoJSON (*.geojson)")
         self.dlg.edtFootprintSateTo.setText(filename)
 
     def cbxFootprintLayer_on_change(self, selected_index):

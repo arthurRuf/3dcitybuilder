@@ -13,7 +13,7 @@ def equalize_layer(layer_name, loaded_layer, layer_type, output_path=""):
 
     if loaded_layer.dataProvider().name() != 'wms':
         project_epsg = f'EPSG:{project_csr.postgisSrid() or "ERR"}'
-        layer_epsg = f'EPSG:{layer_crs.postgisSrid() or appContext.layers[layer_name].crs}'
+        layer_epsg = f'EPSG:{appContext.layers[layer_name].crs or layer_crs.postgisSrid()}'
 
         if project_epsg != layer_epsg:
             logger.plugin_log(f"Converting layer {loaded_layer.name()} CRS...")

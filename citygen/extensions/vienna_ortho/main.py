@@ -65,7 +65,7 @@ def execute(appResources, appContext):
         # "25_2",
         # "25_4",
         # "35_2",
-        "35_4",
+        # "35_4",
         # "45_2",
         # "45_4",
         # "55_2",
@@ -137,14 +137,15 @@ def execute(appResources, appContext):
             f"https://www.wien.gv.at/ma41datenviewer/downloads/ma41/geodaten/op_img/{region}_op_2019.zip")
         zip_file_list.append(f"{raw_folder}/ortho_{region}.zip")
         destination_list.append(f"{appContext.execution.raw_temp_folder}/ortho/")
-        tiff_list.append(f"/Users/arthurrufhosangdacosta/qgis_data/temp/ortho/{region}_op_2019.tif")
-        tiff_epsg_list.append(f"/Users/arthurrufhosangdacosta/qgis_data/temp/ortho/{region}_op_epsg.tif")
+        # tiff_list.append(f"/Users/arthurrufhosangdacosta/qgis_data/temp/ortho/{region}_op_2019.tif")
+        tiff_list.append(f"/Users/arthurrufhosangdacosta/qgis_data/temp/ortho/{region}_op_2019.jpg")
+        tiff_epsg_list.append(f"/Users/arthurrufhosangdacosta/qgis_data/temp/ortho/{region}_op_epsg.jpg")
 
-    appResources.bibliotecas.internet.download_file_list(url_list, zip_file_list)
+    # appResources.bibliotecas.internet.download_file_list(url_list, zip_file_list)
 
     # NORMALIZING
-    appResources.bibliotecas.logger.update_progress(step_description="Uncompromising...")
-    appResources.bibliotecas.file_management.unzip_file_list(zip_file_list, destination_list)
+    # appResources.bibliotecas.logger.update_progress(step_description="Uncompromising...")
+    # appResources.bibliotecas.file_management.unzip_file_list(zip_file_list, destination_list)
 
     for index, layer_path in enumerate(tiff_list):
         output = tiff_epsg_list[index]
@@ -168,8 +169,27 @@ def execute(appResources, appContext):
             }
         )
 
-    result = f"{appContext.execution.raw_temp_folder}/ortho/ortho.tif"
-    result = f"/Users/arthurrufhosangdacosta/qgis_data/temp/ortho/ortho.tif"
+        # processing.run(
+        #     "gdal:warpreproject",
+        #     {
+        #         'INPUT': layer_path,
+        #         'SOURCE_CRS': appResources.qgis.core.QgsCoordinateReferenceSystem('EPSG:31256'),
+        #         'TARGET_CRS': appResources.qgis.core.QgsCoordinateReferenceSystem('EPSG:4326'),
+        #         'RESAMPLING': 0,
+        #         'NODATA': None,
+        #         'TARGET_RESOLUTION': None,
+        #         'OPTIONS': '',
+        #         'DATA_TYPE': 0,
+        #         'TARGET_EXTENT': None,
+        #         'TARGET_EXTENT_CRS': None,
+        #         'MULTITHREADING': False,
+        #         'EXTRA': '',
+        #         'OUTPUT': output
+        #     }
+        # )
+
+    result = f"{appContext.execution.raw_temp_folder}/ortho/ortho.jpg"
+    result = f"/Users/arthurrufhosangdacosta/qgis_data/temp/ortho/ortho.jpg"
     processing.run(
         "gdal:merge",
         {

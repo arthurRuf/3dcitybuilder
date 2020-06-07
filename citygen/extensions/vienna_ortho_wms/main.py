@@ -11,7 +11,7 @@ def execute(appResources, appContext):
 
     appContext.update_layer(
         appContext,
-        "crs=EPSG:3857&dpiMode=7&format=image/jpeg&layers=lb&styles=farbe&tileMatrixSet=google3857&url=https://maps.wien.gv.at/wmts/1.0.0/WMTSCapabilities-arcmap.xml",
+        "crs=EPSG:4326&dpiMode=7&format=image/jpeg&layers=lb&styles=farbe&tileMatrixSet=google3857&url=https://maps.wien.gv.at/wmts/1.0.0/WMTSCapabilities-arcmap.xml",
         "ortho",
         "wms"
     )

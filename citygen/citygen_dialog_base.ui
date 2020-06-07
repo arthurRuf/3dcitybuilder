@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>521</width>
-    <height>714</height>
+    <height>712</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -26,7 +26,7 @@
    <item>
     <widget class="QTabWidget" name="tabMain">
      <property name="currentIndex">
-      <number>0</number>
+      <number>3</number>
      </property>
      <property name="usesScrollButtons">
       <bool>true</bool>
@@ -46,7 +46,7 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>449</width>
+            <width>259</width>
             <height>707</height>
            </rect>
           </property>
@@ -343,7 +343,7 @@
             <x>0</x>
             <y>0</y>
             <width>449</width>
-            <height>489</height>
+            <height>487</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_17">
@@ -590,7 +590,7 @@
           <item>
            <widget class="QPushButton" name="btnFixCRS">
             <property name="text">
-             <string>Fix CRS</string>
+             <string>Set Project CRS to EPSG 3395</string>
             </property>
            </widget>
           </item>
@@ -668,13 +668,6 @@ p, li { white-space: pre-wrap; }
          </size>
         </property>
        </spacer>
-      </item>
-      <item>
-       <widget class="QPushButton" name="btnTest">
-        <property name="text">
-         <string>TEST</string>
-        </property>
-       </widget>
       </item>
       <item>
        <widget class="QPushButton" name="btnCancel">

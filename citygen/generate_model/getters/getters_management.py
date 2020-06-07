@@ -13,11 +13,11 @@ def execute_getters():
     logger.plugin_log("Done!")
 
     # DTM
-    # logger.increase_overall_current()
-    # logger.update_progress(step_current=1, step_description="Digital Terrain Model (DTM)", step_maximum=100)
-    # extension_manager.execute_plugin(appContext.user_parameters.dtm_getter.id)
-    # normalize_layer("dtm", "raster")
-    # logger.plugin_log("Done!")
+    logger.increase_overall_current()
+    logger.update_progress(step_current=1, step_description="Digital Terrain Model (DTM)", step_maximum=100)
+    extension_manager.execute_plugin(appContext.user_parameters.dtm_getter.id)
+    normalize_layer("dtm", "raster")
+    logger.plugin_log("Done!")
 
     # DSM
     logger.increase_overall_current()
