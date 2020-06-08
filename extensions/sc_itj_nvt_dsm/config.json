@@ -4,10 +4,9 @@
     {
       "type": "feature",
       "properties": {
-        "name": "SIGSC",
-        "position": 10,
+        "name": "SIGSC Itajaí e Navegantes",
         "format": "file",
-        "layer": "ortho",
+        "layer": "dsm",
         "crs": "4674",
         "cropIncluded": false,
         "requirements": [
