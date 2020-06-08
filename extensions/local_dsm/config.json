@@ -1,0 +1,45 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "feature",
+      "properties": {
+        "name": "Select a layer from the project",
+        "format": "layer",
+        "position": 0,
+        "layer": "dsm",
+        "cropIncluded": false,
+        "requirements": [
+          "urllib"
+        ]
+      },
+      "geometry": {
+        "type": "Multipolygon",
+        "coordinates": [
+          [
+            [
+              [
+                -180,
+                90
+              ],
+              [
+                180,
+                90
+              ],
+              [
+                180,
+                -90
+              ],
+              [
+                -180,
+                -90
+              ]
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}
+
+

@@ -1,0 +1,45 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "feature",
+      "properties": {
+        "name": "Linkmesh Footprint Extraction Algorithm",
+        "format": "file",
+        "position": 0,
+        "layer": "footprint",
+        "cropIncluded": false,
+        "requirements": [
+          "urllib"
+        ]
+      },
+      "geometry": {
+        "type": "Multipolygon",
+        "coordinates": [
+          [
+            [
+              [
+                -180,
+                90
+              ],
+              [
+                180,
+                90
+              ],
+              [
+                180,
+                -90
+              ],
+              [
+                -180,
+                -90
+              ]
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}
+
+

@@ -1,0 +1,45 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "feature",
+      "properties": {
+        "name": "SIGSC WMTS",
+        "format": "wmts",
+        "layer": "ortho",
+        "crs": "31256",
+        "cropIncluded": false,
+        "requirements": [
+          "urllib"
+        ]
+      },
+      "geometry": {
+        "type": "Multipolygon",
+        "coordinates": [
+          [
+            [
+              [
+                -180,
+                90
+              ],
+              [
+                180,
+                90
+              ],
+              [
+                180,
+                -90
+              ],
+              [
+                -180,
+                -90
+              ]
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}
+
+

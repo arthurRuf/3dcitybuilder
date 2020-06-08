@@ -1,0 +1,45 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "feature",
+      "properties": {
+        "name": "SIGSC",
+        "format": "file",
+        "layer": "dsm",
+        "crs": "4674",
+        "cropIncluded": false,
+        "requirements": [
+          "urllib"
+        ]
+      },
+      "geometry": {
+        "type": "Multipolygon",
+        "coordinates": [
+          [
+            [
+              [
+                -180,
+                90
+              ],
+              [
+                180,
+                90
+              ],
+              [
+                180,
+                -90
+              ],
+              [
+                -180,
+                -90
+              ]
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}
+
+

@@ -1,0 +1,26 @@
+Bayern Geoservices
+https://geoservices.bayern.de/wms/v1/ogc_schummerung.cgi
+
+European Data Portal
+https://www.europeandataportal.eu/data/en/dataset?tags=wind+speed
+
+Germany Terrestris WMS
+https://ows.terrestris.de/osm/service?VERSION=1.1.1
+
+OSM
+http://ows.mundialis.de/services/service
+
+Sccotland
+https://map.sepa.org.uk/arcgis/services/WMS_Habitats_and_Biotopes/MapServer/WMSServer
+
+UK
+https://map.bgs.ac.uk/arcgis/services/UKSO/UKSO_Crowdsourced/MapServer/WmsServer
+
+United Kindom 2
+https://catalogue.ceh.ac.uk/maps/c89cc9a0-dcfa-11e3-8b68-0800200c9a66?cache=false
+
+United States New York State
+https://orthos.dhses.ny.gov/ArcGIS/services/Latest/MapServer/WMSServer
+
+USA National Map
+https://services.nationalmap.gov/arcgis/services/3DEPElevationIndex/MapServer/WMSServer
