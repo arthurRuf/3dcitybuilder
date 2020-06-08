@@ -6,8 +6,6 @@ import sys
 
 import os, processing
 import qgis
-import geopandas as gdp
-import osmnx as ox
 
 from qgis.core import QgsRasterLayer, QgsProject, QgsCoordinateReferenceSystem, QgsProperty, QgsVectorLayer, QgsFeature, \
     QgsGeometry, QgsPointXY, QgsVectorFileWriter, QgsFields, QgsSimpleLineSymbolLayer
@@ -17,6 +15,7 @@ from PyQt5.QtGui import QColor
 from ..appCtx import appContext, add_layer
 from ..bibliotecas import logger, file_management, extension_manager
 from ..normalizer import normalizer
+
 
 def create_viewport_polygon():
     extent = appContext.qgis.iface.mapCanvas().extent()
@@ -201,6 +200,20 @@ def load_layers_to_project():
 
 
 def add_roads():
+    try:
+        import geopandas as gdp
+    except:
+        logger.plugin_log("Unable to add Roads")
+        logger.plugin_log(
+            "You need to install geopandas library into QGIS Python in order to use this functionality")
+
+    try:
+        import osmnx as ox
+    except:
+        logger.plugin_log("Unable to add Roads")
+        logger.plugin_log(
+            "You need to install osmnx library into QGIS Python in order to use this functionality")
+
     ox.config(log_console=True, use_cache=True)
 
     polygon_path = ""

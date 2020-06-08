@@ -40,7 +40,6 @@ def appContext_setup():
     # appContext.execution.raw_temp_folder = f"{appContext.execution.temp_folder}/raw"
     # appContext.execution.normalized_temp_folder = f"{appContext.execution.temp_folder}/normalized"
 
-    appContext.execution.id = ''.join(random.choices(string.ascii_letters + string.digits, k=16))
     temp_folder = os.path.join(QgsProcessingUtils.tempFolder(), "citygen", appContext.execution.id)
     appContext.execution.temp_folder = f"{temp_folder}"
     appContext.execution.raw_temp_folder = os.path.join(appContext.execution.temp_folder, "raw")
