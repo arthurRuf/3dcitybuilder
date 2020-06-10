@@ -47,16 +47,6 @@ def execute(appResources, appContext):
         }
     )
 
-    # processing.run(
-    #     "native:pixelstopolygons",
-    #     {
-    #         'INPUT_RASTER': neighbors_path,
-    #         'RASTER_BAND': 1,
-    #         'FIELD_NAME': 'VALUE',
-    #         'OUTPUT': pixelstopolygons_path
-    #     }
-    # )
-
     processing.run(
         "qgis:rastercalculator",
         {
@@ -68,6 +58,16 @@ def execute(appResources, appContext):
             'OUTPUT': 'TEMPORARY_OUTPUT'
         }
     )
+
+    # processing.run(
+    #     "native:pixelstopolygons",
+    #     {
+    #         'INPUT_RASTER': neighbors_path,
+    #         'RASTER_BAND': 1,
+    #         'FIELD_NAME': 'VALUE',
+    #         'OUTPUT': pixelstopolygons_path
+    #     }
+    # )
 
     processing.run(
         "gdal:polygonize",

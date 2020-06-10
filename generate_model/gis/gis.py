@@ -89,21 +89,18 @@ def extrude_footprint():
 
     logger.plugin_log(f"building_height_method: {building_height_method}")
 
-    # QGIS Analysis -> Supports only SUM, MEAN and COUNT
-    # zonalstats = qgis.analysis.QgsZonalStatistics(vectorlayer, rasterfile, "d")
-    # zonalstats.calculateStatistics(None)
-
     output = ""
 
     if appContext.user_parameters.building_height_method.algorithm == "grass7:v.rast.stats":
         output = f"{appContext.execution.raw_temp_folder}/footprint/footprint_height.gpkg"
+        output = f"{appContext.execution.raw_temp_folder}/footprint/footprint_height.geojson"
 
         processing.run(
             "grass7:v.rast.stats",
             {
                 'map': appContext.layers.footprint.layer.dataProvider().dataSourceUri(),
                 'raster': appContext.layers.dsm.layer.dataProvider().dataSourceUri(),
-                'column_prefix': 'cbuilding',
+                'column_prefix': "cb_heigh",
                 'method': [appContext.user_parameters.building_height_method.method_id],
                 'percentile': 90,
                 'output': output,
@@ -131,6 +128,19 @@ def extrude_footprint():
                 'RESULT': output
             }
         )
+    elif appContext.user_parameters.building_height_method.algorithm == "native:zonalstatistics":
+        output = appContext.layers.footprint.layer.dataProvider().dataSourceUri()
+
+        processing.run(
+            "native:zonalstatistics",
+                       {
+                           'INPUT_RASTER':appContext.layers.dsm.layer.dataProvider().dataSourceUri(),
+                           'RASTER_BAND':1,
+                           'INPUT_VECTOR':appContext.layers.footprint.layer.dataProvider().dataSourceUri(),
+                           'COLUMN_PREFIX':'cg_',
+                           'STATISTICS':[
+                               appContext.user_parameters.building_height_method.method_id
+                           ]})
 
     footprint = appContext.update_layer(appContext, output, "footprint", "ogr", "vector")
 
@@ -139,8 +149,10 @@ def extrude_footprint():
     findex = len(footprint.dataProvider().fields()) - 1
     if findex != -1:
         with edit(footprint):
-            footprint.dataProvider().renameAttributes({findex: "building_height"})
+            footprint.dataProvider().renameAttributes({findex: "cb_heigh"})
             footprint.updateFields()
+    else:
+        loggeer.log("It was not possible to rename Buildings Height Variable.")
 
 
 def move(source, destination, layer_name):
