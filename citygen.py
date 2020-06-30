@@ -208,6 +208,8 @@ class citygen:
         layer_list = QgsProject.instance().layerTreeRoot().children()
         getter_list = extension_manager.get_list()
 
+        self.dlg.tabMain.setCurrentIndex(0)
+
         self.dlg.cbxBuildingHeightMethod.clear()
         self.dlg.cbxBuildingHeightMethod.addItems([method["title"] for method in appContext.BUILDING_HEIGHT_METHODS])
         self.dlg.cbxBuildingHeightMethod.currentIndexChanged.connect(self.cbxBuildingHeightMethod_on_change)
@@ -340,7 +342,7 @@ class citygen:
             return
 
         logger.general_log("clicked on_run")
-        self.dlg.tabMain.setCurrentIndex(2)
+        self.dlg.tabMain.setCurrentIndex(3)
 
         appContext.user_parameters.ortho_output = self.dlg.edtOrthoSateTo.text()
         appContext.user_parameters.dtm_output = self.dlg.edtDTMSateTo.text()
@@ -385,10 +387,10 @@ class citygen:
             appContext.user_parameters.clip_layer = None
         elif selected_index == 1:
             appContext.user_parameters.clip_layer = "viewport"
-        else:
-            if len(QgsProject.instance().layerTreeRoot().children()) >= 1:
-                appContext.user_parameters.clip_layer = QgsProject.instance().layerTreeRoot().children()[
-                    selected_index - 2].layer()
+        elif selected_index > 1:
+            # if len(QgsProject.instance().layerTreeRoot().children()) >= 2:
+            appContext.user_parameters.clip_layer = QgsProject.instance().layerTreeRoot().children()[
+                selected_index - 2].layer()
 
     ## BEGIN Ortho ##
     def get_first_layer_by_name(self, layer_name_list, default=0):
