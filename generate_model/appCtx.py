@@ -26,30 +26,35 @@ def add_layer(filePath, type="raster", layer_name="", provider="gdal", crs_id=No
 class appContext:
     BUILDING_HEIGHT_METHODS: List[Dict[str, Union[str, int]]] = [
         {
+            "title": "Mode (the value that most repeats)",
+            "algorithm": "native:zonalstatistics",
+            "method_id": 9,
+        },
+        {
             "title": "Maximum Value",
             "algorithm": "grass7:v.rast.stats",
-            "method_id": 2
+            "method_id": 2,
         },
         {
             "title": "Average",
             "algorithm": "grass7:v.rast.stats",
-            "method_id": 4
+            "method_id": 4,
         },
         {
             "title": "Median",
             "algorithm": "grass7:v.rast.stats",
-            "method_id": 10
+            "method_id": 10,
         },
         {
             "title": "Third Quartile",
             "algorithm": "grass7:v.rast.stats",
-            "method_id": 11
+            "method_id": 11,
         },
         {
             "title": "Percentile",
             "algorithm": "grass7:v.rast.stats",
-            "method_id": 12
-        }
+            "method_id": 12,
+        },
     ]
 
     plugins = DotDict.DotDict({
