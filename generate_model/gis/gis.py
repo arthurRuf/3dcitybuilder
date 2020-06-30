@@ -168,6 +168,21 @@ def save_files():
              appContext.user_parameters.footprint_output, "footprint")
 
 
+    if (appContext.user_parameters.street_output != ""):
+        move(appContext.layers.street.layer.dataProvider().dataSourceUri(),
+             appContext.user_parameters.street_output, "street")
+
+
+    if (appContext.user_parameters.tree_output != ""):
+        move(appContext.layers.tree.layer.dataProvider().dataSourceUri(),
+             appContext.user_parameters.tree_output, "tree")
+
+
+    if (appContext.user_parameters.water_output != ""):
+        move(appContext.layers.water.layer.dataProvider().dataSourceUri(),
+             appContext.user_parameters.water_output, "water")
+
+
 def load_layers_to_project():
     QgsProject.instance().addMapLayer(appContext.layers.ortho.layer)
     QgsProject.instance().addMapLayer(appContext.layers.dtm.layer)
@@ -198,85 +213,50 @@ def load_layers_to_project():
     # renderer.setLayer(appContext.layers.footprint.layer)
     QgsProject.instance().addMapLayer(appContext.layers.footprint.layer)
 
+    # Street
+    if appContext.user_parameters.street_getter is not None:
+        appContext.layers.street.layer.renderer().symbol().setWidth(10.50000)
+        appContext.layers.street.layer.renderer().symbol().setColor(QColor("#000000"))
 
-def add_roads():
-    try:
-        import geopandas as gdp
-    except:
-        logger.plugin_log("Unable to add Roads")
-        logger.plugin_log(
-            "You need to install geopandas library into QGIS Python in order to use this functionality")
+        symbol_layer = [None, None, None]
 
-    try:
-        import osmnx as ox
-    except:
-        logger.plugin_log("Unable to add Roads")
-        logger.plugin_log(
-            "You need to install osmnx library into QGIS Python in order to use this functionality")
+        symbol_layer[0] = QgsSimpleLineSymbolLayer()
+        symbol_layer[0].setWidth(0.4)
+        symbol_layer[0].setColor(QColor("#cdd31b"))
+        symbol_layer[0].setPenJoinStyle(1)
+        symbol_layer[0].setPenCapStyle(0)
 
-    ox.config(log_console=True, use_cache=True)
+        symbol_layer[1] = QgsSimpleLineSymbolLayer()
+        symbol_layer[1].setWidth(10)
+        symbol_layer[1].setColor(QColor("#3b3b3b"))
+        symbol_layer[1].setPenJoinStyle(1)
+        symbol_layer[1].setPenCapStyle(0)
 
-    polygon_path = ""
-    if appContext.user_parameters.clip_layer == "":
-        polygon_path = appContext.user_parameters.clip_layer.dataProvider().dataSourceUri()
-    else:
-        polygon = create_viewport_polygon()
-        polygon_path = polygon.dataProvider().dataSourceUri()
+        symbol_layer[2] = QgsSimpleLineSymbolLayer()
+        symbol_layer[2].setWidth(10.5)
+        symbol_layer[2].setColor(QColor("#000000"))
+        symbol_layer[2].setPenJoinStyle(1)
+        symbol_layer[2].setPenCapStyle(0)
 
-    # polygon_path = "/Users/arthurrufhosangdacosta/qgis_data/extrusion/polygon_clip_mask.shp"
-    epsg_id = 4326
+        appContext.layers.street.layer.renderer().symbol().appendSymbolLayer(symbol_layer[0])
+        appContext.layers.street.layer.renderer().symbol().appendSymbolLayer(symbol_layer[1])
+        appContext.layers.street.layer.renderer().symbol().appendSymbolLayer(symbol_layer[2])
 
-    epsg_id = QgsProject.instance().crs().postgisSrid()
-    project_epsg = f'EPSG:{epsg_id}'
+        QgsProject.instance().addMapLayer(appContext.layers.street.layer)
 
-    # calif = gdp.read_file('input_data/ZillowNeighborhoods-CA')
-    calif = gdp.read_file(polygon_path)
-    polygon = calif['geometry'].iloc[0]
-    graph = ox.graph_from_polygon(polygon, network_type='drive_service')
-    graph_projected = ox.project_graph(graph, project_epsg)
 
-    ox.save_graph_shapefile(graph_projected, filename='roads', folder=appContext.execution.normalized_temp_folder)
+    # Tree
+    if appContext.user_parameters.tree_getter is not None:
+        QgsProject.instance().addMapLayer(appContext.layers.tree.layer)
 
-    layer = add_layer(
-        f"{appContext.execution.normalized_temp_folder}/roads/edges/edges.shp",
-        "vector",
-        "roads",
-        "ogr",
-        epsg_id
-    )
+    # Water
+    if appContext.user_parameters.water_getter is not None:
+        QgsProject.instance().addMapLayer(appContext.layers.water.layer)
 
-    layer.renderer().symbol().setWidth(10.50000)
-    layer.renderer().symbol().setColor(QColor("#000000"))
 
-    symbol_layer = []
-
-    symbol_layer[0] = QgsSimpleLineSymbolLayer()
-    symbol_layer[0].setWidth(0.4)
-    symbol_layer[0].setColor(QColor("#cdd31b"))
-    symbol_layer[0].setPenJoinStyle(1)
-    symbol_layer[0].setPenCapStyle(0)
-
-    symbol_layer[1] = QgsSimpleLineSymbolLayer()
-    symbol_layer[1].setWidth(10)
-    symbol_layer[1].setColor(QColor("#3b3b3b"))
-    symbol_layer[1].setPenJoinStyle(1)
-    symbol_layer[1].setPenCapStyle(0)
-
-    symbol_layer[2] = QgsSimpleLineSymbolLayer()
-    symbol_layer[2].setWidth(10.5)
-    symbol_layer[2].setColor(QColor("#000000"))
-    symbol_layer[2].setPenJoinStyle(1)
-    symbol_layer[2].setPenCapStyle(0)
-
-    layer.renderer().symbol().appendSymbolLayer(symbol_layer[0])
-    layer.renderer().symbol().appendSymbolLayer(symbol_layer[1])
-    layer.renderer().symbol().appendSymbolLayer(symbol_layer[2])
-
-    QgsProject.instance().addMapLayer(layer)
 
 
 def generate_3d_model():
     extrude_footprint()
     save_files()
-    # add_roads()
     load_layers_to_project()

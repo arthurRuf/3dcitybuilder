@@ -1,0 +1,48 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "feature",
+      "properties": {
+        "name": "OpenStreetMap (via osmnx library)",
+        "position": 10,
+        "format": "file",
+        "layer": "street",
+        "crs": "4326",
+        "cropIncluded": true,
+        "requirements": [
+          "urllib",
+          "geopandas",
+          "osmnx"
+        ]
+      },
+      "geometry": {
+        "type": "Multipolygon",
+        "coordinates": [
+          [
+            [
+              [
+                -180,
+                90
+              ],
+              [
+                180,
+                90
+              ],
+              [
+                180,
+                -90
+              ],
+              [
+                -180,
+                -90
+              ]
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}
+
+

@@ -116,24 +116,30 @@ def execute(appResources, appContext):
         # "58_2"
 
         ### TEST ###
-        "25_4",
-        "26_3",
-        # "26_4",
-        "36_2",
-        "36_3",
-        "36_4",
+        # "25_4",
+        # "26_3",
+        # # "26_4",
+        # "36_2",
+        # "36_3",
+        # "36_4",
+        # "36_1",
+        #
+        # "25_4",
+        #
+        # "35_3",
+        # "35_4",
+        # "45_1",
+        # "45_2",
+        # "35_1",
+        # "35_2",
+        # "46_1",
+        # "46_2",
+
         "36_1",
+        "36_2",
+        "26_3",
+        "26_4",
 
-        "25_4",
-
-        "35_3",
-        "35_4",
-        "45_1",
-        "45_2",
-        "35_1",
-        "35_2",
-        "46_1",
-        "46_2",
     ]
 
     url_list = []
@@ -151,7 +157,7 @@ def execute(appResources, appContext):
     # appResources.bibliotecas.internet.download_file_list(url_list, zip_file_list)
 
     # NORMALIZING
-    # appResources.bibliotecas.logger.update_progress(step_description="Uncompromising...")
+    # appResources.bibliotecas.logger.update_progress(step_description="Uncompressing...")
     # appResources.bibliotecas.file_management.unzip_file_list(zip_file_list, destination_list)
 
     for index, layer_path in enumerate(tiff_list):

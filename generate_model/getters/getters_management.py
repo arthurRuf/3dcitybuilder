@@ -34,3 +34,33 @@ def execute_getters():
         # extension_management.run_plugin_method(appContext.user_parameters.footprint_getter.id, "identify_footprint")
     extension_manager.execute_plugin(appContext.user_parameters.footprint_getter.id)
     logger.plugin_log("Done!")
+
+    # Street
+    if appContext.user_parameters.street_getter is not None:
+        logger.increase_overall_current()
+        logger.update_progress(step_current=1, step_description="Street", step_maximum=100)
+        # if appContext.user_parameters.street_getter.format == "algorithm":
+            # extension_management.run_plugin_method(appContext.user_parameters.street_getter.id, "identify_street")
+        extension_manager.execute_plugin(appContext.user_parameters.street_getter.id)
+        logger.plugin_log("Done!")
+
+
+    # Tree
+    if appContext.user_parameters.tree_getter is not None:
+        logger.increase_overall_current()
+        logger.update_progress(step_current=1, step_description="Tree", step_maximum=100)
+        # if appContext.user_parameters.tree_getter.format == "algorithm":
+            # extension_management.run_plugin_method(appContext.user_parameters.tree_getter.id, "identify_tree")
+        extension_manager.execute_plugin(appContext.user_parameters.tree_getter.id)
+        logger.plugin_log("Done!")
+
+
+    # Water
+    if appContext.user_parameters.water_getter is not None:
+        logger.increase_overall_current()
+        logger.update_progress(step_current=1, step_description="Water", step_maximum=100)
+        # if appContext.user_parameters.water_getter.format == "algorithm":
+            # extension_management.run_plugin_method(appContext.user_parameters.water_getter.id, "identify_water")
+        extension_manager.execute_plugin(appContext.user_parameters.water_getter.id)
+        logger.plugin_log("Done!")
+    

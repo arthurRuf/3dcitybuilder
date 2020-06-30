@@ -9,6 +9,10 @@ def create_temp_dirs(path):
     os.makedirs(os.path.join(path, "dtm"), exist_ok=True)
     os.makedirs(os.path.join(path, "dsm"), exist_ok=True)
     os.makedirs(os.path.join(path, "footprint"), exist_ok=True)
+    os.makedirs(os.path.join(path, "street"), exist_ok=True)
+    os.makedirs(os.path.join(path, "tree"), exist_ok=True)
+    os.makedirs(os.path.join(path, "water"), exist_ok=True)
+    os.makedirs(os.path.join(path, "downolads"), exist_ok=True)
 
 def unzip_file(zip_file, destination):
     zf = zipfile.ZipFile(f"{zip_file}")

@@ -270,6 +270,47 @@ class citygen:
 
         self.cbxFootprintSource_on_change(0)
         ### END Footprint ###
+        
+
+        ### BEGIN Street ###
+        appContext.plugins.getter_street_list = list(filter(lambda x: "street" in x["layer"], list(getter_list)))
+        self.dlg.cbxStreetSource.currentIndexChanged.connect(self.cbxStreetSource_on_change)
+        self.dlg.cbxStreetLayer.currentIndexChanged.connect(self.cbxStreetLayer_on_change)
+        self.dlg.cbxStreetSource.clear()
+        self.dlg.cbxStreetSource.addItems([plugin["name"] for plugin in appContext.plugins.getter_street_list])
+
+        self.dlg.cbxStreetLayer.clear()
+        self.dlg.cbxStreetLayer.addItems([layer.name() for layer in layer_list])
+
+        self.cbxStreetSource_on_change(0)
+        ### END Street ###
+
+
+        ### BEGIN Tree ###
+        appContext.plugins.getter_tree_list = list(filter(lambda x: "trees" in x["layer"], list(getter_list)))
+        self.dlg.cbxTreeSource.currentIndexChanged.connect(self.cbxTreeSource_on_change)
+        self.dlg.cbxTreeLayer.currentIndexChanged.connect(self.cbxTreeLayer_on_change)
+        self.dlg.cbxTreeSource.clear()
+        self.dlg.cbxTreeSource.addItems([plugin["name"] for plugin in appContext.plugins.getter_tree_list])
+
+        self.dlg.cbxTreeLayer.clear()
+        self.dlg.cbxTreeLayer.addItems([layer.name() for layer in layer_list])
+
+        self.cbxTreeSource_on_change(0)
+        ### END Tree ###
+
+        ### BEGIN Water ###
+        appContext.plugins.getter_water_list = list(filter(lambda x: "water" in x["layer"], list(getter_list)))
+        self.dlg.cbxWaterSource.currentIndexChanged.connect(self.cbxWaterSource_on_change)
+        self.dlg.cbxWaterLayer.currentIndexChanged.connect(self.cbxWaterLayer_on_change)
+        self.dlg.cbxWaterSource.clear()
+        self.dlg.cbxWaterSource.addItems([plugin["name"] for plugin in appContext.plugins.getter_water_list])
+
+        self.dlg.cbxWaterLayer.clear()
+        self.dlg.cbxWaterLayer.addItems([layer.name() for layer in layer_list])
+
+        self.cbxWaterSource_on_change(0)
+        ### END Water ###
 
         self.dlg.btnRun.clicked.connect(self.on_run)
         self.dlg.btnCancel.clicked.connect(self.on_cancel)
@@ -280,6 +321,9 @@ class citygen:
         self.dlg.btnDTMSateTo.clicked.connect(self.btnDTMSateTo_on_click)
         self.dlg.btnDSMSateTo.clicked.connect(self.btnDSMSateTo_on_click)
         self.dlg.btnFootprintSateTo.clicked.connect(self.btnFootprintSateTo_on_click)
+        self.dlg.btnStreetSateTo.clicked.connect(self.btnStreetSateTo_on_click)
+        self.dlg.btnTreeSateTo.clicked.connect(self.btnTreeSateTo_on_click)
+        self.dlg.btnWaterSateTo.clicked.connect(self.btnWaterSateTo_on_click)
 
         # show the dialog
         self.dlg.show()
@@ -302,6 +346,9 @@ class citygen:
         appContext.user_parameters.dtm_output = self.dlg.edtDTMSateTo.text()
         appContext.user_parameters.dsm_output = self.dlg.edtDSMSateTo.text()
         appContext.user_parameters.footprint_output = self.dlg.edtFootprintSateTo.text()
+        appContext.user_parameters.street_output = self.dlg.edtStreetSateTo.text()
+        appContext.user_parameters.tree_output = self.dlg.edtTreeSateTo.text()
+        appContext.user_parameters.water_output = self.dlg.edtWaterSateTo.text()
 
         start()
         self.dlg.btnCancel.setText("Close")
@@ -413,7 +460,8 @@ class citygen:
         self.dlg.frmFootprintSateTo.setVisible(
             appContext.user_parameters.footprint_getter.format in ["file", "algorithm"])
 
-        self.dlg.cbxFootprintLayer.setCurrentIndex(self.get_first_layer_by_name(["footprint", "building", "gebaeude"], 0))
+        self.dlg.cbxFootprintLayer.setCurrentIndex(
+            self.get_first_layer_by_name(["footprint", "building", "gebaeude"], 0))
 
     def cbxFootprintLayer_on_change(self, selected_index):
         appContext.user_parameters.footprint_input = QgsProject.instance().layerTreeRoot().children()[
@@ -428,3 +476,77 @@ class citygen:
             selected_index].layer()
 
     ## END Footprint ##
+
+    ## BEGIN Street ##
+    def cbxStreetSource_on_change(self, selected_index):
+        appContext.user_parameters.street_getter = appContext.plugins.getter_street_list[selected_index]
+
+        self.dlg.frmStreetLayer.setVisible(appContext.user_parameters.street_getter.format == "layer")
+        self.dlg.frmStreetSateTo.setVisible(
+            appContext.user_parameters.street_getter.format in ["file", "algorithm"])
+
+        self.dlg.cbxStreetLayer.setCurrentIndex(self.get_first_layer_by_name(["street", "road", "ruas"], 0))
+
+    def cbxStreetLayer_on_change(self, selected_index):
+        appContext.user_parameters.street_input = QgsProject.instance().layerTreeRoot().children()[
+            selected_index].layer()
+
+    def btnStreetSateTo_on_click(self):
+        filename = self.select_output_file("ShapeFil (*.shp);;GeoJSON (*.geojson)")
+        self.dlg.edtStreetSateTo.setText(filename)
+
+    def cbxStreetLayer_on_change(self, selected_index):
+        appContext.user_parameters.street_input = QgsProject.instance().layerTreeRoot().children()[
+            selected_index].layer()
+
+    ## END Street ##
+
+
+    ## BEGIN Tree ##
+    def cbxTreeSource_on_change(self, selected_index):
+        appContext.user_parameters.tree_getter = appContext.plugins.getter_tree_list[selected_index]
+
+        self.dlg.frmTreeLayer.setVisible(appContext.user_parameters.tree_getter.format == "layer")
+        self.dlg.frmTreeSateTo.setVisible(
+            appContext.user_parameters.tree_getter.format in ["file", "algorithm"])
+
+        self.dlg.cbxTreeLayer.setCurrentIndex(self.get_first_layer_by_name(["tree", "veg", "arvores"], 0))
+
+    def cbxTreeLayer_on_change(self, selected_index):
+        appContext.user_parameters.tree_input = QgsProject.instance().layerTreeRoot().children()[
+            selected_index].layer()
+
+    def btnTreeSateTo_on_click(self):
+        filename = self.select_output_file("ShapeFil (*.shp);;GeoJSON (*.geojson)")
+        self.dlg.edtTreeSateTo.setText(filename)
+
+    def cbxTreeLayer_on_change(self, selected_index):
+        appContext.user_parameters.tree_input = QgsProject.instance().layerTreeRoot().children()[
+            selected_index].layer()
+
+    ## END Tree ##
+
+    ## BEGIN Water ##
+    def cbxWaterSource_on_change(self, selected_index):
+        appContext.user_parameters.water_getter = appContext.plugins.getter_water_list[selected_index]
+
+        self.dlg.frmWaterLayer.setVisible(appContext.user_parameters.water_getter.format == "layer")
+        self.dlg.frmWaterSateTo.setVisible(
+            appContext.user_parameters.water_getter.format in ["file", "algorithm"])
+
+        self.dlg.cbxWaterLayer.setCurrentIndex(self.get_first_layer_by_name(["water", "river", "rio"], 0))
+
+    def cbxWaterLayer_on_change(self, selected_index):
+        appContext.user_parameters.water_input = QgsProject.instance().layerTreeRoot().children()[
+            selected_index].layer()
+
+    def btnWaterSateTo_on_click(self):
+        filename = self.select_output_file("ShapeFil (*.shp);;GeoJSON (*.geojson)")
+        self.dlg.edtWaterSateTo.setText(filename)
+
+    def cbxWaterLayer_on_change(self, selected_index):
+        appContext.user_parameters.water_input = QgsProject.instance().layerTreeRoot().children()[
+            selected_index].layer()
+
+    ## END Water ##
+

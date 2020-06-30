@@ -48,21 +48,6 @@ def appContext_setup():
     file_management.create_temp_dirs(appContext.execution.raw_temp_folder)
     file_management.create_temp_dirs(appContext.execution.normalized_temp_folder)
 
-    # if appContext.user_parameters.ortho_output == "" and \
-    #         appContext.user_parameters.ortho_getter.format == "file":
-    #     appContext.user_parameters.ortho_output = f"{appContext.execution.normalized_temp_folder}/ortho.tif"
-    # if appContext.user_parameters.dtm_output == "" and \
-    #         appContext.user_parameters.dtm_getter.format == "file":
-    #     appContext.user_parameters.dtm_output = f"{appContext.execution.normalized_temp_folder}/dtm.tif"
-    # if appContext.user_parameters.dsm_output == "" and \
-    #         appContext.user_parameters.dsm_getter.format == "file":
-    #     appContext.user_parameters.dsm_output = f"{appContext.execution.normalized_temp_folder}/dsm.tif"
-    # if appContext.user_parameters.footprint_output == "" and \
-    #         (appContext.user_parameters.footprint_getter.format == "file" or
-    #          appContext.user_parameters.footprint_getter.format == "algorithm"
-    #         ):
-    #     appContext.user_parameters.footprint_output = f"{appContext.execution.normalized_temp_folder}/footprint.shp"
-
     logger.plugin_log(f"Plugin Temp folder: {appContext.execution.temp_folder}")
 
     logger.update_progress(step_current=100, overall_current=2)

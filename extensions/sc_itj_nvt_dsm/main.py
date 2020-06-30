@@ -23,7 +23,7 @@ def execute(appResources, appContext):
         raw_file)
 
     # NORMALIZING
-    appResources.bibliotecas.logger.update_progress(step_description="Uncompromising...")
+    appResources.bibliotecas.logger.update_progress(step_description="Uncompressing...")
     appResources.bibliotecas.file_management.unzip_file(raw_file, f"{appContext.execution.raw_temp_folder}/dsm/")
     result = f"{appContext.execution.raw_temp_folder}/dsm/dsm.tif"
 

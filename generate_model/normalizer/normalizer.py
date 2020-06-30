@@ -144,3 +144,13 @@ def normalize_layers():
     normalize_layer("ortho", "raster")
     normalize_layer("dtm", "raster")
     normalize_layer("dsm", "raster")
+
+    if appContext.user_parameters.street_getter is not None:
+        normalize_layer("street", "vector")
+
+    if appContext.user_parameters.tree_getter is not None:
+        normalize_layer("tree", "vector")
+
+    if appContext.user_parameters.water_getter is not None:
+        normalize_layer("water", "vector")
+

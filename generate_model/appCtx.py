@@ -58,6 +58,9 @@ class appContext:
         "getter_dsm_list": [],
         "getter_footprint_list": [],
         "footprint_algorithm":[],
+        "getter_street_list": [],
+        "getter_tree_list": [],
+        "getter_water_list": [],
     })
 
     user_parameters = DotDict.DotDict({
@@ -70,11 +73,17 @@ class appContext:
         "dtm_getter": None,
         "dsm_getter": None,
         "footprint_getter": None,
+        "street_getter": None,
+        "tree_getter": None,
+        "water_getter": None,
 
         "ortho_output": "",
         "dtm_output": "",
         "dsm_output": "",
         "footprint_output": "",
+        "street_output": "",
+        "tree_output": "",
+        "water_output": "",
 
         "building_height_method": "",
         "clip_layer": None
@@ -105,6 +114,24 @@ class appContext:
             "type": "vector",
             "crs": None
         },
+        "street": {
+            "layer": None,
+            "data_provider": None,
+            "type": "vector",
+            "crs": None
+        },
+        "tree": {
+            "layer": None,
+            "data_provider": None,
+            "type": "vector",
+            "crs": None
+        },
+        "water": {
+            "layer": None,
+            "data_provider": None,
+            "type": "vector",
+            "crs": None
+        },
         "clipping_polygon": {
             "layer": None,
             "data_provider": None,
@@ -129,7 +156,6 @@ class appContext:
             "description": "",
             "current": 0,
             "maximum": 100
-
         },
         "step": {
             "description": "",

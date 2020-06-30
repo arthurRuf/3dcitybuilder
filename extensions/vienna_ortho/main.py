@@ -144,7 +144,7 @@ def execute(appResources, appContext):
     # appResources.bibliotecas.internet.download_file_list(url_list, zip_file_list)
 
     # NORMALIZING
-    # appResources.bibliotecas.logger.update_progress(step_description="Uncompromising...")
+    # appResources.bibliotecas.logger.update_progress(step_description="Uncompressing...")
     # appResources.bibliotecas.file_management.unzip_file_list(zip_file_list, destination_list)
 
     for index, layer_path in enumerate(tiff_list):
