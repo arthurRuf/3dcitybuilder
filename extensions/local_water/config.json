@@ -4,7 +4,7 @@
     {
       "type": "feature",
       "properties": {
-        "name": "Select a layer from the project (Water)",
+        "name": "Select a layer from the project",
         "format": "layer",
         "position": 0,
         "layer": "water",

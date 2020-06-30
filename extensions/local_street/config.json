@@ -4,7 +4,7 @@
     {
       "type": "feature",
       "properties": {
-        "name": "Select a layer from the project (street)",
+        "name": "Select a layer from the project",
         "format": "layer",
         "position": 0,
         "layer": "street",

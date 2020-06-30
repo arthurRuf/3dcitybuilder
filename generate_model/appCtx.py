@@ -55,6 +55,10 @@ class appContext:
             "algorithm": "grass7:v.rast.stats",
             "method_id": 12,
         },
+        {
+            "title": "Mode",
+            "algorithm": "process:mode",
+        },
     ]
 
     plugins = DotDict.DotDict({

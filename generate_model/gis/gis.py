@@ -133,14 +133,31 @@ def extrude_footprint():
 
         processing.run(
             "native:zonalstatistics",
-                       {
-                           'INPUT_RASTER':appContext.layers.dsm.layer.dataProvider().dataSourceUri(),
-                           'RASTER_BAND':1,
-                           'INPUT_VECTOR':appContext.layers.footprint.layer.dataProvider().dataSourceUri(),
-                           'COLUMN_PREFIX':'cg_',
-                           'STATISTICS':[
-                               appContext.user_parameters.building_height_method.method_id
-                           ]})
+            {
+                'INPUT_RASTER': appContext.layers.dsm.layer.dataProvider().dataSourceUri(),
+                'RASTER_BAND': 1,
+                'INPUT_VECTOR': appContext.layers.footprint.layer.dataProvider().dataSourceUri(),
+                'COLUMN_PREFIX': 'cg_',
+                'STATISTICS': [
+                    appContext.user_parameters.building_height_method.method_id
+                ]})
+    elif appContext.user_parameters.building_height_method.algorithm == "process:mode":
+        output = appContext.layers.footprint.layer.dataProvider().dataSourceUri()
+        intermediary_shapefile = f'{appContext.execution.normalized_temp_folder}/dsm/dsm_points.shp'
+
+        processing.run(
+            "native:pixelstopoints",
+            {
+                'INPUT_RASTER': appContext.layers.dsm.layer.dataProvider().dataSourceUri(),
+                'RASTER_BAND': 1,
+                'FIELD_NAME': 'height',
+                'OUTPUT': intermediary_shapefile
+            }
+        )
+
+        # v.vect.stats
+        # output
+        # intermediary_shapefile
 
     footprint = appContext.update_layer(appContext, output, "footprint", "ogr", "vector")
 
@@ -179,16 +196,13 @@ def save_files():
         move(appContext.layers.footprint.layer.dataProvider().dataSourceUri(),
              appContext.user_parameters.footprint_output, "footprint")
 
-
     if (appContext.user_parameters.street_output != ""):
         move(appContext.layers.street.layer.dataProvider().dataSourceUri(),
              appContext.user_parameters.street_output, "street")
 
-
     if (appContext.user_parameters.tree_output != ""):
         move(appContext.layers.tree.layer.dataProvider().dataSourceUri(),
              appContext.user_parameters.tree_output, "tree")
-
 
     if (appContext.user_parameters.water_output != ""):
         move(appContext.layers.water.layer.dataProvider().dataSourceUri(),
@@ -256,7 +270,6 @@ def load_layers_to_project():
 
         QgsProject.instance().addMapLayer(appContext.layers.street.layer)
 
-
     # Tree
     if appContext.user_parameters.tree_getter is not None:
         QgsProject.instance().addMapLayer(appContext.layers.tree.layer)
@@ -264,8 +277,6 @@ def load_layers_to_project():
     # Water
     if appContext.user_parameters.water_getter is not None:
         QgsProject.instance().addMapLayer(appContext.layers.water.layer)
-
-
 
 
 def generate_3d_model():

@@ -4,9 +4,9 @@
     {
       "type": "feature",
       "properties": {
-        "name": "Vienna City!!!",
+        "name": "Vienna City DSM OLD",
         "format": "file",
-        "layer": "dsm",
+        "layer": "OLD",
         "crs": "4326",
         "cropIncluded": false,
         "requirements": [

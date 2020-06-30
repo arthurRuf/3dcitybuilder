@@ -4,7 +4,7 @@
     {
       "type": "feature",
       "properties": {
-        "name": "Vienna City 2",
+        "name": "Vienna City",
         "format": "file",
         "crs": "31256",
         "layer": "dsm",

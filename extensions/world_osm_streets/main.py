@@ -23,18 +23,17 @@ def execute(appResources, appContext):
         appResources.bibliotecas.logger.plugin_log(
             "You need to install geopandas and osmnx python library into QGIS Python in order to use this functionality")
 
-    ox.config(log_console=True, use_cache=True)
+    # ox.config(log_console=True, use_cache=True)
+raw_folder="/Volumes/TarDisk/ruf"
+import osmnx as ox
+import geopandas as gpd
+calif = gpd.read_file('/Volumes/TarDisk/ruf/workspace/ttc/test/osmnx-examples/notebooks/input_data/ZillowNeighborhoods-CA/ZillowNeighborhoods-CA.shp')
+mission_district = calif
+polygon = mission_district['geometry'].iloc[0]
 
-    calif = gpd.read_file(
-        '/Volumes/TarDisk/ruf/workspace/ttc/test/osmnx-examples/notebooks/input_data/ZillowNeighborhoods-CA/ZillowNeighborhoods-CA.shp')
-    # appContext.user_parameters.clip_layer.dataProvider().dataSourceUri()
+G = ox.graph_from_polygon(polygon, network_type='drive_service')
 
-    mission_district = calif
-    polygon = mission_district['geometry'].iloc[0]
-
-    G = ox.graph_from_polygon(polygon, network_type='drive_service')
-
-    ox.save_graph_shapefile(G, folder=raw_folder, filename='drive')
+ox.save_graph_shapefile(G, folder=raw_folder, filename='drive')
 
     appResources.bibliotecas.copy_file(f'{raw_folder}/drive/edges/edges.shp', result_file)
     appResources.bibliotecas.copy_file(f'{raw_folder}/drive/edges/edges.cpg', f'{raw_folder}/street.cpg')

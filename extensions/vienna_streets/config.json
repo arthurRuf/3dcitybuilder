@@ -4,10 +4,10 @@
     {
       "type": "feature",
       "properties": {
-        "name": "OSM Austria Water",
+        "name": "OSM Austria",
         "position": 10,
         "format": "file",
-        "layer": "water",
+        "layer": "street",
         "crs": "4326",
         "cropIncluded": false,
         "requirements": [

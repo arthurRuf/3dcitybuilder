@@ -4,7 +4,7 @@
     {
       "type": "feature",
       "properties": {
-        "name": "OpenStreetMap (via osmnx library)",
+        "name": "OpenStreetMap (via OSMNX library)",
         "position": 10,
         "format": "file",
         "layer": "street",
