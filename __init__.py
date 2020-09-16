@@ -32,5 +32,5 @@ def classFactory(iface):  # pylint: disable=invalid-name
     :type iface: QgsInterface
     """
     #
-    from .citygen import citygen
+    from .citygen_loader import citygen
     return citygen(iface)
