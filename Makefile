@@ -50,7 +50,7 @@ UI_FILES = citygen_dialog_base.ui
 
 EXTRAS = metadata.txt icon.png
 
-EXTRA_DIRS = extensions
+EXTRA_DIRS = extensions generate_model
 
 COMPILED_RESOURCE_FILES = resources.py
 
@@ -65,7 +65,14 @@ PEP8EXCLUDE=pydev,resources.py,conf.py,third_party,ui
 #	* Windows:
 #	  AppData\Roaming\QGIS\QGIS3\profiles\default\python\plugins'
 
+# For MacOS
 QGISDIR=Library/Application Support/QGIS/QGIS3/profiles/default
+
+# For Windows
+# QGISDIR=AppData\Roaming\QGIS\QGIS3\profiles\default\python\plugins'
+
+# For Linux
+# QGISDIR=.local/share/QGIS/QGIS3/profiles/default/python/plugins/
 
 #################################################
 # Normally you would not need to edit below here
