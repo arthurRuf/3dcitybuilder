@@ -3,14 +3,15 @@
 # This file should be included when you package your plugin.# Mandatory items:
 
 [general]
-name=citygen
+name=3D City Builder
 qgisMinimumVersion=3.0
-description=A plugin to generate 3D models of urban areas
-version=0.1
+description=Generate 3D models of urban areas using DEM.
+version=0.2
 author=Arthur Ruf Hosang da Costa
 email=arthur.rhc@gmail.com
 
-about=A plugin to generate 3D models of urban areas
+about=QGIS Plugin that creates 3D Models of Urban Areas using online databases or files stored locally. To generate the 3D Model, this plugin uses Aerial Imagery (Satellite Image), DTM (Digital Terrain Model) or DEM (Digital Elevation Model), DSM (Digital Surface Model) and a Footprint layer (the contour of the buildings). To run this pligun, XX need to be installed on QGIS Python.
+
 
 tracker=https://github.com/arthurRuf/3dcitybuilder/issues
 repository=https://github.com/arthurRuf/3dcitybuilder
@@ -23,7 +24,7 @@ hasProcessingProvider=no
 # changelog=
 
 # Tags are comma separated with spaces allowed
-tags=python
+tags=python, 3d, dem, dtm, dsm, river, openstreetmap, osm, urban planning, water, view
 
 homepage=https://github.com/arthurRuf/3dcitybuilder
 category=Plugins
