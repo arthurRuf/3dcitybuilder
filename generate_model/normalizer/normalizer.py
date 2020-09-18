@@ -87,39 +87,40 @@ def clip_layer(layer_name, loaded_layer, layer_type):
         layer_path = loaded_layer.dataProvider().dataSourceUri()
         polygon_path = appContext.user_parameters.clip_layer.dataProvider().dataSourceUri()
 
-        if layer_type == "raster":
-            result_path = f"{appContext.execution.raw_temp_folder}/{layer_name}/{layer_name}_croped.tif"
+        if layer_path != polygon_path:
+            if layer_type == "raster":
+                result_path = f"{appContext.execution.raw_temp_folder}/{layer_name}/{layer_name}_croped.tif"
 
-            processing.run(
-                "gdal:cliprasterbymasklayer",
-                {
-                    'INPUT': layer_path,
-                    'MASK': polygon_path,
-                    'SOURCE_CRS': None,
-                    'TARGET_CRS': None,
-                    'NODATA': None,
-                    'ALPHA_BAND': False,
-                    'CROP_TO_CUTLINE': True,
-                    'KEEP_RESOLUTION': False,
-                    'SET_RESOLUTION': False,
-                    'X_RESOLUTION': None,
-                    'Y_RESOLUTION': None,
-                    'MULTITHREADING': False,
-                    'OPTIONS': '',
-                    'DATA_TYPE': 0,
-                    'OUTPUT': result_path
-                }
-            )
-        else:
-            result_path = f"{appContext.execution.raw_temp_folder}/{layer_name}/{layer_name}_croped.shp"
-            processing.run(
-                "native:clip",
-                {
-                    'INPUT': layer_path,
-                    'OVERLAY': polygon_path,
-                    'OUTPUT': result_path
-                }
-            )
+                processing.run(
+                    "gdal:cliprasterbymasklayer",
+                    {
+                        'INPUT': layer_path,
+                        'MASK': polygon_path,
+                        'SOURCE_CRS': None,
+                        'TARGET_CRS': None,
+                        'NODATA': None,
+                        'ALPHA_BAND': False,
+                        'CROP_TO_CUTLINE': True,
+                        'KEEP_RESOLUTION': False,
+                        'SET_RESOLUTION': False,
+                        'X_RESOLUTION': None,
+                        'Y_RESOLUTION': None,
+                        'MULTITHREADING': False,
+                        'OPTIONS': '',
+                        'DATA_TYPE': 0,
+                        'OUTPUT': result_path
+                    }
+                )
+            else:
+                result_path = f"{appContext.execution.raw_temp_folder}/{layer_name}/{layer_name}_croped.shp"
+                processing.run(
+                    "native:clip",
+                    {
+                        'INPUT': layer_path,
+                        'OVERLAY': polygon_path,
+                        'OUTPUT': result_path
+                    }
+                )
 
         appContext.update_layer(
             appContext,
