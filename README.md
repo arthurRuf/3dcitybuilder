@@ -30,7 +30,7 @@ python3  -m pip install
 ## Usage
 
 Demonstration of using the Plugin
-![Plugin Usage Demonstration](https://github.com/arthurRuf/3dcitybuilder/blob/master/docs/brazil_itajai_and_navegantes.gif?raw=true)
+![Image demonstrating how to use the plugin](https://github.com/arthurRuf/3dcitybuilder/blob/master/docs/how-to-use.gif?raw=true)
 
 
 
