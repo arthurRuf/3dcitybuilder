@@ -9,10 +9,10 @@ Plus, if you have any suggestins, please, let me know :D
 I appreciate any help to make this code compliant with PEP8. 
 
 **Vienna, Austria**
-![Result in Vienna, Austria](https://github.com/arthurRuf/3dcitybuilder/blob/master/docs/austria_vienna.gif?raw=true)
+![Result in Vienna, Austria](https://github.com/arthurRuf/3dcitybuilder/blob/main/docs/austria_vienna.gif?raw=true)
 
 **Cities of Itajaí and Navegantes, Santa Catarina, Brazil**
-![Result in the cities of Itajaí and Navegantes, Santa Catarina, Brazil](https://github.com/arthurRuf/3dcitybuilder/blob/master/docs/brazil_itajai_and_navegantes.gif?raw=true)
+![Result in the cities of Itajaí and Navegantes, Santa Catarina, Brazil](https://github.com/arthurRuf/3dcitybuilder/blob/main/docs/brazil_itajai_and_navegantes.gif?raw=true)
 
  
 ## Installing
@@ -45,7 +45,7 @@ To run the 3D City Generator, just follow this steps:
 4. Have fun :D
 
 Animation demonstrating how to use this Plugin
-![Image demonstrating how to use the plugin](https://github.com/arthurRuf/3dcitybuilder/blob/master/docs/how-to-use.gif?raw=true)
+![Image demonstrating how to use the plugin](https://github.com/arthurRuf/3dcitybuilder/blob/main/docs/how-to-use.gif?raw=true)
 
 
 A sample dataset is available to:
