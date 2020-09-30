@@ -50,7 +50,7 @@ Animation demonstrating how to use this Plugin
 
 A sample dataset is available to:
 To make it easier for you to test this plugin, we've made available a sample dataset: 
- * Vienna, Austria: ![https://3dcitygen-test-dataset.s3.amazonaws.com/test-dataset-vienna.zip](https://3dcitygen-test-dataset.s3.amazonaws.com/test-dataset-vienna.zip)
+ * Vienna, Austria: https://3dcitygen-test-dataset.s3.amazonaws.com/test-dataset-vienna.zip
 
 
 ## Development
@@ -67,7 +67,7 @@ The project is licensed under the GNU GPLv2 license.
 You are free to download, modify and redistribute this plugin, since you reference this repo ;D
 
 
-Third Party Licences
+**Third Party Licences**
   * geopandas: © GeoPandas - BSD Licence (https://geopandas.org/)
   * numpy: © NumPy - BSD Licence (https://www.numpy.org)
   * osmnx: © OSMnx - MIT Licence (https://github.com/gboeing/osmnx)
