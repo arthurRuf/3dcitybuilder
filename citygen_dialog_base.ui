@@ -7,11 +7,11 @@
     <x>0</x>
     <y>0</y>
     <width>521</width>
-    <height>710</height>
+    <height>703</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>citygen</string>
+   <string>3D City Builder</string>
   </property>
   <property name="sizeGripEnabled">
    <bool>false</bool>
@@ -533,7 +533,7 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>449</width>
+            <width>434</width>
             <height>707</height>
            </rect>
           </property>

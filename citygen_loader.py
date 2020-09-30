@@ -174,7 +174,7 @@ class citygen:
         icon_path = ':/plugins/citygen/icon.png'
         self.add_action(
             icon_path,
-            text=self.tr(u'3D City Generator'),
+            text=self.tr(u'3D City Builder'),
             callback=self.run,
             parent=self.iface.mainWindow())
 
@@ -185,7 +185,7 @@ class citygen:
         """Removes the plugin menu item and icon from QGIS GUI."""
         for action in self.actions:
             self.iface.removePluginMenu(
-                self.tr(u'&citygen'),
+                self.tr(u'&3D City Builder'),
                 action)
             self.iface.removeToolBarIcon(action)
 
