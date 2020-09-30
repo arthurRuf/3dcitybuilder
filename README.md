@@ -72,4 +72,3 @@ Third Party Licences
   * numpy: © NumPy - BSD Licence (https://www.numpy.org)
   * osmnx: © OSMnx - MIT Licence (https://github.com/gboeing/osmnx)
 
-
