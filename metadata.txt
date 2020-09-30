@@ -21,7 +21,11 @@ repository=https://github.com/arthurRuf/3dcitybuilder
 
 hasProcessingProvider=no
 # Uncomment the following line and add your changelog:
-# changelog=
+changelog=0.2(2020-09-30z)
+     - Some updates to match QGIS Plugin Repository requirements
+    0.1:
+     - Start Plugin for QGIS 3
+
 
 # Tags are comma separated with spaces allowed
 tags=python, 3d, dem, dtm, dsm, river, openstreetmap, osm, urban planning, water, view
