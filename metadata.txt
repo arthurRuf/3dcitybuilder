@@ -10,7 +10,12 @@ version=0.2
 author=Arthur Ruf Hosang da Costa
 email=arthur.rhc@gmail.com
 
-about=QGIS Plugin that creates 3D Models of Urban Areas using online databases or files stored locally. To generate the 3D Model, this plugin uses Aerial Imagery (Satellite Image), DTM (Digital Terrain Model) or DEM (Digital Elevation Model), DSM (Digital Surface Model) and a Footprint layer (the contour of the buildings). To run this pligun, XX need to be installed on QGIS Python.
+about=Create 3D Models of Urban Areas using your files or online databases.
+      To generate the 3D Model, this plugin uses Aerial Imagery (Satellite Image), DTM (Digital Terrain Model aka DEM, Digital Elevation Model), DSM (Digital Surface Model) and a Footprint layer (the contour of the buildings).
+
+      A sample dataset is available to make it easier for you to test this plugin: https://3dcitygen-test-dataset.s3.amazonaws.com/test-dataset-vienna.zip
+
+      Opitionally, you can follow the steps under https://landscapearchaeology.org/2018/installing-python-packages-in-qgis-3-for-windows/ to install the following libraries on QGIS Python: geopandas numpy osmnx.
 
 
 tracker=https://github.com/arthurRuf/3dcitybuilder/issues
