@@ -65,14 +65,22 @@ PEP8EXCLUDE=pydev,resources.py,conf.py,third_party,ui
 #	* Windows:
 #	  AppData\Roaming\QGIS\QGIS3\profiles\default\python\plugins'
 
-# For MacOS
-QGISDIR=Library/Application Support/QGIS/QGIS3/profiles/default
 
-# For Windows
-# QGISDIR=AppData\Roaming\QGIS\QGIS3\profiles\default\python\plugins'
-
-# For Linux
-# QGISDIR=.local/share/QGIS/QGIS3/profiles/default/python/plugins/
+# Checks your OS to set QGISDIR variable to your QGIS Plugin Location. You can also set it manually after this IF
+OS := $(shell uname)
+ifeq ($(OS),Windows_NT)
+  # Windows
+  QGISDIR=AppData\Roaming\QGIS\QGIS3\profiles\default\python\plugins'
+else
+	ifeq ($(OS),Darwin)
+	  # MacOS
+	  QGISDIR=Library/Application Support/QGIS/QGIS3/profiles/default
+	else
+	  # Linux
+	  QGISDIR=.local/share/QGIS/QGIS3/profiles/default/python/plugins/
+	endif
+endif
+# QGISDIR=enter/the/location/manually
 
 #################################################
 # Normally you would not need to edit below here
