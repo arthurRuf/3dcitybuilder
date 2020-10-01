@@ -76,7 +76,6 @@ ox.save_graph_shapefile(G, folder=raw_folder, filename='drive')
         "vector",
         4326
     )
-    # QgsProject.instance().addMapLayer(appContext.layers.dtm.layer)
 
     appResources.bibliotecas.logger.update_progress(step_current=1, step_maximum=1)
     appResources.bibliotecas.logger.plugin_log("Done!")

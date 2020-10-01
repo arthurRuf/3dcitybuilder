@@ -41,7 +41,6 @@ def execute(appResources, appContext):
     appResources.bibliotecas.logger.update_progress(step_description="Downloading Trees...")
 
     zip_file_path = f"{appContext.execution.raw_temp_folder}/downolads/osm.zip"
-    # zip_file_path = f"/private/var/folders/6k/gwc2zlsd7tl7ph27q44pcm0w0000gn/T/processing_c9b8c5d3c16e439fb67a0bbb40d8904e/citygen/W6FSUo5EqeZuqURU/raw/tree/tree.zip"
     uncompressed_file_path = f"{raw_folder}"
 
     if os.path.exists(zip_file_path) == False:

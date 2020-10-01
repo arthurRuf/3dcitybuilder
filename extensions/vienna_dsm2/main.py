@@ -85,7 +85,6 @@ def execute(appResources, appContext):
         "45_3",
         "55_1",
         "55_3",
-        # "15_1", # Does not exists
         "15_2",
         "15_4",
         "25_2",
@@ -180,7 +179,6 @@ def execute(appResources, appContext):
         "gdal",
         31256
     )
-    # QgsProject.instance().addMapLayer(appContext.layers.dsm.layer)
 
     appResources.bibliotecas.logger.update_progress(step_current=1, step_maximum=1)
     appResources.bibliotecas.logger.plugin_log("Done!")

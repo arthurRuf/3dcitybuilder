@@ -139,32 +139,6 @@ def execute(appResources, appContext):
         "58_1",
         "48_4",
         "58_2"
-
-        ## TEST ###
-        "25_4",
-        "26_3",
-        # "26_4",
-        "36_2",
-        "36_3",
-        "36_4",
-        "36_1",
-
-        "25_4",
-
-        "35_3",
-        "35_4",
-        "45_1",
-        "45_2",
-        "35_1",
-        "35_2",
-        "46_1",
-        "46_2",
-
-        "36_1",
-        "36_2",
-        "26_3",
-        "26_4",
-
     ]
 
     url_list = []
@@ -179,11 +153,11 @@ def execute(appResources, appContext):
         tiff_list.append(f"/Users/arthurrufhosangdacosta/qgis_data/temp/dsm/{region}_dom.tif")
         tiff_epsg_list.append(f"/Users/arthurrufhosangdacosta/qgis_data/temp/dsm/{region}_dom_epsg.tif")
 
-    # appResources.bibliotecas.internet.download_file_list(url_list, zip_file_list)
+    appResources.bibliotecas.internet.download_file_list(url_list, zip_file_list)
 
     # NORMALIZING
-    # appResources.bibliotecas.logger.update_progress(step_description="Uncompressing...")
-    # appResources.bibliotecas.file_management.unzip_file_list(zip_file_list, destination_list)
+    appResources.bibliotecas.logger.update_progress(step_description="Uncompressing...")
+    appResources.bibliotecas.file_management.unzip_file_list(zip_file_list, destination_list)
 
     for index, layer_path in enumerate(tiff_list):
         output = tiff_epsg_list[index]
@@ -231,7 +205,6 @@ def execute(appResources, appContext):
         "raster",
         4326
     )
-    # QgsProject.instance().addMapLayer(appContext.layers.dsm.layer)
 
     appResources.bibliotecas.logger.update_progress(step_current=1, step_maximum=1)
     appResources.bibliotecas.logger.plugin_log("Done!")

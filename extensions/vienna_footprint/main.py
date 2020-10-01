@@ -42,7 +42,6 @@ def execute(appResources, appContext):
 
     zip_file_path = f"{raw_folder}/footprint.zip"
 
-    # zip_file_path = f"/private/var/folders/6k/gwc2zlsd7tl7ph27q44pcm0w0000gn/T/processing_c9b8c5d3c16e439fb67a0bbb40d8904e/citygen/W6FSUo5EqeZuqURU/raw/footprint/footprint.zip"
 
     uncompressed_file_path = f"{raw_folder}"
     appResources.bibliotecas.internet.download_file("http://download.geofabrik.de/europe/austria-latest-free.shp.zip",

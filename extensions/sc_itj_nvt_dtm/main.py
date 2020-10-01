@@ -45,7 +45,6 @@ def execute(appResources, appContext):
 
     appResources.bibliotecas.logger.update_progress(step_description="Downloading DTM...")
     appResources.bibliotecas.internet.download_file(
-        # 'https://www.wien.gv.at/ma41datenviewer/downloads/ma41/geodaten/dgm_tif/35_4_dgm_tif.zip',
         "https://ttc-hosang.s3.amazonaws.com/test/sc_dtm.zip",
         raw_file)
 
