@@ -8,7 +8,7 @@
                               -------------------
         begin                : 2020-04-30
         git sha              : $Format:%H$
-        copyright            : (C) 2020 by Arthur Ruf Hosang da Costa
+        copyright            : (C) 2020 by Arthur Ruf Hosang da Costa (https://github.com/arthurRuf)
         email                : arthur.rhc@gmail.com
  ***************************************************************************/
 
