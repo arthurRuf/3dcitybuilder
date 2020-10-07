@@ -1,3 +1,0 @@
-[console_scripts]
-capnpc-cython = capnp._gen:main
-
