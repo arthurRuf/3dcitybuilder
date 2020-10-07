@@ -3,6 +3,8 @@ This QGIS Plugin generates 3D Models of Urban Areas using Aerial Imagery (Satell
 
 This plugin requires QGIS 3.0 or superior
 
+To see it on QGIS Plugin Repository, go to: https://plugins.qgis.org/plugins/citygen/
+
 If you want to help in this project I'll be glad :D
 Plus, if you have any suggestins, please, let me know :D
 
