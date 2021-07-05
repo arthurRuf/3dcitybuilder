@@ -157,9 +157,11 @@ def execute(appResources, appContext):
     appResources.bibliotecas.internet.download_file_list(url_list, zip_file_list)
 
     # NORMALIZING
-    appResources.bibliotecas.logger.update_progress(step_description="Uncompressing...")
+    appResources.bibliotecas.logger.update_progress(step_description="Uncompressing all files...")
     appResources.bibliotecas.file_management.unzip_file_list(zip_file_list, destination_list)
 
+    appResources.bibliotecas.logger.update_progress(step_description=f"Fixing CRS...")
+    count = 0
     for index, layer_path in enumerate(tiff_list):
         output = tiff_epsg_list[index]
 
@@ -183,6 +185,7 @@ def execute(appResources, appContext):
         )
 
 
+    appResources.bibliotecas.logger.plugin_log(f"Running Merge...")
     result = f"{appContext.execution.raw_temp_folder}/ortho/ortho.jpg"
     result = f"/Users/arthurrufhosangdacosta/qgis_data/temp/ortho/ortho.jpg"
     processing.run(
@@ -199,6 +202,7 @@ def execute(appResources, appContext):
         }
     )
 
+    appResources.bibliotecas.logger.plugin_log(f"Updating Layer...")
     appContext.update_layer(
         appContext,
         result,
@@ -209,4 +213,4 @@ def execute(appResources, appContext):
     )
 
     appResources.bibliotecas.logger.update_progress(step_current=1, step_maximum=1)
-    appResources.bibliotecas.logger.plugin_log("Done!")
+    appResources.bibliotecas.logger.plugin_log("Done!", "SUCCESS")

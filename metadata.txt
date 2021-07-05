@@ -6,7 +6,7 @@
 name=3D City Builder
 qgisMinimumVersion=3.0
 description=Generate 3D models of urban areas using DEM.
-version=0.2
+version=0.3
 author=Arthur Ruf Hosang da Costa
 email=arthur.rhc@gmail.com
 

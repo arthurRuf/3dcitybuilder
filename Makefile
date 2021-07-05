@@ -70,14 +70,14 @@ PEP8EXCLUDE=pydev,resources.py,conf.py,third_party,ui
 OS := $(shell uname)
 ifeq ($(OS),Windows_NT)
   # Windows
-  QGISDIR=AppData\Roaming\QGIS\QGIS3\profiles\default\python\plugins'
+  QGISDIR=AppData\Roaming\QGIS\QGIS3\profiles\default'
 else
 	ifeq ($(OS),Darwin)
 	  # MacOS
 	  QGISDIR=Library/Application Support/QGIS/QGIS3/profiles/default
 	else
 	  # Linux
-	  QGISDIR=.local/share/QGIS/QGIS3/profiles/default/python/plugins/
+	  QGISDIR=.local/share/QGIS/QGIS3/profiles/default
 	endif
 endif
 # QGISDIR=enter/the/location/manually

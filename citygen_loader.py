@@ -42,6 +42,7 @@ from .resources import *
 # Import the code for the dialog
 from .citygen_dialog import citygenDialog
 import os.path
+import traceback
 
 
 class citygen:
@@ -336,26 +337,49 @@ class citygen:
             pass
 
     def on_run(self):
+        try:
+            if QgsProject.instance().crs().postgisSrid() == 0:
+                logger.plugin_log("Please set the Project CRS before generating the model.", "WARN")
+                return
 
-        if QgsProject.instance().crs().postgisSrid() == 0:
-            logger.plugin_log("Please set the Project CRS before generating the model.")
-            return
+            logger.general_log("clicked on_run")
+            self.dlg.tabMain.setCurrentIndex(3)
 
-        logger.general_log("clicked on_run")
-        self.dlg.tabMain.setCurrentIndex(3)
+            appContext.user_parameters.ortho_output = self.dlg.edtOrthoSateTo.text()
+            appContext.user_parameters.dtm_output = self.dlg.edtDTMSateTo.text()
+            appContext.user_parameters.dsm_output = self.dlg.edtDSMSateTo.text()
+            appContext.user_parameters.footprint_output = self.dlg.edtFootprintSateTo.text()
+            appContext.user_parameters.street_output = self.dlg.edtStreetSateTo.text()
+            appContext.user_parameters.tree_output = self.dlg.edtTreeSateTo.text()
+            appContext.user_parameters.water_output = self.dlg.edtWaterSateTo.text()
 
-        appContext.user_parameters.ortho_output = self.dlg.edtOrthoSateTo.text()
-        appContext.user_parameters.dtm_output = self.dlg.edtDTMSateTo.text()
-        appContext.user_parameters.dsm_output = self.dlg.edtDSMSateTo.text()
-        appContext.user_parameters.footprint_output = self.dlg.edtFootprintSateTo.text()
-        appContext.user_parameters.street_output = self.dlg.edtStreetSateTo.text()
-        appContext.user_parameters.tree_output = self.dlg.edtTreeSateTo.text()
-        appContext.user_parameters.water_output = self.dlg.edtWaterSateTo.text()
+            start()
+            self.dlg.btnCancel.setText("Close")
+            self.dlg.btnRun.setText("Run again")
+            self.iface.messageBar().pushMessage("Success", "Concluded without errors!", level=Qgis.Success, duration=3)
+        except Exception as e:
+            try:
+                logger.plugin_log(repr(e), "ERROR")
+            except Exception as e:
+                logger.plugin_log("Error for command 0", "ERROR")
+                logger.plugin_log(repr(e), "ERROR")
+            try:
+                logger.plugin_log(e.message, "ERROR")
+            except Exception as e:
+                logger.plugin_log("Error for command 1", "ERROR")
+                logger.plugin_log(repr(e), "ERROR")
+            try:
+                logger.plugin_log(traceback.format_exc(), "ERROR")
+                logger.plugin_log(repr(e), "ERROR")
+            except Exception as e:
+                logger.plugin_log("Error for command 2", "ERROR")
+                logger.plugin_log(repr(e), "ERROR")
+            try:
+                e.print_exc()
+            except Exception as e:
+                logger.plugin_log("Error for command 3", "ERROR")
+                logger.plugin_log(repr(e), "ERROR")
 
-        start()
-        self.dlg.btnCancel.setText("Close")
-        self.dlg.btnRun.setText("Run again")
-        self.iface.messageBar().pushMessage("Success", "Concluded without errors!", level=Qgis.Success, duration=3)
 
     def on_cancel(self):
         self.dlg.close()
@@ -396,8 +420,9 @@ class citygen:
     def get_first_layer_by_name(self, layer_name_list, default=0):
         for index, layer_name in enumerate(layer_name_list):
             for index, i in enumerate(QgsProject.instance().layerTreeRoot().children()):
-                if layer_name in i.layer().name().lower():
-                    return index
+                if hasattr(i, 'layer'):
+                    if layer_name in i.layer().name().lower():
+                        return index
         return default
 
     def cbxOrthoSource_on_change(self, selected_index):

@@ -27,7 +27,14 @@ def unzip_file(zip_file, destination):
     progress_bar.done(p)
 
 def unzip_file_list(zip_file_list, destination_list):
+    total = len(zip_file_list)
+    count = 0
+
     for index, url in enumerate(zip_file_list):
+        count = count + 1
+        logger.update_progress(step_description=f"Unzipping {count} of {total}...")
+        logger.plugin_log(f"Unzipping {count} of {total}...")
+
         unzip_file(zip_file_list[index], destination_list[index])
 
 

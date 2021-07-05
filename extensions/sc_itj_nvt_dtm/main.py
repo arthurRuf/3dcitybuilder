@@ -62,4 +62,4 @@ def execute(appResources, appContext):
     )
 
     appResources.bibliotecas.logger.update_progress(step_current=1, step_maximum=1)
-    appResources.bibliotecas.logger.plugin_log("Done!")
+    appResources.bibliotecas.logger.plugin_log("Done!", "SUCCESS")

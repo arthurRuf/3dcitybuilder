@@ -38,7 +38,7 @@ def load_plugin_list():
                         or "properties" not in plugin_configuration_file["features"][0] \
                         or "geometry" not in plugin_configuration_file["features"][0]:
                     logger.plugin_log(
-                        f"Invalid config.json file for plugin {directory_name}.")
+                        f"Invalid config.json file for plugin {directory_name}.", "ERROR")
                     raise Exception()
 
                 plugin_feature = plugin_configuration_file["features"][0]
@@ -47,7 +47,7 @@ def load_plugin_list():
 
                 if "layer" not in plugin_properties:
                     logger.plugin_log(
-                        f"Invalid config.json file for plugin {directory_name}.\n Property 'layer' is mandatory on features[0].properties.")
+                        f"Invalid config.json file for plugin {directory_name}.\n Property 'layer' is mandatory on features[0].properties.", "ERROR")
                     raise Exception()
 
                 plugin_list.append({
@@ -63,14 +63,14 @@ def load_plugin_list():
                     "geometry": plugin_geometry
                 })
         except FileExistsError:
-            logger.plugin_log(f"Fail to load {directory_name} plugin! The plugin does not have a config.yml file")
+            logger.plugin_log(f"Fail to load {directory_name} plugin! The plugin does not have a config.yml file", "ERROR")
         except Exception:
-            logger.plugin_log(f"Fail to load {directory_name} plugin!")
+            logger.plugin_log(f"Fail to load {directory_name} plugin!", "ERROR")
 
 
     plugin_list = sorted(plugin_list, key=lambda k: (k['position'], k['name']))
 
-    logger.plugin_log("Done!")
+    logger.plugin_log("Done!", "SUCCESS")
     return plugin_list
 
 

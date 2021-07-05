@@ -23,7 +23,7 @@
 """
 
 
-import sys, os, random, string
+import sys, os, random, string, traceback
 from qgis.core import QgsProcessingUtils, QgsRasterLayer, QgsProject
 from .bibliotecas import logger, file_management, install_python_package
 from .appCtx import appContext
@@ -31,7 +31,6 @@ from .appCtx import appContext
 from .getters import getters_management
 from .normalizer import normalizer
 from .gis import gis
-
 
 # def cleanup_temp():
 #     os.rmdir("temp")
@@ -86,18 +85,38 @@ def appContext_setup():
 
 
 def start():
-    logger.plugin_log("OUTPUT LOCATION: " + appContext.user_parameters.ortho_output)
+    try:
+        logger.plugin_log("OUTPUT LOCATION: " + appContext.user_parameters.ortho_output)
 
-    appContext_setup()
+        appContext_setup()
 
-    logger.plugin_log("Getting files...")
-    getters_management.execute_getters()
+        logger.plugin_log("Getting files...")
+        getters_management.execute_getters()
 
-    gis.generate_3d_model()
+        gis.generate_3d_model()
 
-    logger.plugin_log("Process complete without errors!")
+        logger.plugin_log("Process complete without errors!")
 
-    logger.plugin_log("OUTPUT LOCATION: " + appContext.user_parameters.ortho_output)
+        logger.plugin_log("OUTPUT LOCATION: " + appContext.user_parameters.ortho_output)
 
-    logger.update_progress(step_current=1, step_description="Done!", step_maximum=1,
-                           overall_current=1, overall_description="", overall_maximum=1)
+        logger.update_progress(step_current=1, step_description="Done!", step_maximum=1,
+                               overall_current=1, overall_description="", overall_maximum=1)
+    except Exception as e:
+        try:
+            logger.plugin_log(repr(e), "ERROR")
+        except Exception as e:
+            logger.plugin_log("Error for command 0", "ERROR")
+        try:
+            if hasattr(e, "message"):
+                logger.plugin_log(e.message, "ERROR")
+        except Exception as e:
+            logger.plugin_log("Error for command 1", "ERROR")
+        try:
+            logger.plugin_log(traceback.format_exc(), "ERROR")
+        except Exception as e:
+            logger.plugin_log("Error for command 2", "ERROR")
+        try:
+            if hasattr(e, "print_exc"):
+                e.print_exc()
+        except Exception as e:
+            logger.plugin_log("Error for command 3", "ERROR")

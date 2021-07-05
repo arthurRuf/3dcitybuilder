@@ -25,6 +25,7 @@
 
 import time, shutil, os, sys, requests
 from qgis.core import QgsRasterLayer
+import traceback
 
 
 def configure(appResources, appContext):
@@ -33,13 +34,37 @@ def configure(appResources, appContext):
 
 def execute(appResources, appContext):
     # WMS Server: https://maps.wien.gv.at/wmts/1.0.0/WMTSCapabilities-arcmap.xml
+    try:
+        appContext.update_layer(
+            appContext,
+            "crs=EPSG:4326&dpiMode=7&format=image/jpeg&layers=lb&styles=farbe&tileMatrixSet=google3857&url=https://maps.wien.gv.at/wmts/1.0.0/WMTSCapabilities-arcmap.xml",
+            "ortho",
+            "wms"
+        )
 
-    appContext.update_layer(
-        appContext,
-        "crs=EPSG:4326&dpiMode=7&format=image/jpeg&layers=lb&styles=farbe&tileMatrixSet=google3857&url=https://maps.wien.gv.at/wmts/1.0.0/WMTSCapabilities-arcmap.xml",
-        "ortho",
-        "wms"
-    )
+        appResources.bibliotecas.logger.update_progress(step_current=1, step_maximum=1)
+        appResources.bibliotecas.logger.plugin_log("Done!", "SUCCESS")
+    except Exception as e:
+        try:
+            appResources.bibliotecas.logger.plugin_log(repr(e), "ERROR")
+        except Exception as e:
+            appResources.bibliotecas.logger.plugin_log("Error for command 0", "ERROR")
+            appResources.bibliotecas.logger.plugin_log(repr(e), "ERROR")
+        try:
+            appResources.bibliotecas.logger.plugin_log(e.message, "ERROR")
+        except Exception as e:
+            appResources.bibliotecas.logger.plugin_log("Error for command 1", "ERROR")
+            appResources.bibliotecas.logger.plugin_log(repr(e), "ERROR")
+        try:
+            appResources.bibliotecas.logger.plugin_log(traceback.format_exc(), "ERROR")
+            appResources.bibliotecas.logger.plugin_log(repr(e), "ERROR")
+        except Exception as e:
+            appResources.bibliotecas.logger.plugin_log("Error for command 2", "ERROR")
+            appResources.bibliotecas.logger.plugin_log(repr(e), "ERROR")
+        try:
+            e.print_exc()
+        except Exception as e:
+            appResources.bibliotecas.logger.plugin_log("Error for command 3", "ERROR")
+            appResources.bibliotecas.logger.plugin_log(repr(e), "ERROR")
 
-    appResources.bibliotecas.logger.update_progress(step_current=1, step_maximum=1)
-    appResources.bibliotecas.logger.plugin_log("Done!")
+

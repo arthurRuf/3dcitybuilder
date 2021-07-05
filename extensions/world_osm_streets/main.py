@@ -44,9 +44,9 @@ def execute(appResources, appContext):
         import osmnx as ox
         import geopandas as gpd
     except:
-        appResources.bibliotecas.logger.plugin_log("Unable to Download Street Networks")
+        appResources.bibliotecas.logger.plugin_log("Unable to Download Street Networks", "ERROR")
         appResources.bibliotecas.logger.plugin_log(
-            "You need to install geopandas and osmnx python library into QGIS Python in order to use this functionality")
+            "You need to install geopandas and osmnx python library into QGIS Python in order to use this functionality", "ERROR")
 
     # ox.config(log_console=True, use_cache=True)
 raw_folder="/Volumes/TarDisk/ruf"
@@ -78,4 +78,4 @@ ox.save_graph_shapefile(G, folder=raw_folder, filename='drive')
     )
 
     appResources.bibliotecas.logger.update_progress(step_current=1, step_maximum=1)
-    appResources.bibliotecas.logger.plugin_log("Done!")
+    appResources.bibliotecas.logger.plugin_log("Done!", "SUCCESS")

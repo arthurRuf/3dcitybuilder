@@ -31,5 +31,14 @@ def download_file(url, file_destination):
 
 
 def download_file_list(url_list, file_destination_list):
+    total = len(url_list)
+    count = 0
+
     for index, url in enumerate(url_list):
+        count = count + 1
+        logger.update_progress(step_description=f"Downloading {count} of {total}...")
+        logger.plugin_log(f"Downloading {count} of {total}...")
+        logger.plugin_log(f"Downloading from: {url_list[index]}")
+        logger.plugin_log(f"Downloading to: {file_destination_list[index]}")
+
         download_file(url_list[index], file_destination_list[index])
